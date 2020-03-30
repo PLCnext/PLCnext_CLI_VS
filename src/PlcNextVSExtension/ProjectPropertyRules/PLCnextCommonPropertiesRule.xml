@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule Name="PLCnextCommonProperties" 
+      DisplayName="PLCnext Properties" 
+      PageTemplate="tool" 
+      Order="1000"
+      xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+  </Rule.DataSource>
+  <Rule.Categories>
+    <Category Name="ProjectType" DisplayName="Project Type"/>
+  </Rule.Categories>
+  <StringProperty Name="ProjectType_"
+                  Category="ProjectType"
+                  DisplayName="Project Type"
+                  Description="Specifies the project type (e.g. 'project' for PLM projects or 'acfproject' for ACF projects).">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" ItemType="PLCnextProperties" PersistedName="ProjectType" />
+    </StringProperty.DataSource>
+  </StringProperty>
+</Rule>
