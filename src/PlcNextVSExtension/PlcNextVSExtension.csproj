@@ -102,9 +102,30 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">
+      <Project>{3548F0DE-62D9-4EF0-BDC2-255FF09CACF5}</Project>
+      <Name>ACFProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PlcncliServices\PlcncliServices.csproj">
       <Project>{31f51e8c-c031-4bb5-9f4b-75452d136cce}</Project>
       <Name>PlcncliServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PLMProgramItemTemplate\PLMProgramItemTemplate.csproj">
+      <Project>{BDB4D447-8081-4D1B-A4B1-39181BB78A22}</Project>
+      <Name>PLMProgramItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PLMProjectTemplate\PLMProjectTemplate.csproj">
+      <Project>{F9BE3609-4C4F-463E-9656-B13DBE3714DF}</Project>
+      <Name>PLMProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

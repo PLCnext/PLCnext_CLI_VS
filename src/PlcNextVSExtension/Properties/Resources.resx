@@ -135,6 +135,9 @@
   <data name="Command_new_plmproject" xml:space="preserve">
     <value>new project</value>
   </data>
+  <data name="Command_new_program" xml:space="preserve">
+    <value>new program</value>
+  </data>
   <data name="Command_set_target" xml:space="preserve">
     <value>set target</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Option_get_project-information_project" xml:space="preserve">
     <value>-p</value>
+  </data>
+  <data name="Option_get_project_information_no_include_detection" xml:space="preserve">
+    <value>-n</value>
   </data>
   <data name="Option_new_project_componentName" xml:space="preserve">
     <value>-c</value>

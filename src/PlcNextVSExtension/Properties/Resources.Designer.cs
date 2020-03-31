@@ -124,6 +124,15 @@ namespace PlcNextVSExtension.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to new program.
+        /// </summary>
+        internal static string Command_new_program {
+            get {
+                return ResourceManager.GetString("Command_new_program", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to set target.
         /// </summary>
         internal static string Command_set_target {
@@ -147,6 +156,15 @@ namespace PlcNextVSExtension.Properties {
         internal static string Option_get_compiler_specifications_project {
             get {
                 return ResourceManager.GetString("Option_get_compiler-specifications_project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -n.
+        /// </summary>
+        internal static string Option_get_project_information_no_include_detection {
+            get {
+                return ResourceManager.GetString("Option_get_project_information_no_include_detection", resourceCulture);
             }
         }
         
