@@ -17,6 +17,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
+using PlcncliServices.LocationService;
 using IAsyncServiceProvider = Microsoft.VisualStudio.Shell.IAsyncServiceProvider;
 using Task = System.Threading.Tasks.Task;
 
@@ -26,7 +27,7 @@ namespace PlcncliServices
     {
         private readonly IAsyncServiceProvider asyncServiceProvider;
         
-        private OptionPageGrid optionPage = null;
+        private PlcncliOptionPage optionPage = null;
         private readonly string plcncliFileName = "plcncli.exe";
 
         public PlcncliLocationServiceImpl(IAsyncServiceProvider sp)
@@ -41,7 +42,7 @@ namespace PlcncliServices
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             if (asyncServiceProvider is Package package)
             {
-                optionPage = package.GetDialogPage(typeof(OptionPageGrid)) as OptionPageGrid;
+                optionPage = package.GetDialogPage(typeof(PlcncliOptionPage)) as PlcncliOptionPage;
                 if (optionPage != null)
                     optionPage.PropertyChanged += OptionValueChanged;
             }

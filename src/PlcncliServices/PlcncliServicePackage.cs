@@ -9,19 +9,14 @@
 
 using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
+using PlcncliServices.LocationService;
 using Task = System.Threading.Tasks.Task;
 
 namespace PlcncliServices
@@ -45,12 +40,12 @@ namespace PlcncliServices
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideService(typeof(SPlcncliLocationService), IsAsyncQueryable = true)]
-    [ProvideOptionPage(typeof(OptionPageGrid), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
+    [ProvideOptionPage(typeof(PlcncliOptionPage), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
-    [Guid(PlcncliLocationService.PackageGuidString)]
+    [Guid(PlcncliServicePackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class PlcncliLocationService : AsyncPackage
+    public sealed class PlcncliServicePackage : AsyncPackage
     {
         /// <summary>
         /// PlcncliLocationService GUID string.
@@ -58,9 +53,9 @@ namespace PlcncliServices
         public const string PackageGuidString = "03ef82db-24ee-4787-b476-9767e94fa151";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlcncliLocationService"/> class.
+        /// Initializes a new instance of the <see cref="PlcncliServicePackage"/> class.
         /// </summary>
-        public PlcncliLocationService()
+        public PlcncliServicePackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -105,33 +100,5 @@ namespace PlcncliServices
         }
 
         #endregion
-    }
-
-    [Guid("E0865D49-D384-4D95-89D5-A04B1D51EC43")]
-    public class OptionPageGrid : DialogPage, INotifyPropertyChanged
-    {
-        private string _toolLocation = "";
-
-        [Category("PLCnCLI")]
-        [DisplayName("plcncli folder")]
-        [Description("path to a folder containing the plcncli.exe")]
-        public string ToolLocation
-        {
-            get => _toolLocation;
-            set
-            {
-                if (value == _toolLocation)
-                    return;
-                _toolLocation = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
