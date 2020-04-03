@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PLCnext PLM Program</Name>
+    <Description>This template creates a new plm program inside a plm project. This template is only for plm projects.</Description>
+    <Icon>PLMProgramItemTemplate.png</Icon>
+    <TemplateID>5581fe25-f4df-44b3-b498-159af8ec492e</TemplateID>
+    <ProjectType>VC</ProjectType>
+    <ProvideDefaultName>false</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>PlcNextVSExtension.ProjectItemCreationWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <Data>
+      <ValidProjectTypes>
+        <Type>project</Type>
+      </ValidProjectTypes>
+      <ItemType>program</ItemType>
+    </Data>
+  </WizardData>
+</VSTemplate>

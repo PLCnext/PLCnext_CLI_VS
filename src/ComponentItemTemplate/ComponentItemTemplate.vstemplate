@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PLCnext Component</Name>
+    <Description>This template creates a new component inside a plm or acf project.</Description>
+    <Icon>ComponentItemTemplate.png</Icon>
+    <TemplateID>89cd2cda-5099-4ce4-8c0a-66df54beeca0</TemplateID>
+    <ProjectType>VC</ProjectType>
+    <ProvideDefaultName>false</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>PlcNextVSExtension.ProjectItemCreationWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <Data>
+      <ValidProjectTypes>
+        <Type>project</Type>
+        <Type>acfproject</Type>
+      </ValidProjectTypes>
+      <ItemType>component</ItemType>
+    </Data>
+  </WizardData>
+</VSTemplate>

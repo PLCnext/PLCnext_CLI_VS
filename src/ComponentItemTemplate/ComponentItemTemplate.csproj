@@ -9,11 +9,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{3548F0DE-62D9-4EF0-BDC2-255FF09CACF5}</ProjectGuid>
+    <ProjectGuid>{5CA83A70-4095-4829-8C4D-EB66806DC46F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ACFProjectTemplate</RootNamespace>
-    <AssemblyName>ACFProjectTemplate</AssemblyName>
+    <RootNamespace>ComponentItemTemplate</RootNamespace>
+    <AssemblyName>ComponentItemTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -26,7 +26,6 @@
     <CopyVsixManifestToOutput>false</CopyVsixManifestToOutput>
     <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
-	<DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,25 +45,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
+    <VSTemplate Include="ComponentItemTemplate.vstemplate">
+      <OutputSubPath>PLCnextTechnology</OutputSubPath>
+    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ACFProjectTemplate.ico" />
-    <None Include="PLCnextACFProject\PLCnextACFTemplate.vcxproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <VSTemplate Include="ACFProjectTemplate.vstemplate" />
+    <Content Include="ComponentItemTemplate.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PLCnextACFProject\MyTemplate.vstemplate" />
-    <Content Include="PLCnextACFProject\UndefClang.hpp" />
-    <Content Include="PLCnextACFProject\__TemplateIcon.ico" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKToolsPath)\..\Microsoft.VsSDK.targets" Condition="'$(VsSDKToolsPath)' != ''" />

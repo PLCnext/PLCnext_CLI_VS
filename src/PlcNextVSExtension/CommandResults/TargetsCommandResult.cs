@@ -14,40 +14,26 @@ namespace PlcNextVSExtension.CommandResults
 {
     public class TargetsCommandResult : CommandResult
     {
-        public TargetsCommandResult(IEnumerable<TargetResult> targets)
-        {
-            Targets = targets;
-        }
-
         [JsonProperty(PropertyName = "targets")]
-        public IEnumerable<TargetResult> Targets { get; }
+        public IEnumerable<TargetResult> Targets { get; set; }
     }
 
     public class TargetResult
     {
-        public TargetResult(string name, string version, string longVersion, string shortVersion, bool? available = null)
-        {
-            Name = name;
-            Version = version;
-            LongVersion = longVersion;
-            ShortVersion = shortVersion;
-            Available = available;
-        }
-
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public string Version { get; }
+        public string Version { get; set; }
 
         [JsonProperty(PropertyName = "longVersion")]
-        public string LongVersion { get; }
+        public string LongVersion { get; set; }
 
         [JsonProperty(PropertyName = "shortVersion")]
-        public string ShortVersion { get; }
+        public string ShortVersion { get; set; }
 
         [JsonProperty(PropertyName = "available")]
-        public bool? Available { get; }
+        public bool? Available { get; set; }
 
         public string GetDisplayName()
         {

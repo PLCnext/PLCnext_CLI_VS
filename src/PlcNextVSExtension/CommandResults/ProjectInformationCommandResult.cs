@@ -14,58 +14,37 @@ namespace PlcNextVSExtension.CommandResults
 {
     public class ProjectInformationCommandResult : CommandResult
     {
-        public ProjectInformationCommandResult(string name, string ns, string type,
-            IEnumerable<TargetResult> targets,
-            IEnumerable<EntityResult> entities,
-            IEnumerable<UncheckedPath> includePaths)
-        {
-            Name = name;
-            Namespace = ns;
-            Type = type;
-            Targets = targets;
-            Entities = entities;
-            IncludePaths = includePaths;
-        }
-
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "namespace")]
-        public string Namespace { get; }
+        public string Namespace { get; set; }
 
         [JsonProperty(PropertyName = "type")]
-        public string Type { get; }
+        public string Type { get; set; }
 
         [JsonProperty(PropertyName = "targets")]
-        public IEnumerable<TargetResult> Targets { get; }
+        public IEnumerable<TargetResult> Targets { get; set; }
 
         [JsonProperty(PropertyName = "entities")]
-        public IEnumerable<EntityResult> Entities { get; }
+        public IEnumerable<EntityResult> Entities { get; set; }
 
         [JsonProperty(PropertyName = "includePaths")]
-        public IEnumerable<Path> IncludePaths { get; }
+        public IEnumerable<Path> IncludePaths { get; set; }
     }
 
     public class EntityResult
     {
-        public EntityResult(string name, string ns, string type, IEnumerable<string> childEntities)
-        {
-            Name = name;
-            Namespace = ns;
-            Type = type;
-            ChildEntities = childEntities;
-        }
-
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "namespace")]
-        public string Namespace { get; }
+        public string Namespace { get; set; }
 
         [JsonProperty(PropertyName = "type")]
-        public string Type { get; }
+        public string Type { get; set; }
 
         [JsonProperty(PropertyName = "relatedEntity")]
-        public IEnumerable<string> ChildEntities { get; }
+        public IEnumerable<string> ChildEntities { get; set; }
     }
 }

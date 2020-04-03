@@ -50,7 +50,7 @@ namespace PlcNextVSExtension
                 _projectType = Resources.ProjectType_ACF;
             }
 
-            NewProjectInformationModel model = new NewProjectInformationModel(new PlcncliProcessCommunication(), _projectDirectory, projectName, _projectType);
+            NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, _projectDirectory, projectName, _projectType);
             NewProjectInformationViewModel viewModel = new NewProjectInformationViewModel(model);
             NewProjectInformationView view = new NewProjectInformationView(viewModel);
 

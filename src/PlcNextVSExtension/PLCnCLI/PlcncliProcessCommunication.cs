@@ -42,9 +42,9 @@ namespace PlcNextVSExtension.PLCnCLI
             OutputCollector receiver = new OutputCollector();
             int exitCode = 0;
 
+            string commandline = $"{command} {string.Join(" ", arguments)}";
 
-            using (ProcessFacade f = new ProcessFacade(PlcncliCommand, $"{command} {string.Join(" ", arguments)}"
-                , receiver, CancellationToken.None))
+            using (ProcessFacade f = new ProcessFacade(PlcncliCommand, commandline, receiver, CancellationToken.None))
             {
                 f.WaitForExit();
                 exitCode = f.ExitCode;
@@ -54,7 +54,10 @@ namespace PlcNextVSExtension.PLCnCLI
             if (exitCode != 0)
             {
                 //TODO throw error correctly
-                throw new InvalidOperationException($"The process did not exit clearly. {string.Join("",receiver.ErrorMessages)}");
+                string error = receiver.ErrorMessages.Any()
+                    ? string.Join("\n", receiver.ErrorMessages)
+                    : string.Join("\n", receiver.InfoMessages);
+                throw new InvalidOperationException($"An error occured while executing the command {commandline}. {error}");
             }
 
             List<string> infos = receiver.InfoMessages;

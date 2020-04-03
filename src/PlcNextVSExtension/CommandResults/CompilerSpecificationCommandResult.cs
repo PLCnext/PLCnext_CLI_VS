@@ -14,58 +14,37 @@ namespace PlcNextVSExtension.CommandResults
 {
     public class CompilerSpecificationCommandResult : CommandResult
     {
-        public CompilerSpecificationCommandResult(IEnumerable<CompilerSpecificationResult> specifications)
-        {
-            Specifications = specifications;
-        }
-
         [JsonProperty(PropertyName = "compilerSpecifications")]
-        public IEnumerable<CompilerSpecificationResult> Specifications { get; }
+        public IEnumerable<CompilerSpecificationResult> Specifications { get; set; }
     }
 
     public class CompilerSpecificationResult
     {
-        public CompilerSpecificationResult(string compilerPath, string language, string compilerSystemRoot, string compilerFlags, IEnumerable<Path> includePaths, IEnumerable<CompilerMacroResult> compilerMacros)
-        {
-            CompilerPath = compilerPath;
-            Language = language;
-            CompilerSystemRoot = compilerSystemRoot;
-            CompilerFlags = compilerFlags;
-            IncludePaths = includePaths;
-            CompilerMacros = compilerMacros;
-        }
-
         [JsonProperty(PropertyName = "compilerPath")]
-        public string CompilerPath { get; }
+        public string CompilerPath { get; set; }
 
         [JsonProperty(PropertyName = "language")]
-        public string Language { get; }
+        public string Language { get; set; }
 
         [JsonProperty(PropertyName = "compilerSysroot")]
-        public string CompilerSystemRoot { get; }
+        public string CompilerSystemRoot { get; set; }
 
         [JsonProperty(PropertyName = "compilerFlags")]
-        public string CompilerFlags { get; }
+        public string CompilerFlags { get; set; }
 
         [JsonProperty(PropertyName = "includePaths")]
-        public IEnumerable<Path> IncludePaths { get; }
+        public IEnumerable<Path> IncludePaths { get; set; }
 
         [JsonProperty(PropertyName = "compilerMacros")]
-        public IEnumerable<CompilerMacroResult> CompilerMacros { get; }
+        public IEnumerable<CompilerMacroResult> CompilerMacros { get; set; }
     }
 
     public class CompilerMacroResult
     {
-        public CompilerMacroResult(string name, string value)
-        {
-            Name = name;
-            Value = value;
-        }
-
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "value")]
-        public string Value { get; }
+        public string Value { get; set; }
     }
 }

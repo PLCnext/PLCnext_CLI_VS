@@ -129,8 +129,14 @@
   <data name="Command_get_targets" xml:space="preserve">
     <value>get targets</value>
   </data>
+  <data name="Command_new_acfcomponent" xml:space="preserve">
+    <value>new acfcomponent</value>
+  </data>
   <data name="Command_new_acfproject" xml:space="preserve">
     <value>new acfproject</value>
+  </data>
+  <data name="Command_new_component" xml:space="preserve">
+    <value>new component</value>
   </data>
   <data name="Command_new_plmproject" xml:space="preserve">
     <value>new project</value>
@@ -140,6 +146,12 @@
   </data>
   <data name="Command_set_target" xml:space="preserve">
     <value>set target</value>
+  </data>
+  <data name="ItemType_component" xml:space="preserve">
+    <value>component</value>
+  </data>
+  <data name="ItemType_program" xml:space="preserve">
+    <value>program</value>
   </data>
   <data name="Option_generate_code_project" xml:space="preserve">
     <value>-p</value>
@@ -152,6 +164,27 @@
   </data>
   <data name="Option_get_project_information_no_include_detection" xml:space="preserve">
     <value>-n</value>
+  </data>
+  <data name="Option_new_component_name" xml:space="preserve">
+    <value>-n</value>
+  </data>
+  <data name="Option_new_component_namespace" xml:space="preserve">
+    <value>-s</value>
+  </data>
+  <data name="Option_new_component_project" xml:space="preserve">
+    <value>-p</value>
+  </data>
+  <data name="Option_new_program_component" xml:space="preserve">
+    <value>-c</value>
+  </data>
+  <data name="Option_new_program_name" xml:space="preserve">
+    <value>-n</value>
+  </data>
+  <data name="Option_new_program_namespace" xml:space="preserve">
+    <value>-s</value>
+  </data>
+  <data name="Option_new_program_project" xml:space="preserve">
+    <value>-p</value>
   </data>
   <data name="Option_new_project_componentName" xml:space="preserve">
     <value>-c</value>

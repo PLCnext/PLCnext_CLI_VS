@@ -106,11 +106,29 @@ namespace PlcNextVSExtension.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to new acfcomponent.
+        /// </summary>
+        internal static string Command_new_acfcomponent {
+            get {
+                return ResourceManager.GetString("Command_new_acfcomponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to new acfproject.
         /// </summary>
         internal static string Command_new_acfproject {
             get {
                 return ResourceManager.GetString("Command_new_acfproject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to new component.
+        /// </summary>
+        internal static string Command_new_component {
+            get {
+                return ResourceManager.GetString("Command_new_component", resourceCulture);
             }
         }
         
@@ -138,6 +156,24 @@ namespace PlcNextVSExtension.Properties {
         internal static string Command_set_target {
             get {
                 return ResourceManager.GetString("Command_set_target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to component.
+        /// </summary>
+        internal static string ItemType_component {
+            get {
+                return ResourceManager.GetString("ItemType_component", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to program.
+        /// </summary>
+        internal static string ItemType_program {
+            get {
+                return ResourceManager.GetString("ItemType_program", resourceCulture);
             }
         }
         
@@ -174,6 +210,69 @@ namespace PlcNextVSExtension.Properties {
         internal static string Option_get_project_information_project {
             get {
                 return ResourceManager.GetString("Option_get_project-information_project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -n.
+        /// </summary>
+        internal static string Option_new_component_name {
+            get {
+                return ResourceManager.GetString("Option_new_component_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -s.
+        /// </summary>
+        internal static string Option_new_component_namespace {
+            get {
+                return ResourceManager.GetString("Option_new_component_namespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -p.
+        /// </summary>
+        internal static string Option_new_component_project {
+            get {
+                return ResourceManager.GetString("Option_new_component_project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -c.
+        /// </summary>
+        internal static string Option_new_program_component {
+            get {
+                return ResourceManager.GetString("Option_new_program_component", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -n.
+        /// </summary>
+        internal static string Option_new_program_name {
+            get {
+                return ResourceManager.GetString("Option_new_program_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -s.
+        /// </summary>
+        internal static string Option_new_program_namespace {
+            get {
+                return ResourceManager.GetString("Option_new_program_namespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -p.
+        /// </summary>
+        internal static string Option_new_program_project {
+            get {
+                return ResourceManager.GetString("Option_new_program_project", resourceCulture);
             }
         }
         
