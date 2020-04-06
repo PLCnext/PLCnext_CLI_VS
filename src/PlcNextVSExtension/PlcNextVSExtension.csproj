@@ -26,7 +26,7 @@
     <StartAction>Program</StartAction>
     <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
     <StartArguments>/rootsuffix Exp</StartArguments>
-    <DeployExtension>false</DeployExtension>
+	<DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -133,6 +133,7 @@
     <ProjectReference Include="..\PlcncliServices\PlcncliServices.csproj">
       <Project>{31f51e8c-c031-4bb5-9f4b-75452d136cce}</Project>
       <Name>PlcncliServices</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
     <ProjectReference Include="..\PLMProgramItemTemplate\PLMProgramItemTemplate.csproj">
       <Project>{BDB4D447-8081-4D1B-A4B1-39181BB78A22}</Project>
