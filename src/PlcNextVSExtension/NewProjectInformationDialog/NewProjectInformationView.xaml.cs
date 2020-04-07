@@ -21,6 +21,7 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
         {
             InitializeComponent();
             this.DataContext = dataContext;
+            Window.IsCloseButtonEnabled = false;
         }
     }
 }

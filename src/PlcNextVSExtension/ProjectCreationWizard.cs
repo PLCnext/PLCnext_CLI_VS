@@ -100,8 +100,8 @@ namespace PlcNextVSExtension
             foreach (TargetResult target in _projectTargets)
             {
                 //**********create configurations**********
-                project.ConfigurationManager.AddConfigurationRow($"Release {target.GetDisplayName()}", "Release all projecttargets", true);
-                project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug all projecttargets", true);
+                project.ConfigurationManager.AddConfigurationRow($"Release {target.GetDisplayName()}", "Release all projecttargets", false);
+                project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug all projecttargets", false);
 
                 //**********set project target**********
                 _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null,
@@ -181,132 +181,5 @@ namespace PlcNextVSExtension
             }
             itemToRemove?.Remove();
         }
-
-        //public void RunFinished()
-        //{
-        //    ThreadHelper.ThrowIfNotOnUIThread();
-        //    DTE2 dte = (DTE2)Package.GetGlobalService(typeof(DTE));
-
-        //    VCProject p = dte.Solution.Projects.Item(1).Object as VCProject;
-        //    //Project dteProject = dte.Solution.Projects.Item(1);
-
-        //    ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project-information,
-        //        typeof(ProjectInformationCommandResult), Resources.Option_get_project-information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
-
-        //    CompilerSpecificationCommandResult compilerSpecsCommandResult =
-        //        _plcncliCommunication.ExecuteCommand(Resources.Command_get_compiler-specifications,
-        //                typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler-specifications_project, $"\"{_projectDirectory}\"") as
-        //            CompilerSpecificationCommandResult;
-
-
-        //        IEnumerable<CompilerMacroResult> macros = compilerSpecsCommandResult?.Specifications.FirstOrDefault()
-        //            ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
-        //        if (macros == null || !macros.Any()) return;
-
-        //        foreach (VCConfiguration2 config in p.Configurations)
-        //        {
-        //            IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-        //            string propKey = "IncludePath";
-        //            string includes = string.Join(";", projectInformation.IncludePaths.Select(path => path.PathValue));
-
-        //            rule.SetPropertyValue(propKey, includes);
-
-        //            IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-        //            string key = "PreprocessorDefinitions";
-        //            string macro = string.Join(";",
-        //                macros.Select(m => m.Name + (m.Value != null ? "=" + m.Value : "")));
-        //            clRule.SetPropertyValue(key, macro);
-
-
-
-        //        //IEnumerator enumerator = config.Rules.GetEnumerator();
-        //            //while (enumerator.MoveNext())
-        //            //{
-        //            //    if(enumerator.Current is IVCRulePropertyStorage2 storage)
-        //            //    {
-        //            //        Debug.WriteLine("****Found a rule with the following name:");
-        //            //        Debug.WriteLine(storage.Name);
-
-        //            //    }
-        //            //}
-
-        //            //var projectEngine = config.VCProjectEngine as VCProjectEngine;
-        //            //if (projectEngine == null)
-        //            //{
-        //            //    Debug.WriteLine("Project engine is null");
-        //            //    return;
-        //            //}
-
-        //            //var x = p.GetVCService();
-
-        //            //helpercode to find correct rule and/or property name
-        //            //foreach (IVCRulePropertyStorage2 r in config.Rules)
-        //            //{
-        //            //    try
-        //            //    {
-        //            //        Debug.WriteLine(r.GetUnevaluatedPropertyValue("ClCompile.ClangMode"));
-        //            //        Debug.WriteLine("Success");
-        //            //        Debug.WriteLine(r.Name);
-
-        //            //    }
-        //            //    catch (Exception)
-        //            //    { }
-        //            //}
-
-
-        //            //IVCProjectBuildService x = projectEngine.;
-        //            //IVCPropertyStorage propStorage = x.
-
-        //            // way to set the 'Project public include paths'
-        //            //IVCRulePropertyStorage rule = config.Rules.Item("CL");
-        //            //string propKey = "ProjectPublicIncludePath";
-
-
-
-        //        }
-
-
-        //    //// INFOS 
-        //    ////IVSProject4 .ContainsFileEndingWith -> check for plcncli project file ?
-        //    ////IVsAddProjectItemDlg -> access to add project item dialog
-
-        //    //var xyz = Package.GetGlobalService(typeof(IVsSolution));
-
-        //    //if (xyz != null)
-        //    //{
-        //    //    if (xyz is IVsSolution sln)
-        //    //    {
-        //    //        int returnCode = sln.GetProjectOfUniqueName(dteProject.UniqueName, out var hierarchy);
-        //    //        if (returnCode == 0)
-        //    //        {
-        //    //            Debug.WriteLine("Project kind: " + dteProject.Kind);
-        //    //        }
-        //    //    }
-        //    //}
-
-
-        //    ////            if (dte.Solution.Projects.Item(1) is Project project)
-        //    ////            {
-        //    ////                foreach (Property property in project.Properties)
-        //    ////                {
-        //    ////                    if (property != null)
-        //    ////                    {
-        //    ////                        Debug.WriteLine("Name: "+property.Name);
-        //    ////                        try
-        //    ////                        {
-        //    ////                            Debug.WriteLine("Value: "+property.Value);
-        //    ////                        }
-        //    ////                        catch(Exception)
-        //    ////                        { }
-        //    ////                    }
-        //    ////                    else
-        //    ////                        Debug.WriteLine("--------property was null");
-        //    ////                }
-        //    ////            }
-
-        //    ////var dte = Package.GetGlobalService(typeof(_DTE)) as DTE2;
-
-
-        //}
     }
 }

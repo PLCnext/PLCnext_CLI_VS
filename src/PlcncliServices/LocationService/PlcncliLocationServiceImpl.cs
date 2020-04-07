@@ -43,14 +43,7 @@ namespace PlcncliServices
             if (asyncServiceProvider is Package package)
             {
                 optionPage = package.GetDialogPage(typeof(PlcncliOptionPage)) as PlcncliOptionPage;
-                if (optionPage != null)
-                    optionPage.PropertyChanged += OptionValueChanged;
             }
-        }
-
-        private void OptionValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            SearchPlcncliTool();
         }
 
         public string GetLocation()
@@ -62,7 +55,8 @@ namespace PlcncliServices
         {
             string toolLocation = string.Empty;
 
-            if (CheckOption()) {
+            if (CheckOption()) 
+            {
                 return toolLocation;
             }
 
@@ -92,20 +86,17 @@ namespace PlcncliServices
 
             bool CheckOption()
             {
-                
                 string location = optionPage.ToolLocation;
                 if (!string.IsNullOrEmpty(location) && File.Exists(Path.Combine(location, plcncliFileName)))
                 {
                     toolLocation = Path.Combine(location, plcncliFileName);
                     return true;
                 }
-
                 return false;
             }
 
             bool CheckPathVariable()
             {
-
                 string pathVariable = Environment.GetEnvironmentVariable("PATH");
                 if (pathVariable != null)
                 {

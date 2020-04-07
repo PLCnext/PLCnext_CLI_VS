@@ -26,8 +26,8 @@ namespace PlcNextVSExtension.NewProjectItemDialog
     {
         private readonly NewItemModel _model;
         private string _selectedComponent;
-        private readonly string descriptionProgram = "Please select the namespace for the new program and the parent component.";
-        private readonly string descriptionComponent = "Please select the namespace for the new component.";
+        private readonly string descriptionProgram = "Please select a namespace and the parent component for the new program.";
+        private readonly string descriptionComponent = "Please select a namespace for the new component.";
 
         public NewItemViewModel(NewItemModel model)
         {
