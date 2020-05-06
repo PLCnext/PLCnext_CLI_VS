@@ -46,27 +46,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandResults\CommandResult.cs" />
-    <Compile Include="CommandResults\CompilerSpecificationCommandResult.cs" />
-    <Compile Include="CommandResults\Path.cs" />
-    <Compile Include="CommandResults\ProjectInformationCommandResult.cs" />
-    <Compile Include="CommandResults\TargetsCommandResult.cs" />
     <Compile Include="NewProjectItemDialog\NewItemDialogView.xaml.cs">
       <DependentUpon>NewItemDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProjectItemDialog\NewItemModel.cs" />
     <Compile Include="NewProjectItemDialog\NewItemViewModel.cs" />
-    <Compile Include="PLCnCLI\DebugOutputReceiver.cs" />
-    <Compile Include="PLCnCLI\IOutputReceiver.cs" />
-    <Compile Include="PLCnCLI\IPlcncliCommunication.cs" />
     <Compile Include="NewProjectInformationDialog\NewProjectInformationModel.cs" />
     <Compile Include="NewProjectInformationDialog\NewProjectInformationView.xaml.cs">
       <DependentUpon>NewProjectInformationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProjectInformationDialog\NewProjectInformationViewModel.cs" />
     <Compile Include="NewProjectInformationDialog\TargetViewModel.cs" />
-    <Compile Include="PLCnCLI\PlcncliProcessCommunication.cs" />
-    <Compile Include="PLCnCLI\ProcessFacade.cs" />
     <Compile Include="ProjectCreationWizard.cs" />
     <Compile Include="ProjectItemCreationWizard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,10 +67,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
+    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PhoenixContact\PropertyRules</VSIXSubPath>
-    </None>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectPropertyRules\Plcncli.targets">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PhoenixContact</VSIXSubPath>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -101,7 +97,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -129,6 +124,13 @@
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PlcncliBuild\PlcncliBuild.csproj">
+      <Project>{AFB634C2-0E5C-4C42-B736-15459191E772}</Project>
+      <Name>PlcncliBuild</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+      <InstallRoot>PublicAssemblies</InstallRoot>
     </ProjectReference>
     <ProjectReference Include="..\PlcncliServices\PlcncliServices.csproj">
       <Project>{31f51e8c-c031-4bb5-9f4b-75452d136cce}</Project>

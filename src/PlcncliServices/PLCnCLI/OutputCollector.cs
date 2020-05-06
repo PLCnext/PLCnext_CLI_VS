@@ -10,10 +10,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace PlcNextVSExtension.PLCnCLI
+namespace PlcncliServices.PLCnCLI
 {
 
-    class OutputCollector : IOutputReceiver
+    public class OutputCollector : IOutputReceiver
     {
         public List<string> InfoMessages { get; } = new List<string>();
         public List<string> ErrorMessages { get; } = new List<string>();

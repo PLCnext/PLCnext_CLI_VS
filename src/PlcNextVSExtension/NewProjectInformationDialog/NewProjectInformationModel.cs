@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using PlcNextVSExtension.CommandResults;
+using PlcncliServices.CommandResults;
+using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
 namespace PlcNextVSExtension.NewProjectInformationDialog
@@ -76,7 +77,7 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
 
         public void UpdateTargets()
         {
-            var result = _plcncliCommunication.ExecuteCommand(Resources.Command_get_targets, typeof(TargetsCommandResult)) as TargetsCommandResult;
+            var result = _plcncliCommunication.ExecuteCommand(Resources.Command_get_targets, null, typeof(TargetsCommandResult)) as TargetsCommandResult;
             if (result != null) AllTargets = result.Targets;
         }
 

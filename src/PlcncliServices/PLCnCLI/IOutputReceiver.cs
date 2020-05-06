@@ -7,9 +7,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-namespace PlcNextVSExtension.CommandResults
+using System.Collections.Generic;
+
+namespace PlcncliServices.PLCnCLI
 {
-    public class CommandResult
+    public interface IOutputReceiver
     {
+        void WriteLine(string line);
+
+        void WriteError(string error);
+
+        List<string> InfoMessages { get; }
+
+        List<string> ErrorMessages { get; }
     }
 }

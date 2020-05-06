@@ -23,16 +23,16 @@ using Task = System.Threading.Tasks.Task;
 
 namespace PlcncliServices
 {
-    public class PlcncliLocationServiceImpl : SPlcncliLocationService, IPlcncliLocationService
+    public class PlcncliLocationService
     {
-        private readonly IAsyncServiceProvider asyncServiceProvider;
+        private readonly IAsyncServiceProvider _asyncServiceProvider;
         
         private PlcncliOptionPage optionPage = null;
         private readonly string plcncliFileName = "plcncli.exe";
 
-        public PlcncliLocationServiceImpl(IAsyncServiceProvider sp)
+        public PlcncliLocationService(IAsyncServiceProvider sp)
         {
-            asyncServiceProvider = sp;
+            _asyncServiceProvider = sp;
         }
 
         public async Task InitializeAsync(CancellationToken cancellationToken)
@@ -40,10 +40,18 @@ namespace PlcncliServices
             await TaskScheduler.Default;
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            if (asyncServiceProvider is Package package)
+            if (_asyncServiceProvider is Package package)
             {
                 optionPage = package.GetDialogPage(typeof(PlcncliOptionPage)) as PlcncliOptionPage;
+
+                OnOptionPagePropertyChanged(null, null);
+                optionPage.PropertyChanged += OnOptionPagePropertyChanged;
             }
+        }
+
+        private void OnOptionPagePropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            Environment.SetEnvironmentVariable("plcncli_toollocation", GetLocation());
         }
 
         public string GetLocation()
@@ -51,7 +59,7 @@ namespace PlcncliServices
             return SearchPlcncliTool();
         }
 
-        private string SearchPlcncliTool(bool secondTry = false)
+        private string SearchPlcncliTool(bool secondTry = false, bool showMessages = true)
         {
             string toolLocation = string.Empty;
 
@@ -67,12 +75,14 @@ namespace PlcncliServices
 
             if (secondTry)
             {
-                MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
+                if(showMessages)
+                    MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
                 return string.Empty;
             }
 
-            MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
-            if (asyncServiceProvider is Package package)
+            if(showMessages)
+                MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
+            if (_asyncServiceProvider is Package)
             {
                 DTE2 dte = (DTE2)Package.GetGlobalService(typeof(DTE));
                 if (dte != null)

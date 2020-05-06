@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using PlcNextVSExtension.CommandResults;
+using PlcncliServices.CommandResults;
 
 namespace PlcNextVSExtension.NewProjectInformationDialog
 {

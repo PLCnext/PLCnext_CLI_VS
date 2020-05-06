@@ -9,7 +9,7 @@
 
 using Newtonsoft.Json;
 
-namespace PlcNextVSExtension.CommandResults
+namespace PlcncliServices.CommandResults
 {
     public class Path
     {

@@ -7,14 +7,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using PlcNextVSExtension.CommandResults;
+using PlcncliServices.CommandResults;
+using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
 namespace PlcNextVSExtension.NewProjectItemDialog
@@ -43,7 +39,7 @@ namespace PlcNextVSExtension.NewProjectItemDialog
 
         private void FetchProjectComponents()
         {
-            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information,
+            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
                 typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_no_include_detection,
                 Resources.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
             if (projectInformation != null)

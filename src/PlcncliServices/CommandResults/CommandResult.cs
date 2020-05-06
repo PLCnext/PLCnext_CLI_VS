@@ -7,13 +7,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-using System;
-using PlcNextVSExtension.CommandResults;
-
-namespace PlcNextVSExtension
+namespace PlcncliServices.CommandResults
 {
-    public interface IPlcncliCommunication
+    public class CommandResult
     {
-        CommandResult ExecuteCommand(string command, Type resultType, params string[] arguments);
     }
 }

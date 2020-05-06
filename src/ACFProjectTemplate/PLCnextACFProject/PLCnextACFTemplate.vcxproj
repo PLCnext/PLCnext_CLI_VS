@@ -16,7 +16,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{$guid1$}</ProjectGuid>
-    <Keyword>Linux</Keyword>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -43,13 +42,11 @@
       <CLanguageStandard/>
       <CppLanguageStandard/>
     </ClCompile>
-	<PLCnextProperties>
-      <ProjectType>acfproject</ProjectType>
-    </PLCnextProperties>
   </ItemDefinitionGroup>
+  <PropertyGroup>
+    <PlcncliProjectType>acfproject</PlcncliProjectType>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-  <Target Name="Build">
-    <Message Text="$(ProjectDir) is writing this message." />
-  </Target>
+  <Import Project="$(MSBuildExtensionsPath)/PhoenixContact/Plcncli.targets" />
 </Project>

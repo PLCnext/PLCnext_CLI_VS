@@ -8,15 +8,15 @@
 #endregion
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using PlcncliServices.LocationService;
+using PlcncliServices.PLCnCLI;
 using Task = System.Threading.Tasks.Task;
 
 namespace PlcncliServices
@@ -39,7 +39,7 @@ namespace PlcncliServices
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideService(typeof(SPlcncliLocationService), IsAsyncQueryable = true)]
+    [ProvideService(typeof(SPlcncliCommunication), IsAsyncQueryable = true)]
     [ProvideOptionPage(typeof(PlcncliOptionPage), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
@@ -77,22 +77,26 @@ namespace PlcncliServices
 
             //ServiceCreatorCallback callback = new ServiceCreatorCallback(CreateService);
 
-            //((IServiceContainer)this).AddService(typeof(SPlcncliLocationService), callback);
+            //((IServiceContainer)this).AddService(typeof(SPlcncliCommunicationService), callback);
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             //await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
 
             await base.InitializeAsync(cancellationToken, progress);
-            this.AddService(typeof(SPlcncliLocationService), CreateService, true);
-            
+            this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
+            _locationService = new PlcncliLocationService(this);
+            await _locationService.InitializeAsync(cancellationToken);
         }
 
-        private async Task<object> CreateService(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
+        private PlcncliLocationService _locationService = null;
+
+        private async Task<object> CreateServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
         {
-            if (typeof(SPlcncliLocationService) == serviceType)
+            if (typeof(SPlcncliCommunication) == serviceType)
             {
-                PlcncliLocationServiceImpl service = new PlcncliLocationServiceImpl(this);
+                
+                PlcncliProcessCommunication service = new PlcncliProcessCommunication(_locationService);
                 await service.InitializeAsync(cancellationToken);
                 return service;
             }

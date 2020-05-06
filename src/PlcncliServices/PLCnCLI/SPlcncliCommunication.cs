@@ -7,15 +7,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PlcncliServices
+namespace PlcncliServices.PLCnCLI
 {
-    public interface SPlcncliLocationService
+    public interface SPlcncliCommunication
     {
     }
 }

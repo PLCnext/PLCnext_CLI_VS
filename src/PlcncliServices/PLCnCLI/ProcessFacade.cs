@@ -14,7 +14,7 @@ using System.Linq;
 using System.Management;
 using System.Threading;
 
-namespace PlcNextVSExtension.PLCnCLI
+namespace PlcncliServices.PLCnCLI
 {
     class ProcessFacade : IDisposable
     {
@@ -50,7 +50,7 @@ namespace PlcNextVSExtension.PLCnCLI
                 {
                     _processName = _internalProcess.ProcessName;
                     _internalProcess.OutputDataReceived += InternalProcessOnOutputDataReceived;
-                    _internalProcess.ErrorDataReceived += InternalProcessOnErrorDataReceived;
+                    _internalProcess.ErrorDataReceived += InternalProcessOnOutputDataReceived;
                     _internalProcess.EnableRaisingEvents = true;
                     _internalProcess.Exited += InternalProcessOnExited;
                     _internalProcess.BeginOutputReadLine();
@@ -94,13 +94,13 @@ namespace PlcNextVSExtension.PLCnCLI
             }
         }
 
-        private void InternalProcessOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
-        {
-            if (dataReceivedEventArgs.Data != null)
-            {
-                _outputReceiver.WriteLine($"[{_processName}]: {dataReceivedEventArgs.Data}");
-            }
-        }
+        //private void InternalProcessOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
+        //{
+        //    if (dataReceivedEventArgs.Data != null)
+        //    {
+        //        _outputReceiver.WriteLine($"[{_processName}]: {dataReceivedEventArgs.Data}");
+        //    }
+        //}
 
         public int ExitCode
         {
@@ -146,7 +146,7 @@ namespace PlcNextVSExtension.PLCnCLI
                 if (_internalProcess != null)
                 {
                     _internalProcess.OutputDataReceived -= InternalProcessOnOutputDataReceived;
-                    _internalProcess.ErrorDataReceived -= InternalProcessOnErrorDataReceived;
+                    _internalProcess.ErrorDataReceived -= InternalProcessOnOutputDataReceived;
                     _internalProcess.Exited -= InternalProcessOnExited;
                     _internalProcess.EnableRaisingEvents = false;
                     if (_errorReadStarted)

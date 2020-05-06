@@ -10,7 +10,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace PlcNextVSExtension.CommandResults
+namespace PlcncliServices.CommandResults
 {
     public class CompilerSpecificationCommandResult : CommandResult
     {

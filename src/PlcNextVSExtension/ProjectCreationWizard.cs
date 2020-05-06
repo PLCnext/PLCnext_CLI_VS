@@ -14,9 +14,9 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.VisualStudio.VCProjectEngine;
-using PlcNextVSExtension.CommandResults;
+using PlcncliServices.CommandResults;
+using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.NewProjectInformationDialog;
-using PlcNextVSExtension.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
 namespace PlcNextVSExtension
@@ -33,7 +33,7 @@ namespace PlcNextVSExtension
         private Project _project;
         public ProjectCreationWizard()
         {
-            _plcncliCommunication = new PlcncliProcessCommunication();
+            _plcncliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
 
         }
 
@@ -94,7 +94,7 @@ namespace PlcNextVSExtension
                 newProjectCommand = Resources.Command_new_acfproject;
             }
 
-            _plcncliCommunication.ExecuteCommand(newProjectCommand, null, newProjectArguments.ToArray());
+            _plcncliCommunication.ExecuteCommand(newProjectCommand, null, null, newProjectArguments.ToArray());
 
             
             foreach (TargetResult target in _projectTargets)
@@ -104,7 +104,7 @@ namespace PlcNextVSExtension
                 project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug all projecttargets", false);
 
                 //**********set project target**********
-                _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null,
+                _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
                     Resources.Option_set_target_add, Resources.Option_set_target_name, target.Name,
                     Resources.Option_set_target_version, target.Version, Resources.Option_set_target_project,
                     $"\"{_projectDirectory}\"");
@@ -123,13 +123,13 @@ namespace PlcNextVSExtension
             }
 
             //**********generate code**********
-            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, Resources.Option_generate_code_project, $"\"{_projectDirectory}\"");
+            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null, Resources.Option_generate_code_project, $"\"{_projectDirectory}\"");
             
-            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information,
+            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
                 typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
 
             CompilerSpecificationCommandResult compilerSpecsCommandResult =
-                _plcncliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications,
+                _plcncliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
                         typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{_projectDirectory}\"") as
                     CompilerSpecificationCommandResult;
 

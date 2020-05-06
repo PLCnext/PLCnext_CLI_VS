@@ -9,13 +9,38 @@
   </Rule.DataSource>
   <Rule.Categories>
     <Category Name="ProjectType" DisplayName="Project Type"/>
+    <Category Name="Build" DisplayName="Plcncli Build and Deploy"/>
   </Rule.Categories>
   <StringProperty Name="ProjectType_"
                   Category="ProjectType"
                   DisplayName="Project Type"
                   Description="Specifies the project type (e.g. 'project' for PLM projects or 'acfproject' for ACF projects).">
     <StringProperty.DataSource>
-      <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" ItemType="PLCnextProperties" PersistedName="ProjectType" />
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PlcncliProjectType" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="GenerateOptions_"
+                  Category="Build"
+                  DisplayName="Additional Generate Options"
+                  Description="Additional generate options can be specified here. These options will be appended to the plcncli generate command. See plcncli help for information about available options.">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PlcncliGenerateOptions" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="BuildOptions_"
+                  Category="Build"
+                  DisplayName="Additional Build Options"
+                  Description="Additional build options can be specified here. These options will be appended to the plcncli build command. See plcncli help for information about available options.">
+    <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PlcncliBuildOptions" />
+    </StringProperty.DataSource>
+  </StringProperty>
+  <StringProperty Name="DeployOptions_"
+                  Category="Build"
+                  DisplayName="Additional Deploy Options"
+                  Description="Additional deploy options can be specified here. These options will be appended to the plcncli deploy command. See plcncli help for information about available options.">
+    <StringProperty.DataSource>
+      <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PlcncliDeployOptions" />
     </StringProperty.DataSource>
   </StringProperty>
 </Rule>

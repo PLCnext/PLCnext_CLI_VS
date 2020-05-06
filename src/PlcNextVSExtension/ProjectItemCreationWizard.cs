@@ -16,9 +16,9 @@ using System.Xml.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using PlcNextVSExtension.CommandResults;
+using PlcncliServices.CommandResults;
+using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.NewProjectItemDialog;
-using PlcNextVSExtension.PLCnCLI;
 using PlcNextVSExtension.Properties;
 using Path = System.IO.Path;
 
@@ -30,7 +30,7 @@ namespace PlcNextVSExtension
 
         public ProjectItemCreationWizard()
         {
-            _plcncliCommunication = new PlcncliProcessCommunication();
+            _plcncliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
 
         }
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind,
@@ -54,7 +54,7 @@ namespace PlcNextVSExtension
                         GetWizardDataFromTemplate();
 
                         string projectDirectory = Path.GetDirectoryName(project.FullName);
-                        ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information,
+                        ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
                             typeof(ProjectInformationCommandResult),
                             Resources.Option_get_project_information_no_include_detection,
                             Resources.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
@@ -79,7 +79,7 @@ namespace PlcNextVSExtension
                         {
                             if (itemType.Equals(Resources.ItemType_program))
                             {
-                                _plcncliCommunication.ExecuteCommand(Resources.Command_new_program, null,
+                                _plcncliCommunication.ExecuteCommand(Resources.Command_new_program, null, null,
                                     Resources.Option_new_program_project, $"\"{projectDirectory}\"",
                                     Resources.Option_new_program_name, itemName,
                                     Resources.Option_new_program_component, model.SelectedComponent,
@@ -91,7 +91,7 @@ namespace PlcNextVSExtension
                                 {
                                     command = Resources.Command_new_acfcomponent;
                                 }
-                                _plcncliCommunication.ExecuteCommand(command, null,
+                                _plcncliCommunication.ExecuteCommand(command, null, null,
                                     Resources.Option_new_component_project, $"\"{projectDirectory}\"",
                                     Resources.Option_new_component_name, itemName,
                                     Resources.Option_new_component_namespace, model.SelectedNamespace);
@@ -103,7 +103,7 @@ namespace PlcNextVSExtension
                                 project.ProjectItems.AddFromFile(itemFile);
                             }
 
-                            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null,
+                            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null,
                                 Resources.Option_generate_code_project, $"\"{projectDirectory}\"");
 
                         }
