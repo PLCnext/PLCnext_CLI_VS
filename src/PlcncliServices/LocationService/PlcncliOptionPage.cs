@@ -7,9 +7,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using Microsoft.VisualStudio.Shell;
 
 namespace PlcncliServices.LocationService
@@ -17,11 +22,31 @@ namespace PlcncliServices.LocationService
     [Guid("E0865D49-D384-4D95-89D5-A04B1D51EC43")]
     public class PlcncliOptionPage : DialogPage, INotifyPropertyChanged
     {
-        private string _toolLocation = "";
+        private string _toolLocation;
+        private string _toolLocationFilePath = "C:\\ProgramData\\PHOENIX CONTACT\\PLCnCLI\\PATHS.xml";
+
+        public PlcncliOptionPage()
+        {
+            _toolLocation = "C:\\Program Files\\PHOENIX CONTACT\\PLCnCLI";
+            TryFindToolLocationFile();
+        }
+
+        private void TryFindToolLocationFile()
+        {
+            try
+            {
+                XDocument pathsDocument = XDocument.Load(_toolLocationFilePath);
+                ToolLocation = pathsDocument.Element("Product").Elements().First().Element("Path").Attribute("Value").Value;
+            }
+            catch (Exception)
+            {
+                //if something went wrong while trying to read tool location from file just use default value of _toolLocation
+            }
+        }
 
         [Category("PLCnCLI")]
         [DisplayName("plcncli folder")]
-        [Description("path to a folder containing the plcncli.exe")]
+        [Description("Path to a folder containing the plcncli.exe. If this path is not a valid path to a plcncli the 'PATH' environment variable will be used to find the plcncli.")]
         public string ToolLocation
         {
             get => _toolLocation;

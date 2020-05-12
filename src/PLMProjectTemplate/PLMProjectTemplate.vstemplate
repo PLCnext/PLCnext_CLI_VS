@@ -14,7 +14,8 @@
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>PLMProjectTemplate.ico</Icon>
     <LanguageTag>cpp</LanguageTag>
-    <ProjectTypeTag>PLCnext Technology</ProjectTypeTag>
+    <PlatformTag>PLCnext Technology</PlatformTag>
+	  <ProjectTypeTag>Library</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <ProjectCollection>

@@ -13,8 +13,9 @@
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>ACFProjectTemplate.ico</Icon>
-	<LanguageTag>cpp</LanguageTag>
-	<ProjectTypeTag>PLCnext Technology</ProjectTypeTag>
+	  <LanguageTag>cpp</LanguageTag>
+    <PlatformTag>PLCnext Technology</PlatformTag>
+	  <ProjectTypeTag>Library</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <ProjectCollection>

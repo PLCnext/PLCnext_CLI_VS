@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rule Name="PLCnextCommonProperties" 
-      DisplayName="PLCnext Properties" 
+      DisplayName="PLCnext Technology" 
       PageTemplate="tool" 
       Order="1000"
       xmlns="http://schemas.microsoft.com/build/2009/properties">
