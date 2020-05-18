@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UndefClang.hpp" />
-    <PropertyPageSchema Include="$(MSBuildExtensionsPath)\PhoenixContact\PropertyRules\PLCnextCommonPropertiesRule.xml" />
+    <PropertyPageSchema Include="$(MSBuildExtensionsPath)\PHOENIX CONTACT\PropertyRules\PLCnextCommonPropertiesRule.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{$guid1$}</ProjectGuid>
