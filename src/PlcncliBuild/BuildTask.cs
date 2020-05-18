@@ -8,6 +8,7 @@
 #endregion
 
 
+using System;
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
 
@@ -21,6 +22,8 @@ namespace PlcncliBuild
 
             Log.LogMessage(MessageImportance.Low, "Starting plcncli build task.");
             Log.LogMessage(MessageImportance.Low, "Additional build options value: \"" + AdditionalOptions + "\"");
+
+            Configuration = Configuration.StartsWith("Debug") ? "Debug" : "Release";
 
             try {
                 Communication.ExecuteWithoutResult("build", new TaskLogger(Log), "-p", ProjectDirectory, "-b", Configuration, AdditionalOptions);

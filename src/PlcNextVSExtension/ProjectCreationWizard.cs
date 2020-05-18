@@ -100,8 +100,9 @@ namespace PlcNextVSExtension
             foreach (TargetResult target in _projectTargets)
             {
                 //**********create configurations**********
-                project.ConfigurationManager.AddConfigurationRow($"Release {target.GetDisplayName()}", "Release all projecttargets", false);
-                project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug all projecttargets", false);
+                //disabled, for the moment the tool only supports build all
+                //project.ConfigurationManager.AddConfigurationRow($"Release {target.GetDisplayName()}", "Release - all Targets", false);
+                //project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug - all Targets", false);
 
                 //**********set project target**********
                 _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,

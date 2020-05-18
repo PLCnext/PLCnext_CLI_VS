@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="PLMProgramItemTemplate.vstemplate">
-      <OutputSubPath>PLCnextTechnology</OutputSubPath>
+      <OutputSubPath>PLCnext Technology</OutputSubPath>
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>

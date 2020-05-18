@@ -45,8 +45,8 @@ namespace PlcncliServices.LocationService
         }
 
         [Category("PLCnCLI")]
-        [DisplayName("plcncli folder")]
-        [Description("Path to a folder containing the plcncli.exe. If this path is not a valid path to a plcncli the 'PATH' environment variable will be used to find the plcncli.")]
+        [DisplayName("PLCnCLI Folder")]
+        [Description("Path to a folder containing the plcncli.exe. If this path is not a valid path to a PLCnCLI the 'PATH' environment variable will be used to find the PLCnCLI.")]
         public string ToolLocation
         {
             get => _toolLocation;

@@ -101,6 +101,16 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
 
         private void OnOkButtonClicked(Window window)
         {
+            //first check if at least one target is selected
+            if (!Targets.Any(t => t.Selected))
+            {
+                MessageBoxResult messageBoxResult =
+                    MessageBox.Show("No target was selected. Do you really want to create a project, which supports no target?",
+                        "No target selected", MessageBoxButton.OKCancel);
+                if(messageBoxResult == MessageBoxResult.Cancel)
+                    return;
+            }
+
             string projectNamespace = ProjectNameProperties.Where(p => p.Name.Text.Equals(ProjectNamespaceKey))
                 .Select(p => p.Value).SingleOrDefault();
             if (projectNamespace != null)

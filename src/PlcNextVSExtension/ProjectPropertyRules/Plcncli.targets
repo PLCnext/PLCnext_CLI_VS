@@ -4,12 +4,12 @@
   <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
   <Target Name="Build">
     <GenerateTask ProjectDirectory="$(ProjectDir)"
-                  AdditionalOptions="$(PlcncliGenerateOptions)"/>
+                  AdditionalOptions="$(PLCnCLIGenerateOptions)"/>
 	  <BuildTask ProjectDirectory="$(ProjectDir)"
-             AdditionalOptions="$(PlcncliBuildOptions)"
+             AdditionalOptions="$(PLCnCLIBuildOptions)"
              Configuration="$(Configuration)"/>
     <DeployTask ProjectDirectory="$(ProjectDir)"
-                AdditionalOptions="$(PlcncliDeployOptions)"
+                AdditionalOptions="$(PLCnCLIDeployOptions)"
                 Configuration="$(Configuration)"/>
   </Target>
 </Project>

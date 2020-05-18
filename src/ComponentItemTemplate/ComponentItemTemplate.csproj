@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="ComponentItemTemplate.vstemplate">
-      <OutputSubPath>PLCnextTechnology</OutputSubPath>
+      <OutputSubPath>PLCnext Technology</OutputSubPath>
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>

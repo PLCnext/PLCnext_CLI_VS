@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug all projecttargets|x86">
-      <Configuration>Debug all projecttargets</Configuration>
+    <ProjectConfiguration Include="Debug - all Targets|x86">
+      <Configuration>Debug - all Targets</Configuration>
       <Platform>x86</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release all projecttargets|x86">
-      <Configuration>Release all projecttargets</Configuration>
+    <ProjectConfiguration Include="Release - all Targets|x86">
+      <Configuration>Release - all Targets</Configuration>
       <Platform>x86</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -23,11 +23,11 @@
     <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug all projecttargets|x86'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release all projecttargets|x86'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
   </PropertyGroup>
@@ -44,9 +44,9 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup>
-    <PlcncliProjectType>acfproject</PlcncliProjectType>
+    <PLCnCLIProjectType>acfproject</PLCnCLIProjectType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-  <Import Project="$(MSBuildExtensionsPath)/PhoenixContact/Plcncli.targets" />
+  <Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLI.targets" />
 </Project>

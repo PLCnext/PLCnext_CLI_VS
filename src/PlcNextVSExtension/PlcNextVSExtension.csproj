@@ -75,13 +75,13 @@
   <ItemGroup>
     <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <InstallRoot>MSBuild</InstallRoot>
-      <VSIXSubPath>PhoenixContact\PropertyRules</VSIXSubPath>
+      <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectPropertyRules\Plcncli.targets">
+    <Content Include="ProjectPropertyRules\PLCnCLI.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>MSBuild</InstallRoot>
-      <VSIXSubPath>PhoenixContact</VSIXSubPath>
+      <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
     </Content>
     <None Include="key.snk" />
     <None Include="source.extension.vsixmanifest">

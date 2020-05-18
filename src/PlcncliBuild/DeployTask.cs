@@ -18,6 +18,9 @@ namespace PlcncliBuild
         {
             Log.LogMessage(MessageImportance.Low, "Starting deploy task.");
             Log.LogMessage(MessageImportance.Low, "Additional deploy options value: \"" + AdditionalOptions + "\"");
+
+            Configuration = Configuration.StartsWith("Debug") ? "Debug" : "Release";
+
             try
             {
                 Communication.ExecuteWithoutResult("deploy", new TaskLogger(Log), "-p", ProjectDirectory, "-b", Configuration, AdditionalOptions);
