@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>PLCnext Component</Name>
-    <Description>This template creates a new component inside a plm or acf project.</Description>
+    <Description>Creates a C++ component. This template might be used from within PLM projects or ACF projects.</Description>
     <Icon>ComponentItemTemplate.png</Icon>
     <TemplateID>89cd2cda-5099-4ce4-8c0a-66df54beeca0</TemplateID>
     <ProjectType>VC</ProjectType>
