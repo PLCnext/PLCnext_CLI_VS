@@ -76,6 +76,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PlcNextVSExtension.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>

@@ -83,9 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.202" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading">
-      <Version>16.0.102</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
   </ItemGroup>
   <ItemGroup>

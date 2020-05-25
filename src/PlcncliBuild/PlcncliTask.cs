@@ -23,7 +23,7 @@ namespace PlcncliBuild
 
         internal string PlcncliLocation { get; }
 
-        internal PlcncliProcessCommunication Communication { get; }
+        internal IPlcncliCommunication Communication { get; }
 
         public string ProjectDirectory { get; set; }
 
