@@ -52,6 +52,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="NewProjectItemDialog\NewItemDialogView.xaml.cs">
       <DependentUpon>NewItemDialogView.xaml</DependentUpon>
     </Compile>

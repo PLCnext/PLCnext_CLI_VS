@@ -53,6 +53,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="CommandResults\CommandResult.cs" />
     <Compile Include="CommandResults\CompilerSpecificationCommandResult.cs" />
     <Compile Include="CommandResults\Path.cs" />
