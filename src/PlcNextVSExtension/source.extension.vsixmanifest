@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="PlcNextVSExtension.aa798a7d-7803-4d0f-9426-ab21550c665e" Version="1.0" Language="en-US" Publisher="PHOENIX CONTACT Software GmbH" />
@@ -24,5 +24,7 @@
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Component.MDD.Linux" Version="[16.5.29515.121,17.0)" DisplayName="C++ for Linux Development" />
+        <Prerequisite Id="Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core" Version="[16.2.29012.281,17.0)" DisplayName="C++ core desktop features" />
     </Prerequisites>
 </PackageManifest>
