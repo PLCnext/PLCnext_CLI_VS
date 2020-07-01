@@ -51,7 +51,7 @@ namespace PlcncliServices
 
         private void OnOptionPagePropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            Environment.SetEnvironmentVariable("plcncli_toollocation", GetLocation());
+            Environment.SetEnvironmentVariable("plcncli_toollocation", SearchPlcncliTool(true, false));
         }
 
         public string GetLocation()
