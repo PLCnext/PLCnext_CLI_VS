@@ -25,12 +25,6 @@ namespace PlcncliServices.LocationService
         private string _toolLocation;
         private string _toolLocationFilePath = "C:\\ProgramData\\PHOENIX CONTACT\\PLCnCLI\\PATHS.xml";
 
-        public PlcncliOptionPage()
-        {
-            _toolLocation = "C:\\Program Files\\PHOENIX CONTACT\\PLCnCLI";
-            TryFindToolLocationFile();
-        }
-
         private void TryFindToolLocationFile()
         {
             try
@@ -49,7 +43,15 @@ namespace PlcncliServices.LocationService
         [Description("Path to a folder containing the plcncli.exe. If this path is not a valid path to a PLCnCLI the 'PATH' environment variable will be used to find the PLCnCLI.")]
         public string ToolLocation
         {
-            get => _toolLocation;
+            get
+            {
+                if (string.IsNullOrEmpty(_toolLocation))
+                {
+                    _toolLocation = "C:\\Program Files\\PHOENIX CONTACT\\PLCnCLI";
+                    TryFindToolLocationFile();
+                }
+                return _toolLocation;
+            }
             set
             {
                 if (value == _toolLocation)
