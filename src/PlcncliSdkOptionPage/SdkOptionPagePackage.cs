@@ -11,14 +11,12 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using PlcncliServices.LocationService;
-using PlcncliServices.PLCnCLI;
+using PlcncliSdkOptionPage.ChangeSDKsProperty;
 using Task = System.Threading.Tasks.Task;
 
-namespace PlcncliServices
+namespace PlcncliOptionPages
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -38,23 +36,22 @@ namespace PlcncliServices
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideService(typeof(SPlcncliCommunication), IsAsyncQueryable = true)]
-    [ProvideOptionPage(typeof(PlcncliOptionPage), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
+    [ProvideOptionPage(typeof(SDKsOptionPage), "PLCnext Technology", "SDKs", 0, 0, false)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
-    [Guid(PlcncliServicePackage.PackageGuidString)]
+    [Guid(SdkOptionPagePackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class PlcncliServicePackage : AsyncPackage
+    public sealed class SdkOptionPagePackage : AsyncPackage
     {
         /// <summary>
-        /// PlcncliLocationService GUID string.
+        /// OptionPagesPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "03ef82db-24ee-4787-b476-9767e94fa151";
+        public const string PackageGuidString = "b03e7970-c741-422e-ac4b-7b9d4effd140";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlcncliServicePackage"/> class.
+        /// Initializes a new instance of the <see cref="SdkOptionPagePackage"/> class.
         /// </summary>
-        public PlcncliServicePackage()
+        public SdkOptionPagePackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -73,33 +70,9 @@ namespace PlcncliServices
         /// <returns>A task representing the async work of package initialization, or an already completed task if there is none. Do not return null from this method.</returns>
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-
-            //ServiceCreatorCallback callback = new ServiceCreatorCallback(CreateService);
-
-            //((IServiceContainer)this).AddService(typeof(SPlcncliCommunicationService), callback);
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            //await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-
-            await base.InitializeAsync(cancellationToken, progress);
-            this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
-            _locationService = new PlcncliLocationService(this);
-            await _locationService.InitializeAsync(cancellationToken);
-        }
-
-        private PlcncliLocationService _locationService = null;
-
-        private async Task<object> CreateServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
-        {
-            if (typeof(SPlcncliCommunication) == serviceType)
-            {
-                
-                PlcncliProcessCommunication service = new PlcncliProcessCommunication(_locationService);
-                await service.InitializeAsync(cancellationToken);
-                return service;
-            }
-            return null;
+            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
         }
 
         #endregion

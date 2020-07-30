@@ -67,9 +67,6 @@ namespace PlcNextVSExtension
                             return;
                         }
 
-                        //TODO different dialog for component template -> no parent component, different description
-                        //TODO different 'new' command
-
                         NewItemModel model = new NewItemModel(_plcncliCommunication, projectDirectory, itemType);
                         NewItemViewModel viewModel = new NewItemViewModel(model);
                         NewItemDialogView view = new NewItemDialogView(viewModel);

@@ -23,7 +23,7 @@ namespace PlcNextVSExtension
 {
     class ProjectCreationWizard : IWizard
     {
-        private IPlcncliCommunication _plcncliCommunication;
+        private readonly IPlcncliCommunication _plcncliCommunication;
         private string _projectDirectory;
         private string _componentName;
         private string _programName;

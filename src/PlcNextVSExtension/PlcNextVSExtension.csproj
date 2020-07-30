@@ -146,6 +146,12 @@
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
       <InstallRoot>PublicAssemblies</InstallRoot>
     </ProjectReference>
+    <ProjectReference Include="..\PlcncliSdkOptionPage\PlcncliSdkOptionPage.csproj">
+      <Project>{B9CBA487-48FA-4C86-AEDC-EFBC30263810}</Project>
+      <Name>PlcncliSdkOptionPage</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\PlcncliServices\PlcncliServices.csproj">
       <Project>{31f51e8c-c031-4bb5-9f4b-75452d136cce}</Project>
       <Name>PlcncliServices</Name>

@@ -60,6 +60,8 @@
     <Compile Include="CommandResults\CompilerSpecificationCommandResult.cs" />
     <Compile Include="CommandResults\Path.cs" />
     <Compile Include="CommandResults\ProjectInformationCommandResult.cs" />
+    <Compile Include="CommandResults\SdksCommandResult.cs" />
+    <Compile Include="CommandResults\SdkPathsSettingCommandResult.cs" />
     <Compile Include="CommandResults\TargetsCommandResult.cs" />
     <Compile Include="LocationService\PlcncliOptionPage.cs">
       <SubType>Component</SubType>
@@ -94,15 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\PlcncliLocationService.ico" />
   </ItemGroup>
