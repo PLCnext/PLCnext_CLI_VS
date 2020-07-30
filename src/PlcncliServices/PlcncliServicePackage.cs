@@ -44,6 +44,7 @@ namespace PlcncliServices
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PlcncliServicePackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class PlcncliServicePackage : AsyncPackage
     {
         /// <summary>
@@ -86,6 +87,7 @@ namespace PlcncliServices
             this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
             _locationService = new PlcncliLocationService(this);
             await _locationService.InitializeAsync(cancellationToken);
+            await PlcncliServices.GeneratePortComment.PortCommentCommand.InitializeAsync(this);
         }
 
         private PlcncliLocationService _locationService = null;

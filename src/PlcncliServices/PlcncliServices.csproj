@@ -63,6 +63,11 @@
     <Compile Include="CommandResults\SdksCommandResult.cs" />
     <Compile Include="CommandResults\SdkPathsSettingCommandResult.cs" />
     <Compile Include="CommandResults\TargetsCommandResult.cs" />
+    <Compile Include="GeneratePortComment\GeneratePortCommentControl.xaml.cs">
+      <DependentUpon>GeneratePortCommentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GeneratePortComment\GeneratePortCommentViewModel.cs" />
+    <Compile Include="GeneratePortComment\PortCommentCommand.cs" />
     <Compile Include="LocationService\PlcncliOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -99,10 +104,24 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GeneratePortComment\GeneratePortCommentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="GeneratePortComment\PlcncliServicePackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+    <Content Include="GeneratePortComment\Resources\Port.16.png" />
     <Content Include="Resources\PlcncliLocationService.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
