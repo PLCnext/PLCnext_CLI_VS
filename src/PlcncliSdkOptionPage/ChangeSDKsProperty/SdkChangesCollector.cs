@@ -44,7 +44,8 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                 
             if (SdksToAdd.Remove(sdk))
                 return;
-            SdksToRemove.Add(sdk);
+            if(!SdksToRemove.Contains(sdk))
+                SdksToRemove.Add(sdk);
         }
     }
 }
