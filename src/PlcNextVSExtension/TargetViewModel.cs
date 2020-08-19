@@ -13,18 +13,19 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using PlcncliServices.CommandResults;
 
-namespace PlcNextVSExtension.NewProjectInformationDialog
+namespace PlcNextVSExtension
 {
     public class TargetViewModel : INotifyPropertyChanged
     {
         private bool _selected = false;
 
-        public TargetViewModel(string displayName, TargetResult source)
+        public TargetViewModel(string displayName, TargetResult source, bool? available = null)
         {
             DisplayName = displayName;
             Source = source;
             Name = source.Name;
             Version = source.LongVersion;
+            Available = available;
         }
 
         public bool Selected
@@ -44,6 +45,9 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
         public string Version { get; }
 
         public TargetResult Source { get; }
+
+        public bool? Available { get; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

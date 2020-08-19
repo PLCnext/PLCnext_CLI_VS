@@ -207,6 +207,9 @@
   <data name="Option_set_target_project" xml:space="preserve">
     <value>-p</value>
   </data>
+  <data name="Option_set_target_remove" xml:space="preserve">
+    <value>-r</value>
+  </data>
   <data name="Option_set_target_version" xml:space="preserve">
     <value>-v</value>
   </data>

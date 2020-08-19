@@ -3,22 +3,33 @@
       DisplayName="PLCnext Technology" 
       PageTemplate="tool" 
       Order="1000"
-      xmlns="http://schemas.microsoft.com/build/2009/properties">
+      xmlns="http://schemas.microsoft.com/build/2009/properties"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Rule.DataSource>
     <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
   </Rule.DataSource>
   <Rule.Categories>
-    <Category Name="ProjectType" DisplayName="PLCnCLI Project Type"/>
+    <Category Name="General" DisplayName="General"/>
     <Category Name="Build" DisplayName="PLCnCLI Build"/>
   </Rule.Categories>
   <StringProperty Name="ProjectType_"
-                  Category="ProjectType"
+                  Category="General"
                   DisplayName="Project Type"
                   Description="Specifies the project type (e.g. 'project' for PLM projects or 'acfproject' for ACF projects).">
     <StringProperty.DataSource>
       <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIProjectType" />
     </StringProperty.DataSource>
   </StringProperty>
+	<!--<EnumProperty Name="ProjectTargets_"
+						 DisplayName="Project Targets"
+						 Category="General"
+						 Description="">
+		--><!--TODO description for string property--><!--
+		<EnumProperty.ValueEditors>
+			<ValueEditor EditorType="ProjectTargetsValueEditor" DisplayName="&lt;Edit project targets...&gt;"/>
+		</EnumProperty.ValueEditors>
+		<EnumValue Name="test12345" DisplayName="Test 12345"/>
+	</EnumProperty>-->
   <StringProperty Name="GenerateOptions_"
                   Category="Build"
                   DisplayName="Additional Generate Options"

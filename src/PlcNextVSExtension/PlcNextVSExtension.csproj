@@ -4,6 +4,7 @@
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <TargetFrameworkProfile />
+    <UseCodebase>true</UseCodebase>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -23,7 +24,7 @@
     <RootNamespace>PlcNextVSExtension</RootNamespace>
     <AssemblyName>PlcNextVSExtension</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
@@ -65,9 +66,17 @@
       <DependentUpon>NewProjectInformationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProjectInformationDialog\NewProjectInformationViewModel.cs" />
-    <Compile Include="NewProjectInformationDialog\TargetViewModel.cs" />
+    <Compile Include="ProjectPropertyEditor\BoolToColorConverter.cs" />
+    <Compile Include="SetTargetsCommand.cs" />
+    <Compile Include="SetTargetsCommandPackage.cs" />
+    <Compile Include="TargetViewModel.cs" />
     <Compile Include="ProjectCreationWizard.cs" />
     <Compile Include="ProjectItemCreationWizard.cs" />
+    <Compile Include="ProjectPropertyEditor\ProjectTargetValueEditorModel.cs" />
+    <Compile Include="ProjectPropertyEditor\ProjectTargetValueEditorViewModel.cs" />
+    <Compile Include="ProjectPropertyEditor\ProjectTargetValueEditorView.xaml.cs">
+      <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -90,6 +99,9 @@
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
     </Content>
+    <VSCTCompile Include="SetTargetsCommandPackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
     <None Include="key.snk" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -111,7 +123,12 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewProjectItemDialog\NewItemDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProjectPropertyEditor\ProjectTargetValueEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,6 +6,7 @@
              xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:local="clr-namespace:PlcNextVSExtension.NewProjectInformationDialog"
              xmlns:y="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:plcNextVsExtension="clr-namespace:PlcNextVSExtension"
              mc:Ignorable="d"
              Name="Window" Height="700" Width="550">
     <Window.Title>Project Properties</Window.Title>
@@ -52,7 +53,7 @@
 
         <ListBox Name="TargetsListBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource SortedTargets}}">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:TargetViewModel}">
+                <DataTemplate DataType="{x:Type plcNextVsExtension:TargetViewModel}">
                     <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding Selected}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>

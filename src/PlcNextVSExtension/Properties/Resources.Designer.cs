@@ -340,6 +340,15 @@ namespace PlcNextVSExtension.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -r.
+        /// </summary>
+        internal static string Option_set_target_remove {
+            get {
+                return ResourceManager.GetString("Option_set_target_remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -v.
         /// </summary>
         internal static string Option_set_target_version {
