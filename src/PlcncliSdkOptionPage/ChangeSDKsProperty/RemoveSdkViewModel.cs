@@ -21,7 +21,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
     public class RemoveSdkViewModel
     {
         private readonly string rawDialogMessage = 
-            "You are about to remove the SDK{0}\n{1}\nfrom your installed SDKs.\nPlease decide if you also want to remove the SDK directory from disk.";
+            "You are about to remove the SDK{0}\n{1}\nfrom your list of installed SDKs.\nPlease decide if you also want to delete the SDK directory from disk.";
         public RemoveSdkViewModel(IEnumerable<string> sdksToRemove)
         {
             DialogMessage = string.Format(rawDialogMessage, sdksToRemove.Count() >1?"s":string.Empty, string.Join("\n", sdksToRemove));

@@ -56,7 +56,7 @@
         <Parent guid="guidPlcncliServicePackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="Port" />
         <Strings>
-          <ButtonText>Mark As Program Port</ButtonText>
+          <ButtonText>&amp;Mark As Program Port</ButtonText>
         </Strings>
       </Button>
     </Buttons>

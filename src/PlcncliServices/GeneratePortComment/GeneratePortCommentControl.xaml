@@ -4,7 +4,7 @@
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:local="clr-namespace:PlcncliServices.GeneratePortComment"
                           Width="600"
-                          Height="360"
+                          Height="380"
                           Title="Generate Port Comments"
                           Name="PortCommentWindow">
     <Window.Style>
@@ -32,23 +32,27 @@
                    Margin="15"
                    Grid.ColumnSpan="2"/>
 
-        <Label Content="Port Name:"
+        <Label Content="Port _Name:"
                Grid.Row="1"
-               Margin="10,0,5,0"/>
+               Margin="10,0,5,0"
+               Target="{Binding ElementName=NameTextBox}"/>
         <TextBox Grid.Column="1"
                  Grid.Row="1"
+                 Name="NameTextBox"
                  Margin="0,0,15,0"
                  Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Width="120"/>
 
-        <TextBlock Text="Select port attributes from list below"
+        <Label Content="Select port _attributes from list below"
                    Grid.Row="2"
                    Grid.ColumnSpan="2"
-                   Margin="15,15,15,5"/>
+                   Margin="10,15,15,5"
+                   Target="{Binding ElementName=AttributesListBox}"/>
         <ListBox Grid.Row="3"
                  Grid.ColumnSpan="2"
                  Margin="15,0,15,15"
-                 ItemsSource="{Binding PortAttributes}">
+                 ItemsSource="{Binding PortAttributes}"
+                 Name="AttributesListBox">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:PortAttributeViewModel}">
                     <CheckBox Content="{Binding Label}" IsChecked="{Binding Selected}"/>
@@ -74,12 +78,18 @@
                    />
         </StackPanel>
 
-        <Button Grid.Row="4"
+        <StackPanel Grid.Row="4"
                 Grid.Column="3"
                 HorizontalAlignment="Right"
-                Content="OK"
+                Orientation="Horizontal"
+                Margin="0,0,10,10">
+        <Button Content="_OK"
                 Command="{Binding OkCommand}"
                 CommandParameter="{Binding ElementName=PortCommentWindow}"
-                Margin="0,0,10,10"/>
+                Margin="0,0,10,0"/>
+        <Button Content="_Cancel"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding ElementName=PortCommentWindow}"/>
+        </StackPanel>
     </Grid>
 </platformui:DialogWindow>

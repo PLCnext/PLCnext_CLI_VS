@@ -44,9 +44,10 @@
                Margin="10"/>
 
         <Label Name="LeftListBoxLabel" 
-               Content="Available Targets:" 
+               Content="A_vailable Targets:" 
                Grid.Row="1" 
-               Margin="10,0,10,0"/>
+               Margin="10,0,10,0"
+               Target="{Binding ElementName=LeftListBox}"/>
         <ListBox Name="LeftListBox"
                  Grid.Column="0" 
                  Grid.Row="2" 
@@ -64,13 +65,13 @@
                     Grid.Column="1" 
                     Grid.Row="2" 
                     VerticalAlignment="Top">
-            <Button Content="Add >>" 
+            <Button Content="_Add >>" 
                     Margin="10,0" 
                     Padding="3" 
                     ToolTip="Add to project targets"
                     Command="{Binding AddButtonClickCommand}"
                     CommandParameter="{Binding SelectedItems, ElementName=LeftListBox}"/>
-            <Button Content="&lt;&lt; Remove" 
+            <Button Content="&lt;&lt; _Remove" 
                     Margin="10" 
                     Padding="3" 
                     ToolTip="Remove from project targets"
@@ -79,10 +80,11 @@
         </StackPanel>
 
         <Label Name="RightListBoxLabel" 
-               Content="Selected Targets:" 
+               Content="S_elected Targets:" 
                Grid.Row="1" 
                Grid.Column="2" 
-               Margin="10,0,10,0"/>
+               Margin="10,0,10,0"
+               Target="{Binding ElementName=RightListBox}"/>
         <ListBox Name="RightListBox" 
                  Grid.Column="2" 
                  Grid.Row="2" 
@@ -96,14 +98,23 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
-        <Button Content="Save and Close"
-                HorizontalAlignment="Right" 
-                Margin="10" 
-                Grid.Row="3"
-                Grid.Column="2" 
+
+        <StackPanel Grid.Row="3"
+                    Grid.Column="2"
+                    Margin="10"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right" >
+        <Button Content="_Save and Close"
                 Padding="3"
+                Margin="0,0,10,0"
                 Command="{Binding CloseButtonClickCommand}"
                 CommandParameter="{Binding ElementName=window}"/>
+        <Button Content="_Cancel"
+                Padding="3"
+                Width="60"
+                Command="{Binding CancelButtonClickCommand}"
+                CommandParameter="{Binding ElementName=window}"
+                />
+        </StackPanel>
     </Grid>
 </platformui:DialogWindow>

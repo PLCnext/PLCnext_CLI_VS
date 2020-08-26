@@ -56,7 +56,7 @@
         <Parent guid="guidSetTargetsCommandPackageCmdSet" id="MyCommandGroup" />
 		  <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Set Targets</ButtonText>
+          <ButtonText>Set &amp;Targets</ButtonText>
         </Strings>
       </Button>
     </Buttons>

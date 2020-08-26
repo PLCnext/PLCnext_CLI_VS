@@ -30,8 +30,10 @@
                Margin="10,15,10,5"/>
         <Label Grid.Row="1"
                Margin="5"
-               Content="Location:"/>
+               Content="_Location:"
+               Target="{Binding ElementName=LocationTextBox}"/>
         <TextBox Grid.Row="1" Grid.Column="1"
+                 Name="LocationTextBox"
                  Height="22"
                  Text="{Binding SdkRootPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Padding="2"/>
@@ -39,7 +41,7 @@
                 Margin="10,0,20,0"
                 Width="90"
                 Height="22"
-                Content="Browse..."
+                Content="_Browse..."
                 Command="{Binding BrowseCommand}"/>
         <Image Source="{Binding ErrorImage}"
                Grid.Row="2"
@@ -51,7 +53,7 @@
                    Grid.Column="1"
                    Grid.ColumnSpan="99"
                    Margin="10"/>
-        <Button Content="OK" 
+        <Button Content="_OK" 
                 Grid.Row="3" 
                 Grid.Column="1"
                 HorizontalAlignment="Right" 
@@ -62,7 +64,7 @@
                 Command="{Binding OKCommand}"
                 CommandParameter="{Binding ElementName=AddDialog}"
                 IsEnabled="{Binding ErrorText, Converter={StaticResource StringToBooleanConverter}}"/>
-        <Button Content="Cancel"
+        <Button Content="_Cancel"
                 Grid.Row="3"
                 Grid.Column="2"
                 HorizontalAlignment="Right"

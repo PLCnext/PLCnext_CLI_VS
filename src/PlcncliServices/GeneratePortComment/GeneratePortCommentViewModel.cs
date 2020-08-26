@@ -88,11 +88,17 @@ namespace PlcncliServices.GeneratePortComment
         public string Line { get; }
 
         public ICommand OkCommand { get; } = new DelegateCommand<DialogWindow>(OnOkButtonClicked);
+        public ICommand CancelCommand { get; } = new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
 
         private static void OnOkButtonClicked(DialogWindow window)
         {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             window.DialogResult = true;
+            window.Close();
+        }
+
+        private static void OnCancelButtonClicked(DialogWindow window)
+        {
+            window.DialogResult = false;
             window.Close();
         }
 

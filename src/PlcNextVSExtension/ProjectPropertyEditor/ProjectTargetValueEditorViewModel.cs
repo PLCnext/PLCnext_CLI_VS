@@ -42,7 +42,9 @@ namespace PlcNextVSExtension.ProjectPropertyEditor
         public ICommand AddButtonClickCommand => new DelegateCommand<IList>(OnAddButtonClicked);
         public ICommand RemoveButtonClickCommand => new DelegateCommand<IList>(OnRemoveButtonClicked);
         public ICommand CloseButtonClickCommand => new DelegateCommand<Window>(OnCloseButtonClicked);
-        
+        public ICommand CancelButtonClickCommand => new DelegateCommand<Window>(OnCancelButtonClicked);
+
+
         public void OnAddButtonClicked(IList selectedItems)
         {
             IEnumerable<TargetViewModel> targets =
@@ -77,6 +79,12 @@ namespace PlcNextVSExtension.ProjectPropertyEditor
                 .Select(t => t.Source);
 
             window.DialogResult = true;
+            window.Close();
+        }
+
+        private void OnCancelButtonClicked(Window window)
+        {
+            window.DialogResult = false;
             window.Close();
         }
 

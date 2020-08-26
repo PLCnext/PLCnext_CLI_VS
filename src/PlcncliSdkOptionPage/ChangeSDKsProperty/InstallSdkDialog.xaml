@@ -29,12 +29,14 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.ColumnSpan="99"
-                   Text="Select sdk archive file and skd destination directory. Destination directory should be empty or cleared with force option."
+                   Text="Select sdk archive file and skd destination directory. Destination directory has to be empty or cleared with force option."
                    Margin="10,15,10,5"/>
         <Label Grid.Row="1"
                Margin="5"
-               Content="Archive File:"/>
+               Content="_Archive File:"
+               Target="{Binding ElementName=ArchiveTextBox}"/>
         <TextBox Grid.Row="1" Grid.Column="1"
+                 Name="ArchiveTextBox"
                  Height="22"
                  Text="{Binding ArchiveFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Padding="2"/>
@@ -42,12 +44,14 @@
                 Margin="10,0,20,0"
                 Width="90"
                 Height="22"
-                Content="Browse..."
+                Content="_Browse..."
                 Command="{Binding BrowseFileCommand}"/>
         <Label Grid.Row="2"
                Margin="5"
-               Content="Destination:"/>
+               Content="_Destination:"
+               Target="{Binding ElementName=DestinationTextBox}"/>
         <TextBox Grid.Row="2" Grid.Column="1"
+                 Name="DestinationTextBox"
                  Height="22"
                  Text="{Binding SdkDestination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Padding="2"/>
@@ -55,11 +59,11 @@
                 Margin="10,0,20,0"
                 Width="90"
                 Height="22"
-                Content="Browse..."
+                Content="B_rowse..."
                 Command="{Binding BrowseDirCommand}"/>
         <CheckBox Grid.Row="3"
                   Grid.Column="1"
-                  Content="Force installation into this destination"/>
+                  Content="_Force installation into this destination"/>
         <Image Source="{Binding ErrorImage}"
                Grid.Row="4"
                HorizontalAlignment="Right"
@@ -70,7 +74,7 @@
                    Grid.Column="1"
                    Grid.ColumnSpan="99"
                    Margin="10"/>
-        <Button Content="OK" 
+        <Button Content="_OK" 
                 Grid.Row="5" 
                 Grid.Column="1"
                 HorizontalAlignment="Right" 
@@ -81,7 +85,7 @@
                 Command="{Binding OKCommand}"
                 CommandParameter="{Binding ElementName=InstallDialog}"
                 IsEnabled="{Binding ErrorText, Converter={StaticResource StringToBooleanConverter}}"/>
-        <Button Content="Cancel"
+        <Button Content="_Cancel"
                 Grid.Row="5"
                 Grid.Column="2"
                 HorizontalAlignment="Right"
