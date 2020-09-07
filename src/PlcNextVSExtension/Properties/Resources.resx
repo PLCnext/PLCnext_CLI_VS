@@ -138,6 +138,9 @@
   <data name="Command_new_component" xml:space="preserve">
     <value>new component</value>
   </data>
+  <data name="Command_new_consumablelibrary" xml:space="preserve">
+    <value>new consumablelibrary</value>
+  </data>
   <data name="Command_new_plmproject" xml:space="preserve">
     <value>new project</value>
   </data>
@@ -215,6 +218,9 @@
   </data>
   <data name="ProjectType_ACF" xml:space="preserve">
     <value>acfproject</value>
+  </data>
+  <data name="ProjectType_ConsumableLibrary" xml:space="preserve">
+    <value>consumablelibrary</value>
   </data>
   <data name="ProjectType_PLM" xml:space="preserve">
     <value>project</value>

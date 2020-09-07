@@ -89,6 +89,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="ProjectPropertyRules\PLCnextBuildPropertiesRule.xml" />
+    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule_override.xml" />
     <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
@@ -103,6 +105,7 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <None Include="key.snk" />
+    <Content Include="ProjectPropertyRules\PLCnCLIBuild.targets" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -157,6 +160,13 @@
       <Project>{5CA83A70-4095-4829-8C4D-EB66806DC46F}</Project>
       <Name>ComponentItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ConsumableLibraryTemplate\ConsumableLibraryTemplate.csproj">
+      <Project>{8FA04B3B-8039-46BE-995B-5B2320F62A69}</Project>
+      <Name>ConsumableLibraryTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>

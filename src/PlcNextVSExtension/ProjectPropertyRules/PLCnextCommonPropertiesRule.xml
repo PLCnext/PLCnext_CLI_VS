@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Compatibility Note: PLCnCLI projects created with VS Extension v2020.6 directly reference this file in their project files.-->
+<!-- Do not delete this file in future versions.-->
 <Rule Name="PLCnextCommonProperties" 
       DisplayName="PLCnext Technology" 
       PageTemplate="tool" 
@@ -20,16 +22,6 @@
       <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIProjectType" />
     </StringProperty.DataSource>
   </StringProperty>
-	<!--<EnumProperty Name="ProjectTargets_"
-						 DisplayName="Project Targets"
-						 Category="General"
-						 Description="">
-		--><!--TODO description for string property--><!--
-		<EnumProperty.ValueEditors>
-			<ValueEditor EditorType="ProjectTargetsValueEditor" DisplayName="&lt;Edit project targets...&gt;"/>
-		</EnumProperty.ValueEditors>
-		<EnumValue Name="test12345" DisplayName="Test 12345"/>
-	</EnumProperty>-->
   <StringProperty Name="GenerateOptions_"
                   Category="Build"
                   DisplayName="Additional Generate Options"

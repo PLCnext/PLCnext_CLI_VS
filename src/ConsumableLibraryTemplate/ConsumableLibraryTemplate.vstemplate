@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PLCnext Consumable Library</Name>
+    <Description>This is a template for consumable libraries. A consumable library can be used by other PLCnext projects. For more information visit the Help Center in the PLCnext Community.</Description>
+    <Icon>ConsumableLibraryTemplate.ico</Icon>
+    <ProjectType>VC</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>32cbb59f-79cd-4a37-a0d9-06e66aa9eb73</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ConsumableLibrary</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+	<LanguageTag>cpp</LanguageTag>
+	<PlatformTag>PLCnext Technology</PlatformTag>
+	<ProjectTypeTag>Library</ProjectTypeTag>
+  </TemplateData>
+  <TemplateContent>
+	  <ProjectCollection>
+		  <ProjectTemplateLink ProjectName="$projectname$">ProjectTemplate\MyTemplate.vstemplate</ProjectTemplateLink>
+	  </ProjectCollection>
+  </TemplateContent>
+</VSTemplate>

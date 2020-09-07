@@ -88,10 +88,13 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
         private void SetProjectNameProperties()
         {
             ProjectNameProperties.Add(new KVP(ProjectNamespaceKey, _model.ProjectNamespace));
-            ProjectNameProperties.Add(new KVP(InitialComponentNameKey, _model.InitialComponentName));
-            if (_model.ProjectType == Resources.ProjectType_PLM)
+            if (_model.ProjectType != Resources.ProjectType_ConsumableLibrary)
             {
-                ProjectNameProperties.Add(new KVP(InitialProgramNameKey, _model.InitialProgramName));
+                ProjectNameProperties.Add(new KVP(InitialComponentNameKey, _model.InitialComponentName));
+                if (_model.ProjectType == Resources.ProjectType_PLM)
+                {
+                    ProjectNameProperties.Add(new KVP(InitialProgramNameKey, _model.InitialProgramName));
+                }
             }
         }
 
@@ -118,20 +121,23 @@ namespace PlcNextVSExtension.NewProjectInformationDialog
                 _model.ProjectNamespace = projectNamespace;
             }
 
-            string componentName = ProjectNameProperties.Where(p => p.Name.Text.Equals(InitialComponentNameKey))
-                .Select(p => p.Value).SingleOrDefault();
-            if (componentName != null)
+            if (_model.ProjectType != Resources.ProjectType_ConsumableLibrary)
             {
-                _model.InitialComponentName = componentName;
-            }
-
-            if (_model.ProjectType == Resources.ProjectType_PLM)
-            {
-                string programName = ProjectNameProperties.Where(p => p.Name.Text.Equals(InitialProgramNameKey))
+                string componentName = ProjectNameProperties.Where(p => p.Name.Text.Equals(InitialComponentNameKey))
                     .Select(p => p.Value).SingleOrDefault();
-                if (programName != null)
+                if (componentName != null)
                 {
-                    _model.InitialProgramName = programName;
+                    _model.InitialComponentName = componentName;
+                }
+
+                if (_model.ProjectType == Resources.ProjectType_PLM)
+                {
+                    string programName = ProjectNameProperties.Where(p => p.Name.Text.Equals(InitialProgramNameKey))
+                        .Select(p => p.Value).SingleOrDefault();
+                    if (programName != null)
+                    {
+                        _model.InitialProgramName = programName;
+                    }
                 }
             }
 

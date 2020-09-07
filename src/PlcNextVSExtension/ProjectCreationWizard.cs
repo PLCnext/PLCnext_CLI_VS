@@ -7,6 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,6 +50,11 @@ namespace PlcNextVSExtension
             {
                 _projectType = Resources.ProjectType_ACF;
             }
+            else if(customParams[0].ToString().EndsWith("ConsumableLibraryTemplate\\ProjectTemplate\\MyTemplate.vstemplate") ||
+                     customParams[0].ToString().EndsWith("ConsumableLibraryTemplate/ProjectTemplate/MyTemplate.vstemplate"))
+            {
+                _projectType = Resources.ProjectType_ConsumableLibrary;
+            }
 
             NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, _projectDirectory, projectName, _projectType);
             NewProjectInformationViewModel viewModel = new NewProjectInformationViewModel(model);
@@ -65,6 +71,27 @@ namespace PlcNextVSExtension
 
         public void ProjectFinishedGenerating(Project project)
         {
+            try
+            {
+                GeneratePLCnCLIProject(project);
+            }
+            catch (Exception e)
+            {
+                try
+                {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    project.DTE.Solution.Remove(project);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
+                }
+                catch (Exception)
+                {}
+
+                throw e;
+            }
+        }
+
+        private void GeneratePLCnCLIProject(Project project)
+        {
             ThreadHelper.ThrowIfNotOnUIThread();
             _project = project;
             VCProject p = _project.Object as VCProject;
@@ -79,19 +106,28 @@ namespace PlcNextVSExtension
             List<string> newProjectArguments = new List<string>
             {
                 Resources.Option_new_project_output, $"\"{_projectDirectory}\"",
-                Resources.Option_new_project_componentName, _componentName,
                 Resources.Option_new_project_projectNamespace, _projectNamespace
             };
 
-            if (projectType.Equals(Resources.ProjectType_PLM))
+            if (!projectType.Equals(Resources.ProjectType_ConsumableLibrary))
             {
-                newProjectArguments.Add(Resources.Option_new_project_programName);
-                newProjectArguments.Add(_programName);
+                newProjectArguments.Add(Resources.Option_new_project_componentName);
+                newProjectArguments.Add(_componentName);
+
+                if (projectType.Equals(Resources.ProjectType_PLM))
+                {
+                    newProjectArguments.Add(Resources.Option_new_project_programName);
+                    newProjectArguments.Add(_programName);
+                }
             }
 
             if (projectType.Equals(Resources.ProjectType_ACF))
             {
                 newProjectCommand = Resources.Command_new_acfproject;
+            }
+            else if (projectType.Equals(Resources.ProjectType_ConsumableLibrary))
+            {
+                newProjectCommand = Resources.Command_new_consumablelibrary;
             }
 
             _plcncliCommunication.ExecuteCommand(newProjectCommand, null, null, newProjectArguments.ToArray());

@@ -133,6 +133,15 @@ namespace PlcNextVSExtension.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to new consumablelibrary.
+        /// </summary>
+        internal static string Command_new_consumablelibrary {
+            get {
+                return ResourceManager.GetString("Command_new_consumablelibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to new project.
         /// </summary>
         internal static string Command_new_plmproject {
@@ -363,6 +372,15 @@ namespace PlcNextVSExtension.Properties {
         internal static string ProjectType_ACF {
             get {
                 return ResourceManager.GetString("ProjectType_ACF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to consumablelibrary.
+        /// </summary>
+        internal static string ProjectType_ConsumableLibrary {
+            get {
+                return ResourceManager.GetString("ProjectType_ConsumableLibrary", resourceCulture);
             }
         }
         

@@ -1,15 +1,16 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="PlcncliBuild.GenerateTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
-  <UsingTask TaskName="PlcncliBuild.BuildTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
-  <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
-  <Target Name="Build">
-    <GenerateTask ProjectDirectory="$(ProjectDir)"
+	<Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLIBuild.targets" />
+	<ItemGroup>
+		<PropertyPageSchema Include="$(MSBuildExtensionsPath)\PHOENIX CONTACT\PropertyRules\PLCnextBuildPropertiesRule.xml" />
+	</ItemGroup>
+    <UsingTask TaskName="PlcncliBuild.GenerateTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
+    <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
+    <Target Name="Build">
+        <GenerateTask ProjectDirectory="$(ProjectDir)"
                   AdditionalOptions="$(PLCnCLIGenerateOptions)"/>
-	  <BuildTask ProjectDirectory="$(ProjectDir)"
-             AdditionalOptions="$(PLCnCLIBuildOptions)"
-             Configuration="$(Configuration)"/>
-    <DeployTask ProjectDirectory="$(ProjectDir)"
+	    <CallTarget Targets="PLCnCLIBuild"/>
+        <DeployTask ProjectDirectory="$(ProjectDir)"
                 AdditionalOptions="$(PLCnCLIDeployOptions)"
                 Configuration="$(Configuration)"/>
-  </Target>
+    </Target>
 </Project>

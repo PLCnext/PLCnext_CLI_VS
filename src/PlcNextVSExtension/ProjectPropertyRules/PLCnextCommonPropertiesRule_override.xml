@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule Name="PLCnextCommonProperties"
+      DisplayName="PLCnext Technology"
+      PageTemplate="tool"
+      Order="1000"
+	  OverrideMode="Replace"
+      xmlns="http://schemas.microsoft.com/build/2009/properties"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Rule.DataSource>
+		<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+	</Rule.DataSource>
+	<Rule.Categories>
+		<Category Name="General" DisplayName="General"/>
+		<Category Name="Build" DisplayName="PLCnCLI Build"/>
+	</Rule.Categories>
+	<StringProperty Name="ProjectType_"
+					Category="General"
+					DisplayName="Project Type"
+					Description="Specifies the project type (e.g. 'project' for PLM projects or 'acfproject' for ACF projects).">
+		<StringProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIProjectType" />
+		</StringProperty.DataSource>
+	</StringProperty>
+	<StringProperty Name="BuildOptions_"
+					Category="Build"
+					DisplayName="Additional Build Options"
+					Description="Additional build options can be specified here. These options will be appended to the PLCnCLI build command. See &quot;plcncli build --help&quot; command for information about available options.">
+		<StringProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIBuildOptions" />
+		</StringProperty.DataSource>
+	</StringProperty>
+</Rule>
