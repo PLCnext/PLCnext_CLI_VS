@@ -95,5 +95,20 @@ namespace PlcncliServices.PLCnCLI
                 throw new PlcncliException(command, receiver.InfoMessages, receiver.ErrorMessages);
             }
         }
+
+        public T ConvertToTypedCommandResult<T>(IEnumerable<string> messages)
+        {
+            if (messages != null)
+            {
+                try
+                {
+                    var result = JsonConvert.DeserializeObject(string.Join(string.Empty, messages.SkipWhile(s => !s.Trim().StartsWith("{"))), typeof(T));
+                    return (T) result;
+                }
+                catch (PlcncliException) { }
+                catch (JsonException) { }
+            }
+            return default(T);
+        }
     }
 }

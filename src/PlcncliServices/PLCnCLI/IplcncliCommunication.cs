@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using PlcncliServices.CommandResults;
 
 namespace PlcncliServices.PLCnCLI
@@ -17,5 +18,7 @@ namespace PlcncliServices.PLCnCLI
         CommandResult ExecuteCommand(string command, IOutputReceiver receiver, Type resultType, params string[] arguments);
 
         void ExecuteWithoutResult(string command, IOutputReceiver receiver = null, params string[] arguments);
+
+        T ConvertToTypedCommandResult<T>(IEnumerable<string> messages);
     }
 }
