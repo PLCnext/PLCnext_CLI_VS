@@ -10,15 +10,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio.ProjectSystem.Properties;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
@@ -168,12 +163,29 @@ namespace PlcNextVSExtension
             {
                 if (serviceProvider.GetService(typeof(SPlcncliCommunication)) is IPlcncliCommunication cliCommunication)
                 {
-                    ProjectInformationCommandResult projectInformationBefore = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                        typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
-                        $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
-                    CompilerSpecificationCommandResult compilerSpecsBefore = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
-                        typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
-                        $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
+                    ProjectInformationCommandResult projectInformationBefore = null;
+                    try
+                    {
+                        projectInformationBefore = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                            typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
+                            $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                    }
+                    catch (PlcncliException ex)
+                    {
+                        projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                    }
+
+                    CompilerSpecificationCommandResult compilerSpecsBefore = null;
+                    try
+                    { 
+                        compilerSpecsBefore = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
+                            typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
+                            $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
+                    }
+                    catch(PlcncliException ex)
+                    {
+                        compilerSpecsBefore = cliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
+                    }
 
                     IEnumerable<CompilerMacroResult> macrosBefore = compilerSpecsBefore?.Specifications.FirstOrDefault()
                         ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
@@ -196,13 +208,28 @@ namespace PlcNextVSExtension
                             $"\"{target.LongVersion}\"");
                     }
 
-                    ProjectInformationCommandResult projectInformationAfter = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                        typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
-                        $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
-                    CompilerSpecificationCommandResult compilerSpecsAfter = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
-                        typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
-                        $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
-
+                    ProjectInformationCommandResult projectInformationAfter = null;
+                    try 
+                    {
+                        projectInformationAfter = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                            typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
+                            $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                    }
+                    catch (PlcncliException ex)
+                    {
+                        projectInformationAfter = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                    }
+                    CompilerSpecificationCommandResult compilerSpecsAfter = null;
+                    try
+                    {
+                        compilerSpecsAfter = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
+                         typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
+                         $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
+                    }
+                    catch (PlcncliException ex)
+                    {
+                        compilerSpecsAfter = cliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
+                    }
                     IEnumerable<CompilerMacroResult> macrosAfter = compilerSpecsAfter?.Specifications.FirstOrDefault()
                         ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
 
