@@ -9,10 +9,12 @@
 
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TaskStatusCenter;
 using PlcncliServices.PLCnCLI;
 using System;
 using System.IO;
 using System.Windows;
+using Task = System.Threading.Tasks.Task;
 
 namespace PlcncliSdkOptionPage.ChangeSDKsProperty
 {
@@ -77,25 +79,58 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                     }
                 }
             }
-            try
+
+            IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
+
+            foreach (string sdk in model.SdkChangesCollector.SdksToRemove)
             {
-                foreach (string sdk in model.SdkChangesCollector.SdksToRemove)
+                ITaskHandler taskHandler = taskCenter.PreRegister(new TaskHandlerOptions() { Title = $"Removing sdk {sdk}" }, new TaskProgressData());
+                taskHandler.RegisterTask(Task.Run(() =>
                 {
-                    plcncliCommunication.ExecuteCommand("set setting", null, null, "-r", "SdkPaths", $"\"{sdk}\"");
-                }
-                foreach (string sdk in model.SdkChangesCollector.SdksToAdd)
-                {
-                    plcncliCommunication.ExecuteCommand("set setting", null, null, "-a", "SdkPaths", $"\"{sdk}\"");
-                }
-                foreach (InstallSdk sdk in model.SdkChangesCollector.SdksToInstall)
-                {
-                    plcncliCommunication.ExecuteCommand("install sdk", null, null, "--path", $"\"{sdk.ArchiveFile}\"",
-                        "--destination", $"\"{sdk.Destination}\"", sdk.Force ? "--force" : "");
-                }
+                    try
+                    {
+                        plcncliCommunication.ExecuteCommand("set setting", null, null, "-r", "SdkPaths", $"\"{sdk}\"");
+                    }
+                    catch (PlcncliException e)
+                    {
+                        MessageBox.Show(e.Message, "PLCnCLI error");
+                    }
+                }));
             }
-            catch(PlcncliException e)
+            foreach (string sdk in model.SdkChangesCollector.SdksToAdd)
             {
-                MessageBox.Show(e.Message, "PLCnCLI error");
+                ITaskHandler taskHandler = taskCenter.PreRegister(new TaskHandlerOptions() { Title = $"Adding sdk {sdk}" }, new TaskProgressData());
+                taskHandler.RegisterTask(Task.Run(() =>
+                {
+                    try
+                    {
+                        plcncliCommunication.ExecuteCommand("set setting", null, null, "-a", "SdkPaths", $"\"{sdk}\"");
+                    }
+                    catch (PlcncliException e)
+                    {
+                        MessageBox.Show(e.Message, "PLCnCLI error");
+                    }
+                }));
+                
+            }
+            foreach (InstallSdk sdk in model.SdkChangesCollector.SdksToInstall)
+            {
+                ITaskHandler taskHandler = taskCenter.PreRegister(
+                    new TaskHandlerOptions() { Title = $"Installing sdk {sdk.ArchiveFile} to {sdk.Destination}" }, 
+                    new TaskProgressData());
+
+                taskHandler.RegisterTask(Task.Run(() =>
+                {
+                    try
+                    {
+                        plcncliCommunication.ExecuteCommand("install sdk", null, null, "--path", $"\"{sdk.ArchiveFile}\"",
+                    "--destination", $"\"{sdk.Destination}\"", sdk.Force ? "--force" : "");
+                    }
+                    catch (PlcncliException e)
+                    {
+                        MessageBox.Show(e.Message, "PLCnCLI error");
+                    }
+                }));
             }
         }
     }
