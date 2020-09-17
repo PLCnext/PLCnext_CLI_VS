@@ -9,6 +9,8 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
 
@@ -18,15 +20,26 @@ namespace PlcncliBuild
     {
         public override bool Execute()
         {
-            //TODO generate and deploy: consider option -s (source folder)
-
             Log.LogMessage(MessageImportance.Low, "Starting plcncli build task.");
             Log.LogMessage(MessageImportance.Low, "Additional build options value: \"" + AdditionalOptions + "\"");
 
-            Configuration = Configuration.StartsWith("Debug") ? "Debug" : "Release";
+            string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
+            string target = Configuration.Substring(buildType.Length);
+
+            IEnumerable<string> options = new[] { "-p", ProjectDirectory };
+            if (!target.Contains("all Targets"))
+            {
+                options = options.Append("-t");
+                options = options.Append($"\"{target.Trim()}\"");
+            }
+
+            
+            options = options.Append("-b");
+            options = options.Append(buildType);
+            options = options.Append(AdditionalOptions);
 
             try {
-                Communication.ExecuteWithoutResult("build", new TaskLogger(Log), "-p", ProjectDirectory, "-b", Configuration, AdditionalOptions);
+                Communication.ExecuteWithoutResult("build", new TaskLogger(Log), options.ToArray());
             }
             catch (PlcncliException ex)
             {

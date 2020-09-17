@@ -39,5 +39,10 @@ namespace PlcncliServices.CommandResults
         {
             return $"{Name} {LongVersion}";
         }
+
+        public string GetNameFormattedForCommandLine()
+        {
+            return $"{Name},{LongVersion}";
+        }
     }
 }

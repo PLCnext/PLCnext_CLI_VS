@@ -9,6 +9,8 @@
 
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PlcncliBuild
 {
@@ -19,11 +21,24 @@ namespace PlcncliBuild
             Log.LogMessage(MessageImportance.Low, "Starting deploy task.");
             Log.LogMessage(MessageImportance.Low, "Additional deploy options value: \"" + AdditionalOptions + "\"");
 
-            Configuration = Configuration.StartsWith("Debug") ? "Debug" : "Release";
+            string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
+            string target = Configuration.Substring(buildType.Length);
+
+            IEnumerable<string> options = new[] { "-p", ProjectDirectory };
+
+            if (!target.Contains("all Targets"))
+            {
+                options = options.Append("-t");
+                options = options.Append($"\"{ target.Trim()}\"");
+            }
+
+            options = options.Append("-b");
+            options = options.Append(buildType);
+            options = options.Append(AdditionalOptions);
 
             try
             {
-                Communication.ExecuteWithoutResult("deploy", new TaskLogger(Log), "-p", ProjectDirectory, "-b", Configuration, AdditionalOptions);
+                Communication.ExecuteWithoutResult("deploy", new TaskLogger(Log), options.ToArray());
             }
             catch (PlcncliException ex)
             {

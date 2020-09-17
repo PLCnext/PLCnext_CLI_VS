@@ -66,6 +66,7 @@
       <DependentUpon>NewProjectInformationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProjectInformationDialog\NewProjectInformationViewModel.cs" />
+    <Compile Include="ProjectConfigurationManager.cs" />
     <Compile Include="ProjectPropertyEditor\BoolToColorConverter.cs" />
     <Compile Include="SetTargetsCommand.cs" />
     <Compile Include="SetTargetsCommandPackage.cs" />

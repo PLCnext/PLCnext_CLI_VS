@@ -132,14 +132,13 @@ namespace PlcNextVSExtension
 
             _plcncliCommunication.ExecuteCommand(newProjectCommand, null, null, newProjectArguments.ToArray());
 
-            
+
+            //**********create configurations**********
+            ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
+                (_projectTargets.Select(t => t.GetNameFormattedForCommandLine()), project);
+
             foreach (TargetResult target in _projectTargets)
             {
-                //**********create configurations**********
-                //disabled, for the moment the tool only supports build all
-                //project.ConfigurationManager.AddConfigurationRow($"Release {target.GetDisplayName()}", "Release - all Targets", false);
-                //project.ConfigurationManager.AddConfigurationRow($"Debug {target.GetDisplayName()}", "Debug - all Targets", false);
-
                 //**********set project target**********
                 _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
                     Resources.Option_set_target_add, Resources.Option_set_target_name, target.Name,
