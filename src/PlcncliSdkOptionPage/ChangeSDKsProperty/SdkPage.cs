@@ -26,14 +26,15 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
 
         public SdkPage()
         {
-            
+
             try
             {
                 plcncliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
                 model = new SDKPageModel(plcncliCommunication);
                 viewModel = new SDKPageViewModel(model);
                 PageControl = new SDKPageControl(viewModel);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
                 IVsActivityLog log = Package.GetGlobalService(typeof(SVsActivityLog)) as IVsActivityLog;
@@ -62,16 +63,21 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
 
         public void ApplyChanges()
         {
+            IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
+            ITaskHandler taskHandler = taskCenter.PreRegister(
+                new TaskHandlerOptions() { Title = "Updating sdks..." },
+                new TaskProgressData());
+
             if (model.SdkChangesCollector.SdksToRemove.Count > 0)
             {
                 RemoveSdkViewModel dialogVM = new RemoveSdkViewModel(model.SdkChangesCollector.SdksToRemove);
                 RemoveSdkDialog dialog = new RemoveSdkDialog(dialogVM);
                 bool? result = dialog.ShowModal();
-                if(result == null || result == false)
+                if (result == null || result == false)
                 {
                     return;
                 }
-                if(dialogVM.RemoveFromDisk)
+                if (dialogVM.RemoveFromDisk)
                 {
                     foreach (string path in model.SdkChangesCollector.SdksToRemove)
                     {
@@ -80,58 +86,71 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                 }
             }
 
-            IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
 
-            foreach (string sdk in model.SdkChangesCollector.SdksToRemove)
+            taskHandler.RegisterTask(Task.Run(async () =>
             {
-                ITaskHandler taskHandler = taskCenter.PreRegister(new TaskHandlerOptions() { Title = $"Removing sdk {sdk}" }, new TaskProgressData());
-                taskHandler.RegisterTask(Task.Run(() =>
+                foreach (string sdk in model.SdkChangesCollector.SdksToRemove)
                 {
-                    try
-                    {
-                        plcncliCommunication.ExecuteCommand("set setting", null, null, "-r", "SdkPaths", $"\"{sdk}\"");
-                    }
-                    catch (PlcncliException e)
-                    {
-                        MessageBox.Show(e.Message, "PLCnCLI error");
-                    }
-                }));
-            }
-            foreach (string sdk in model.SdkChangesCollector.SdksToAdd)
-            {
-                ITaskHandler taskHandler = taskCenter.PreRegister(new TaskHandlerOptions() { Title = $"Adding sdk {sdk}" }, new TaskProgressData());
-                taskHandler.RegisterTask(Task.Run(() =>
-                {
-                    try
-                    {
-                        plcncliCommunication.ExecuteCommand("set setting", null, null, "-a", "SdkPaths", $"\"{sdk}\"");
-                    }
-                    catch (PlcncliException e)
-                    {
-                        MessageBox.Show(e.Message, "PLCnCLI error");
-                    }
-                }));
-                
-            }
-            foreach (InstallSdk sdk in model.SdkChangesCollector.SdksToInstall)
-            {
-                ITaskHandler taskHandler = taskCenter.PreRegister(
-                    new TaskHandlerOptions() { Title = $"Installing sdk {sdk.ArchiveFile} to {sdk.Destination}" }, 
-                    new TaskProgressData());
+                    ITaskHandler subTaskHandler = taskCenter.PreRegister(
+                        new TaskHandlerOptions() { Title = $"Removing sdk {sdk}" },
+                        new TaskProgressData());
 
-                taskHandler.RegisterTask(Task.Run(() =>
+                    Task task = Task.Run(() =>
+                    {
+                        try
+                        {
+                            plcncliCommunication.ExecuteCommand("set setting", null, null, "-r", "SdkPaths", $"\"{sdk}\"");
+                        }
+                        catch (PlcncliException e)
+                        {
+                            MessageBox.Show(e.Message, "PLCnCLI error");
+                        }
+                    });
+                    subTaskHandler.RegisterTask(task);
+                    await task;
+                }
+
+                foreach (string sdk in model.SdkChangesCollector.SdksToAdd)
                 {
-                    try
+                    ITaskHandler subTaskHandler = taskCenter.PreRegister(
+                        new TaskHandlerOptions() { Title = $"Adding sdk {sdk}" },
+                        new TaskProgressData());
+
+                    Task task = Task.Run(() =>
                     {
-                        plcncliCommunication.ExecuteCommand("install sdk", null, null, "--path", $"\"{sdk.ArchiveFile}\"",
-                    "--destination", $"\"{sdk.Destination}\"", sdk.Force ? "--force" : "");
-                    }
-                    catch (PlcncliException e)
+                        try
+                        {
+                            plcncliCommunication.ExecuteCommand("set setting", null, null, "-a", "SdkPaths", $"\"{sdk}\"");
+                        }
+                        catch (PlcncliException e)
+                        {
+                            MessageBox.Show(e.Message, "PLCnCLI error");
+                        }
+                    });
+                    subTaskHandler.RegisterTask(task);
+                    await task;
+                }
+                foreach (InstallSdk sdk in model.SdkChangesCollector.SdksToInstall)
+                {
+                    ITaskHandler subTaskHandler = taskCenter.PreRegister(
+                        new TaskHandlerOptions() { Title = $"Installing sdk {sdk.ArchiveFile} to {sdk.Destination}" },
+                        new TaskProgressData());
+                    Task task = Task.Run(() =>
                     {
-                        MessageBox.Show(e.Message, "PLCnCLI error");
-                    }
-                }));
-            }
+                        try
+                        {
+                            plcncliCommunication.ExecuteCommand("install sdk", null, null, "--path", $"\"{sdk.ArchiveFile}\"",
+                            "--destination", $"\"{sdk.Destination}\"", sdk.Force ? "--force" : "");
+                        }
+                        catch (PlcncliException e)
+                        {
+                            MessageBox.Show(e.Message, "PLCnCLI error");
+                        }
+                    });
+                    subTaskHandler.RegisterTask(task);
+                    await task;
+                }
+            }));
         }
     }
 }
