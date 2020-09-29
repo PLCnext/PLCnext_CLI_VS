@@ -10,30 +10,24 @@
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Windows.Forms.Integration;
+using System.Windows;
 
 namespace PlcncliSdkOptionPage.ChangeSDKsProperty
 {
+    [DesignerCategory("")]
     [Guid("98F73EC3-E018-48BF-BA20-22A3E6ED3FD3")]
-    public class SDKsOptionPage : DialogPage
+    public class SDKsOptionPage : UIElementDialogPage
     {
         private SdkPage SdkPage { get; set; }
         private bool ReinitializationNeeded { get; set; }
 
-        protected override IWin32Window Window
+        protected override UIElement Child
         {
             get
             {
                 SdkPage = new SdkPage();
-                // convert wpf usercontrol to windows.forms.usercontrol
-                ElementHost host = new ElementHost
-                {
-                    Child = SdkPage.PageControl
-                };
-                return host;
+                return SdkPage.PageControl;
             }
         }
         protected override void OnClosed(EventArgs e)
