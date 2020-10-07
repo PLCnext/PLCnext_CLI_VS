@@ -20,5 +20,7 @@ namespace PlcncliServices.PLCnCLI
         List<string> InfoMessages { get; }
 
         List<string> ErrorMessages { get; }
+
+        void LogDebugInfo(string info);
     }
 }

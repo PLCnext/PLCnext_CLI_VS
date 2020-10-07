@@ -83,6 +83,7 @@ namespace PlcncliServices.PLCnCLI
 
             string commandline = $"{command} {string.Join(" ", arguments)}";
 
+            receiver.LogDebugInfo($"Starting process {PlcncliCommand} with options {commandline}");
             using (ProcessFacade f = new ProcessFacade(PlcncliCommand, commandline, receiver, CancellationToken.None))
             {
                 f.WaitForExit();

@@ -50,7 +50,7 @@ namespace PlcncliServices.PLCnCLI
                 {
                     _processName = _internalProcess.ProcessName;
                     _internalProcess.OutputDataReceived += InternalProcessOnOutputDataReceived;
-                    _internalProcess.ErrorDataReceived += InternalProcessOnOutputDataReceived;
+                    _internalProcess.ErrorDataReceived += InternalProcessOnErrorDataReceived;
                     _internalProcess.EnableRaisingEvents = true;
                     _internalProcess.Exited += InternalProcessOnExited;
                     _internalProcess.BeginOutputReadLine();
@@ -94,13 +94,14 @@ namespace PlcncliServices.PLCnCLI
             }
         }
 
-        //private void InternalProcessOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
-        //{
-        //    if (dataReceivedEventArgs.Data != null)
-        //    {
-        //        _outputReceiver.WriteLine($"[{_processName}]: {dataReceivedEventArgs.Data}");
-        //    }
-        //}
+        private void InternalProcessOnErrorDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
+        {
+            if (dataReceivedEventArgs.Data != null)
+            {
+                _outputReceiver.ErrorMessages.Add(dataReceivedEventArgs.Data);
+                _outputReceiver.WriteLine(dataReceivedEventArgs.Data);
+            }
+        }
 
         public int ExitCode
         {
@@ -146,7 +147,7 @@ namespace PlcncliServices.PLCnCLI
                 if (_internalProcess != null)
                 {
                     _internalProcess.OutputDataReceived -= InternalProcessOnOutputDataReceived;
-                    _internalProcess.ErrorDataReceived -= InternalProcessOnOutputDataReceived;
+                    _internalProcess.ErrorDataReceived -= InternalProcessOnErrorDataReceived;
                     _internalProcess.Exited -= InternalProcessOnExited;
                     _internalProcess.EnableRaisingEvents = false;
                     if (_errorReadStarted)

@@ -30,5 +30,9 @@ namespace PlcncliServices.PLCnCLI
             ErrorMessages.Add(error);
         }
 
+        void IOutputReceiver.LogDebugInfo(string info)
+        {
+            Debug.WriteLine(info);
+        }
     }
 }

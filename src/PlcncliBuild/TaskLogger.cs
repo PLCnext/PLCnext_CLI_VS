@@ -29,14 +29,25 @@ namespace PlcncliBuild
             string cmake = "[cmake]: ";
             if (line.Contains(cmake))
                 line = line.Substring(line.IndexOf(cmake) + cmake.Length);
-            _loggingHelper.LogMessageFromText(line, MessageImportance.Normal);
+
+            // output format of librarybuilder does not match visual studio error format
+            string libBuilder = "[EngineeringLibraryBuilder]:";
+
+            if (line.TrimStart().StartsWith(libBuilder) && ErrorMessages.Contains(line))
+                _loggingHelper.LogError(line);
+            else
+                _loggingHelper.LogMessageFromText(line, MessageImportance.Normal);
             
         }
 
         public void WriteError(string error)
         {
            throw new NotImplementedException();
-            
+        }
+
+        void IOutputReceiver.LogDebugInfo(string info)
+        {
+            _loggingHelper.LogCommandLine(info);
         }
 
         public List<string> InfoMessages { get; } = new List<string>();
