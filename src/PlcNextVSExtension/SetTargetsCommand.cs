@@ -103,12 +103,12 @@ namespace PlcNextVSExtension
         {
             if (sender is OleMenuCommand cmd)
             {
-                Project project = GetProject();
-                VCProject p = project.Object as VCProject;
-                VCConfiguration configuration = p.ActiveConfiguration;
-                IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
-                if (plcnextRule != null)
+                try
                 {
+                    Project project = GetProject();
+                    VCProject p = project.Object as VCProject;
+                    VCConfiguration configuration = p.ActiveConfiguration;
+                    IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
                     string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
                     if (!string.IsNullOrEmpty(projectType))
                     {
@@ -116,8 +116,10 @@ namespace PlcNextVSExtension
                         return;
                     }
                 }
-
-
+                catch(NullReferenceException)
+                {
+                    //cmd visibility will be set to false
+                }
                 cmd.Visible = false;
             }
         }
