@@ -19,7 +19,7 @@ namespace PlcNextVSExtension
     {
         const string releaseConfigurationNameRaw = "Release {0}";
         const string debugConfigurationNameRaw = "Debug {0}";
-        const string targetBuildConfigName = "Target-specific";
+        const string targetBuildConfigName = "Project-specific";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD010:Invoke single-threaded types on Main thread", Justification = "Handled in calling method")]
         private static void CreateConfigurationsForTarget(string target, Project project, SolutionConfiguration2 solutionConfiguration)
