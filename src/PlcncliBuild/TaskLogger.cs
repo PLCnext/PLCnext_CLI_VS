@@ -42,7 +42,8 @@ namespace PlcncliBuild
 
         public void WriteError(string error)
         {
-           throw new NotImplementedException();
+            ErrorMessages.Add(error);
+            WriteLine(error);
         }
 
         void IOutputReceiver.LogDebugInfo(string info)

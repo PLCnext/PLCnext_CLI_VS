@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -148,7 +149,7 @@ namespace PlcNextVSExtension
 
 
             //add project items to project
-            IEnumerable<string> projectFiles = 
+            IEnumerable<string> projectFiles =
                 Directory.GetFiles(_projectDirectory, "*.*pp", SearchOption.AllDirectories)
                 .Concat(Directory.GetFiles(_projectDirectory, "*.txt", SearchOption.AllDirectories))
                 .Where(f => !f.EndsWith("UndefClang.hpp"));
@@ -160,7 +161,7 @@ namespace PlcNextVSExtension
 
             //**********generate code**********
             _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null, Resources.Option_generate_code_project, $"\"{_projectDirectory}\"");
-            
+
             ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
                 typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
 
@@ -169,24 +170,39 @@ namespace PlcNextVSExtension
                         typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{_projectDirectory}\"") as
                     CompilerSpecificationCommandResult;
 
+            (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsCommandResult, projectInformation);
 
-            IEnumerable<CompilerMacroResult> macros = compilerSpecsCommandResult?.Specifications.FirstOrDefault()
-                ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
             if (macros == null || !macros.Any()) return;
+
+            string joinedMacros = string.Join(";",
+                    macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)));
+            string joinedIncludes = string.Join(";", includes);
 
             foreach (VCConfiguration2 config in p.Configurations)
             {
-                IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                string propKey = "IncludePath";
-                string includes = string.Join(";", projectInformation.IncludePaths.Select(path => path.PathValue));
+                IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
+                if (plcnextCommonPropertiesRule == null)
+                {
+                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                }
+                plcnextCommonPropertiesRule.SetPropertyValue("Macros", joinedMacros);
+                plcnextCommonPropertiesRule.SetPropertyValue("Includes", joinedIncludes);
 
-                rule.SetPropertyValue(propKey, includes);
-                
+                IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
+                if (rule == null)
+                {
+                    MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
+                }
+                string propKey = "IncludePath";
+                rule.SetPropertyValue(propKey, joinedIncludes);
+
                 IVCRulePropertyStorage clRule = config.Rules.Item("CL");
+                if (clRule == null)
+                {
+                    MessageBox.Show("CL rule was not found in configuration rules collection.");
+                }
                 string key = "PreprocessorDefinitions";
-                string macro = string.Join(";",
-                    macros.Select(m => m.Name + (m.Value != null ? "=" + m.Value : "")));
-                clRule.SetPropertyValue(key, macro);
+                clRule.SetPropertyValue(key, joinedMacros);
             }
         }
 

@@ -8,6 +8,7 @@
 #endregion
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace PlcncliServices.CommandResults
 {
@@ -21,5 +22,11 @@ namespace PlcncliServices.CommandResults
     {
         [JsonProperty(PropertyName = "exists")]
         public bool Exists { get; set; }
+    }
+
+    public class IncludePath : UncheckedPath
+    {
+        [JsonProperty(PropertyName = "targets")]
+        public IEnumerable<TargetResult> Targets { get; set; }
     }
 }

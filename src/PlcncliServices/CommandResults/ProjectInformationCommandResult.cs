@@ -30,7 +30,7 @@ namespace PlcncliServices.CommandResults
         public IEnumerable<EntityResult> Entities { get; set; }
 
         [JsonProperty(PropertyName = "includePaths")]
-        public IEnumerable<Path> IncludePaths { get; set; }
+        public IEnumerable<IncludePath> IncludePaths { get; set; }
     }
 
     public class EntityResult

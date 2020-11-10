@@ -37,6 +37,9 @@ namespace PlcncliServices.CommandResults
 
         [JsonProperty(PropertyName = "compilerMacros")]
         public IEnumerable<CompilerMacroResult> CompilerMacros { get; set; }
+
+        [JsonProperty(PropertyName ="targets")]
+        public IEnumerable<TargetResult> Targets { get; set; }
     }
 
     public class CompilerMacroResult

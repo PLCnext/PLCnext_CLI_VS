@@ -98,8 +98,7 @@ namespace PlcncliServices.PLCnCLI
         {
             if (dataReceivedEventArgs.Data != null)
             {
-                _outputReceiver.ErrorMessages.Add(dataReceivedEventArgs.Data);
-                _outputReceiver.WriteLine(dataReceivedEventArgs.Data);
+                _outputReceiver.WriteError(dataReceivedEventArgs.Data);
             }
         }
 

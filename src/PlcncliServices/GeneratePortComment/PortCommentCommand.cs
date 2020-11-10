@@ -10,6 +10,7 @@
 using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -98,16 +99,21 @@ namespace PlcncliServices.GeneratePortComment
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!(Package.GetGlobalService(typeof(DTE)) is DTE dte))
-                //TODO add info for user that dte is null
+            {
+                MessageBox.Show("Could not set project targets because dte is null.");
                 return;
-
+            }
             Document activeDocument = dte.ActiveDocument;
             if (activeDocument == null)
-                //TODO add info for user that document is null
+            {
+                MessageBox.Show("Could not set project targets because there is no active document.");
                 return;
+            }
             if (!(activeDocument.Selection is TextSelection selection))
-                //TODO add info for user that selection is null
+            {
+                MessageBox.Show("Could not set project targets because no selection was found.");
                 return;
+            }
 
             VirtualPoint activePoint = selection.ActivePoint;
             string line = activePoint.CreateEditPoint().GetLines(activePoint.Line, activePoint.Line + 1);

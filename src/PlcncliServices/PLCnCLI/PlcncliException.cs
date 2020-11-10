@@ -15,12 +15,12 @@ namespace PlcncliServices.PLCnCLI
 {
     public class PlcncliException : Exception
     {
-        public IEnumerable<string> InfoMessages { get; }
-        public IEnumerable<string> ErrorMessages { get; }
+        public List<string> InfoMessages { get; }
+        public List<string> ErrorMessages { get; }
 
         private readonly string _command;
 
-        public PlcncliException(string command, IEnumerable<string> infoMessages, IEnumerable<string> errorMessages)
+        public PlcncliException(string command, List<string> infoMessages, List<string> errorMessages)
         {
             _command = command;
             InfoMessages = infoMessages;

@@ -153,6 +153,7 @@ namespace PlcNextVSExtension
         /// <param name="e">Event args.</param>
         private void SetTargets(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             IServiceProvider serviceProvider = package;
             Project project = GetProject();
             if (project == null)
@@ -167,63 +168,88 @@ namespace PlcNextVSExtension
 
             if (view.DialogResult == true)
             {
-                IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
-                ITaskHandler taskHandler = taskCenter.PreRegister(new TaskHandlerOptions() { Title = $"Setting project targets" }, new TaskProgressData());
-                taskHandler.RegisterTask(Task.Run(() => ApplyChangesInBackgroundAsync()));
-            }
-
-            async void ApplyChangesInBackgroundAsync()
-            {
-                try
+                if (!(serviceProvider.GetService(typeof(SPlcncliCommunication)) is IPlcncliCommunication cliCommunication))
                 {
-                    if (serviceProvider.GetService(typeof(SPlcncliCommunication)) is IPlcncliCommunication cliCommunication)
+                    MessageBox.Show("Could not set project targets because no plcncli communication found.");
+                    return;
+                }
+
+                VCProject p = project.Object as VCProject;
+                bool needProjectInformation = false;
+                bool needCompilerInformation = false;
+                foreach (VCConfiguration2 config in p.Configurations)
+                {
+                    // find includes and macros which were set by this extension before
+                    IVCRulePropertyStorage plcnextCommonPropertiesRule = p.ActiveConfiguration?.Rules.Item("PLCnextCommonProperties");
+                    if (plcnextCommonPropertiesRule == null)
                     {
-                        ProjectInformationCommandResult projectInformationBefore = null;
-                        try
+                        MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    }
+                    if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Includes")))
+                    {
+                        needProjectInformation = true;
+                    }
+                    if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Macros")))
+                    {
+                        needCompilerInformation = true;
+                    }
+                    if (needCompilerInformation && needProjectInformation)
+                    {
+                        break;
+                    }
+                }
+                
+                IEnumerable<string> includesBefore = null;
+                IEnumerable<CompilerMacroResult> macrosBefore = Enumerable.Empty<CompilerMacroResult>();
+                CompilerSpecificationCommandResult compilerSpecsAfter = null;
+                ProjectInformationCommandResult projectInformationAfter = null;
+                IEnumerable<CompilerMacroResult> macrosAfter = null;
+                IEnumerable<string> includesAfter = null;
+
+                IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
+                ITaskHandler taskHandler = taskCenter.PreRegister(
+                    new TaskHandlerOptions() { Title = $"Setting project targets" },
+                    new TaskProgressData());
+                Task task = Task.Run(async () =>
+                {
+                    try
+                    {
+                        if (needProjectInformation)
                         {
-                            projectInformationBefore = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                                typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
-                                $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
-                        }
-                        catch (PlcncliException ex)
-                        {
-                            projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                            ProjectInformationCommandResult projectInformationBefore = null;
+                            try
+                            {
+                                projectInformationBefore = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                                    typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
+                                    $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                            }
+                            catch (PlcncliException ex)
+                            {
+                                projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                            }
+                            includesBefore = projectInformationBefore.IncludePaths.Select(x => x.PathValue);
+
                         }
 
-                        CompilerSpecificationCommandResult compilerSpecsBefore = null;
-                        try
+                        if (needCompilerInformation)
                         {
-                            compilerSpecsBefore = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
-                                typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
-                                $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
-                        }
-                        catch (PlcncliException ex)
-                        {
-                            compilerSpecsBefore = cliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
-                        }
-
-                        IEnumerable<CompilerMacroResult> macrosBefore = compilerSpecsBefore?.Specifications.FirstOrDefault()
-                            ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
-
-                        foreach (TargetResult target in model.TargetsToAdd)
-                        {
-                            cliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
-                                Resources.Option_set_target_add, Resources.Option_set_target_project,
-                                $"\"{projectDirectory}\"",
-                                Resources.Option_set_target_name, target.Name, Resources.Option_set_target_version,
-                                $"\"{target.LongVersion}\"");
+                            CompilerSpecificationCommandResult compilerSpecsBefore = null;
+                            try
+                            {
+                                compilerSpecsBefore = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
+                                    typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project,
+                                    $"\"{projectDirectory}\"") as CompilerSpecificationCommandResult;
+                            }
+                            catch (PlcncliException ex)
+                            {
+                                compilerSpecsBefore = cliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
+                            }
+                            macrosBefore = compilerSpecsBefore?.Specifications.FirstOrDefault()
+                                ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("))??Enumerable.Empty<CompilerMacroResult>();
                         }
 
-                        foreach (TargetResult target in model.TargetsToRemove)
-                        {
-                            cliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
-                                Resources.Option_set_target_remove, Resources.Option_set_target_project,
-                                $"\"{projectDirectory}\"",
-                                Resources.Option_set_target_name, target.Name, Resources.Option_set_target_version,
-                                $"\"{target.LongVersion}\"");
-                        }
+                        SetTargets();
 
-                        ProjectInformationCommandResult projectInformationAfter = null;
                         try
                         {
                             projectInformationAfter = cliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
@@ -234,7 +260,6 @@ namespace PlcNextVSExtension
                         {
                             projectInformationAfter = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
                         }
-                        CompilerSpecificationCommandResult compilerSpecsAfter = null;
                         try
                         {
                             compilerSpecsAfter = cliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
@@ -245,62 +270,102 @@ namespace PlcNextVSExtension
                         {
                             compilerSpecsAfter = cliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
                         }
-                        IEnumerable<CompilerMacroResult> macrosAfter = compilerSpecsAfter?.Specifications.FirstOrDefault()
-                            ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include("));
+
+                        (macrosAfter, includesAfter) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsAfter, projectInformationAfter);
+
 
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                        VCProject p = project.Object as VCProject;
+
                         foreach (VCConfiguration2 config in p.Configurations)
                         {
+                            IEnumerable<string> configIncludesBefore = includesBefore;
+                            IEnumerable<CompilerMacroResult> configMacrosBefore = macrosBefore;
+                            IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
+                            string savedIncludes = plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Includes");
+                            string savedMacros = plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Macros");
+                            if (!string.IsNullOrEmpty(savedIncludes))
+                            {
+                                configIncludesBefore = savedIncludes.Split(';');
+                            }
+                            if (!string.IsNullOrEmpty(savedMacros))
+                            {
+                                configMacrosBefore = savedMacros.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                                .Select(x => x.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
+                                                                .Select(x => new CompilerMacroResult { Name = x[0], Value = x.Length == 2 ? x[1].Trim() : null });
+                            }
+
+
                             IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                            string propKey = "IncludePath";
+                            string includePathKey = "IncludePath";
+                            IEnumerable<string> currentIncludes = rule.GetUnevaluatedPropertyValue(includePathKey).Split(';');
 
-                            string currentIncludes = rule.GetUnevaluatedPropertyValue(propKey);
-                            IEnumerable<string> currentIncludeEnum = currentIncludes.Split(';');
-                            IEnumerable<string> includesEnum = currentIncludeEnum.Where(value =>
-                                    !projectInformationBefore.IncludePaths.Select(path => path.PathValue).Contains(value))
-                                .Concat(projectInformationAfter.IncludePaths.Select(path => path.PathValue));
+                            string includes = string.Join(";",
+                                                          currentIncludes.Where(value => !configIncludesBefore.Contains(value))
+                                                                         .Concat(includesAfter));
 
-                            string includes = string.Join(";", includesEnum);
+                            rule.SetPropertyValue(includePathKey, includes);
+                            plcnextCommonPropertiesRule.SetPropertyValue("Includes", string.Join(";", includesAfter));
 
-                            rule.SetPropertyValue(propKey, includes);
-
-
-                            IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-                            string macroKey = "PreprocessorDefinitions";
-                            string currentMacros = clRule.GetUnevaluatedPropertyValue(macroKey);
-                            IEnumerable<(string, string)> currentMacroEnum = currentMacros.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(m => m.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
-                                .Select(m => (m[0], m.Length == 2 ? m[1] : string.Empty));
-
-                            if (macrosBefore == null && macrosAfter == null)
+                            if (configMacrosBefore == null && macrosAfter == null)
                                 continue;
-
                             if (macrosAfter == null)
                                 macrosAfter = Enumerable.Empty<CompilerMacroResult>();
 
-                            IEnumerable<(string, string)> macroEnum = macrosAfter.Select(m => (m.Name, m.Value));
+                            IVCRulePropertyStorage clRule = config.Rules.Item("CL");
+                            string macroKey = "PreprocessorDefinitions";
+                            IEnumerable<CompilerMacroResult> currentMacros =
+                                clRule.GetUnevaluatedPropertyValue(macroKey)
+                                      .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(m => m.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
+                                      .Select(m => new CompilerMacroResult { Name = m[0], Value = m.Length == 2 ? m[1].Trim() : null });
 
-                            if (macrosBefore != null)
+                            if (configMacrosBefore != null)
                             {
-                                macroEnum = macroEnum.Concat(currentMacroEnum.Where(value =>
-                                   !macrosBefore.Where(m => m.Name.Equals(value.Item1) && m.Value.Equals(value.Item2)).Any()));
+                                currentMacros = currentMacros.Where(x => !configMacrosBefore.Any(y => y.Name.Equals(x.Name) &&
+                                                                                                     (y.Value != null ?
+                                                                                                        (x.Value == null ? string.IsNullOrEmpty(y.Value.Trim()) : y.Value.Trim().Equals(x.Value.Trim())) :
+                                                                                                        string.IsNullOrEmpty(x.Value?.Trim()))))
+                                                             .Concat(macrosAfter);
                             }
-                            string macros = string.Join(";", macroEnum.Select(m => m.Item1 + (m.Item2 != null ? "=" + m.Item2 : "")));
-
-                            clRule.SetPropertyValue(macroKey, macros);
+                            string joinedMacros = string.Join(";", currentMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))));
+                            clRule.SetPropertyValue(macroKey, joinedMacros);
+                            plcnextCommonPropertiesRule.SetPropertyValue("Macros", 
+                                string.Join(";",macrosAfter.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value)))));
                         }
 
-                        
+
                         ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
                             (projectInformationAfter.Targets.Select(t => t.GetNameFormattedForCommandLine()), project);
+
+
+                        void SetTargets()
+                        {
+                            foreach (TargetResult target in model.TargetsToAdd)
+                            {
+                                cliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
+                                Resources.Option_set_target_add, Resources.Option_set_target_project,
+                                $"\"{projectDirectory}\"",
+                                Resources.Option_set_target_name, target.Name, Resources.Option_set_target_version,
+                                $"\"{target.LongVersion}\"");
+                            }
+
+                            foreach (TargetResult target in model.TargetsToRemove)
+                            {
+                                cliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
+                                    Resources.Option_set_target_remove, Resources.Option_set_target_project,
+                                    $"\"{projectDirectory}\"",
+                                    Resources.Option_set_target_name, target.Name, Resources.Option_set_target_version,
+                                    $"\"{target.LongVersion}\"");
+                            }
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Exception during setting of targets");
-                    throw ex;
-                }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message+ex.StackTrace??string.Empty, "Exception during setting of targets");
+                        throw ex;
+                    }
+                });
+                taskHandler.RegisterTask(task);
             }
         }
     }

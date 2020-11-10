@@ -19,6 +19,6 @@ namespace PlcncliServices.PLCnCLI
 
         void ExecuteWithoutResult(string command, IOutputReceiver receiver = null, params string[] arguments);
 
-        T ConvertToTypedCommandResult<T>(IEnumerable<string> messages);
+        T ConvertToTypedCommandResult<T>(List<string> messages);
     }
 }

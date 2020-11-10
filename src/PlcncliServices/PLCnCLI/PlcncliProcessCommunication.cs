@@ -97,7 +97,7 @@ namespace PlcncliServices.PLCnCLI
             }
         }
 
-        public T ConvertToTypedCommandResult<T>(IEnumerable<string> messages)
+        public T ConvertToTypedCommandResult<T>(List<string> messages)
         {
             if (messages != null)
             {
