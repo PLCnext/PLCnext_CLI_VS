@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule Name="PLCnextCommonProperties"
+      DisplayName="PLCnext Technology"
+      PageTemplate="tool"
+      Order="1050"
+	  OverrideMode="Extend"
+      xmlns="http://schemas.microsoft.com/build/2009/properties"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Rule.DataSource>
+		<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
+	</Rule.DataSource>
+	<BoolProperty Name="GenerateDT"
+				  Category="Build"
+				  DisplayName="Generate Datatypes Worksheet"
+				  Description="This option controlls whether a datatypes worksheet shall be generated for the pcwlx library. Default is 'Yes'."
+				  Default="true"
+				  IsRequired="true">
+		<BoolProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIGenerateDT" />
+		</BoolProperty.DataSource>
+	</BoolProperty>
+</Rule>

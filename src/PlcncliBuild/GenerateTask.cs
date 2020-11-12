@@ -9,6 +9,8 @@
 
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PlcncliBuild
 {
@@ -19,9 +21,23 @@ namespace PlcncliBuild
             Log.LogMessage(MessageImportance.Low, "Starting generate task.");
             Log.LogMessage(MessageImportance.Low, "Plcncli location: \"" + PlcncliLocation + "\"");
             Log.LogMessage(MessageImportance.Low, "Additional generate options value: \"" + AdditionalOptions + "\"");
+
+            string[] args =new string[]
+            {
+                "-p",
+                ProjectDirectory
+            };
+
+            if(GenerateDatatypesWorksheet == false)
+            {
+                args = args.Append("--no-datatypes-worksheet").ToArray();
+            }
+
+            args = args.Append(AdditionalOptions).ToArray();
+
             try
             {
-                Communication.ExecuteWithoutResult("generate all", new TaskLogger(Log), "-p", ProjectDirectory, AdditionalOptions);
+                Communication.ExecuteWithoutResult("generate all", new TaskLogger(Log), args);
             }
             catch (PlcncliException ex)
             {
@@ -34,5 +50,7 @@ namespace PlcncliBuild
 
             return true;
         }
+
+        public bool GenerateDatatypesWorksheet { get; set; }
     }
 }

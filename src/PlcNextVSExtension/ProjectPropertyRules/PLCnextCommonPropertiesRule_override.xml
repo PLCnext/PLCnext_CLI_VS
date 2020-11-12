@@ -10,7 +10,7 @@
 		<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
 	</Rule.DataSource>
 	<Rule.Categories>
-		<Category Name="General" DisplayName="General"/>
+		<Category Name="General" DisplayName="General" />
 		<Category Name="Build" DisplayName="PLCnCLI Build"/>
 	</Rule.Categories>
 	<StringProperty Name="ProjectType_"

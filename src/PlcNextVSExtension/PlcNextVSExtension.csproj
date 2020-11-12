@@ -91,8 +91,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectPropertyRules\PLCnextBuildPropertiesRule.xml" />
-    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule_override.xml" />
+    <Content Include="ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+    </Content>
+    <Content Include="ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+    </Content>
+    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule_override.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+    </Content>
     <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
@@ -107,7 +120,11 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <None Include="key.snk" />
-    <Content Include="ProjectPropertyRules\PLCnCLIBuild.targets" />
+    <Content Include="ProjectPropertyRules\PLCnCLIBuild.targets">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

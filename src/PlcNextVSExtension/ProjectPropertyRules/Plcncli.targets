@@ -3,11 +3,18 @@
 	<ItemGroup>
 		<PropertyPageSchema Include="$(MSBuildExtensionsPath)\PHOENIX CONTACT\PropertyRules\PLCnextBuildPropertiesRule.xml" />
 	</ItemGroup>
+	<ItemGroup Condition="'$(PLCnCLIProjectType)' == 'project'">
+		<PropertyPageSchema Include="$(MSBuildExtensionsPath)\PHOENIX CONTACT\PropertyRules\PLCnextPLMGeneratePropertiesRule.xml" />
+	</ItemGroup>
+	<PropertyGroup Condition="'$(PLCnCLIGenerateDT)' == '' ">
+		<PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
+	</PropertyGroup>
     <UsingTask TaskName="PlcncliBuild.GenerateTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
     <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
     <Target Name="Build">
         <GenerateTask ProjectDirectory="$(ProjectDir)"
-                  AdditionalOptions="$(PLCnCLIGenerateOptions)"/>
+                  AdditionalOptions="$(PLCnCLIGenerateOptions)"
+			      GenerateDatatypesWorksheet="$(PLCnCLIGenerateDT)"/>
 	    <CallTarget Targets="PLCnCLIBuild"/>
         <DeployTask ProjectDirectory="$(ProjectDir)"
                 AdditionalOptions="$(PLCnCLIDeployOptions)"
