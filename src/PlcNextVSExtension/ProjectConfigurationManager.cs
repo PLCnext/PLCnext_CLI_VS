@@ -22,7 +22,7 @@ namespace PlcNextVSExtension
         const string targetBuildConfigName = "Project-specific";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD010:Invoke single-threaded types on Main thread", Justification = "Handled in calling method")]
-        private static void CreateConfigurationsForTarget(string target, Project project, SolutionConfiguration2 solutionConfiguration)
+        private static void CreateConfigurationsForTarget(string target, Project project)
         {
             //*****create release and debug project configuration*****
             string releaseConfigurationName = string.Format(releaseConfigurationNameRaw, target);
@@ -43,6 +43,9 @@ namespace PlcNextVSExtension
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
+            if (!targets.Any())
+                return;
+
             //*****create a 'target-specific build' solution configuration if not available
             
             Solution solution = project.DTE.Solution;
@@ -60,7 +63,7 @@ namespace PlcNextVSExtension
 
             foreach (string target in targets)
             {
-                CreateConfigurationsForTarget(target, project, targetSpecificConfiguration);
+                CreateConfigurationsForTarget(target, project);
             }
 
             //***** set project configuration for solution configuration
