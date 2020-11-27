@@ -15,7 +15,7 @@ using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
-namespace PlcNextVSExtension.NewProjectInformationDialog
+namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 {
     public class NewProjectInformationModel : INotifyPropertyChanged
     {

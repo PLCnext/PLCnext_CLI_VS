@@ -7,7 +7,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,10 +14,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
-using PlcncliServices.CommandResults;
-using PlcNextVSExtension.NewProjectInformationDialog;
 
-namespace PlcNextVSExtension.ProjectPropertyEditor
+namespace PlcNextVSExtension.PlcNextProject.ProjectTargetsEditor
 {
     public class ProjectTargetValueEditorViewModel
     {

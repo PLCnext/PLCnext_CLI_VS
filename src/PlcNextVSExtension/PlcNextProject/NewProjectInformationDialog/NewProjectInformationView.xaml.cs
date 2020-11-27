@@ -10,7 +10,7 @@
 using System;
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace PlcNextVSExtension.NewProjectInformationDialog
+namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 {
     /// <summary>
     /// Interaction logic for NewProjectInformationView.xaml

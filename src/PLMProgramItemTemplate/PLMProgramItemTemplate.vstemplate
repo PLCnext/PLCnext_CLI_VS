@@ -12,7 +12,7 @@
   </TemplateContent>
   <WizardExtension>
     <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=87c72726285801ba</Assembly>
-    <FullClassName>PlcNextVSExtension.ProjectItemCreationWizard</FullClassName>
+    <FullClassName>PlcNextVSExtension.PlcNextProject.ProjectItemCreationWizard</FullClassName>
   </WizardExtension>
   <WizardData>
     <Data>

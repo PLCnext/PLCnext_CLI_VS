@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using PlcNextVSExtension.PlcNextProject.Commands;
 using Task = System.Threading.Tasks.Task;
 
 namespace PlcNextVSExtension
@@ -37,9 +38,9 @@ namespace PlcNextVSExtension
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
-    [Guid(SetTargetsCommandPackage.PackageGuidString)]
+    [Guid(PlcNextCommandsPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class SetTargetsCommandPackage : AsyncPackage
+    public sealed class PlcNextCommandsPackage : AsyncPackage
     {
         /// <summary>
         /// SetTargetsCommandPackage GUID string.
@@ -47,9 +48,9 @@ namespace PlcNextVSExtension
         public const string PackageGuidString = "4e491c4f-6fb3-44b4-9dcb-45b065dbefa9";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SetTargetsCommandPackage"/> class.
+        /// Initializes a new instance of the <see cref="PlcNextCommandsPackage"/> class.
         /// </summary>
-        public SetTargetsCommandPackage()
+        public PlcNextCommandsPackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -70,8 +71,8 @@ namespace PlcNextVSExtension
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await SetTargetsCommand.InitializeAsync(this);
+            await CMakeFlagsCommand.InitializeAsync(this);
         }
 
         #endregion

@@ -21,6 +21,6 @@
   </TemplateContent>
   <WizardExtension>
     <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=87c72726285801ba</Assembly>
-    <FullClassName>PlcNextVSExtension.ProjectCreationWizard</FullClassName>
+    <FullClassName>PlcNextVSExtension.PlcNextProject.ProjectCreationWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

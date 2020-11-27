@@ -11,7 +11,7 @@ using PlcncliServices.CommandResults;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PlcNextVSExtension
+namespace PlcNextVSExtension.PlcNextProject
 {
     internal static class ProjectIncludesManager
     {

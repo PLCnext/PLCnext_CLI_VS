@@ -10,7 +10,7 @@
 using System.Windows;
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace PlcNextVSExtension.ProjectPropertyEditor
+namespace PlcNextVSExtension.PlcNextProject.ProjectTargetsEditor
 {
     /// <summary>
     /// Interaction logic for ProjectTargetValueEditorView.xaml

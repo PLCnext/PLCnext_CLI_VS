@@ -14,7 +14,7 @@ using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
-namespace PlcNextVSExtension.ProjectPropertyEditor
+namespace PlcNextVSExtension.PlcNextProject.ProjectTargetsEditor
 {
     public class ProjectTargetValueEditorModel
     {

@@ -12,16 +12,18 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace PlcNextVSExtension.ProjectPropertyEditor
+namespace PlcNextVSExtension.Converter
 {
     [ValueConversion(typeof(bool?), typeof(Brush))]
-    public class BoolToColorConverter : IValueConverter
+    public class InverseBoolToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            SolidColorBrush colorBrush = parameter as SolidColorBrush;
+
             bool? isBlack = (bool?)value;
             if (isBlack == false)
-                return Brushes.DarkRed;
+                return colorBrush;
             return Brushes.Black;
         }
 

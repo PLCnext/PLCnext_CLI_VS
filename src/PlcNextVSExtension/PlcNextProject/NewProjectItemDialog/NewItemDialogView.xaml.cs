@@ -23,7 +23,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace PlcNextVSExtension.NewProjectItemDialog
+namespace PlcNextVSExtension.PlcNextProject.NewProjectItemDialog
 {
     /// <summary>
     /// Interaction logic for NewItemDialogView.xaml

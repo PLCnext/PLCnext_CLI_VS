@@ -1,0 +1,62 @@
+﻿<platformui:DialogWindow x:Class="PlcNextVSExtension.PlcNextProject.ProjectCMakeFlagsEditor.CMakeFlagsEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:converter="clr-namespace:PlcNextVSExtension.Converter"
+             mc:Ignorable="d"  
+             Height="400" Width="610"
+             Title="Edit Cmake Flags"
+             Name="window">
+    <Window.Resources>
+        <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock TextWrapping="WrapWithOverflow" 
+                   Grid.ColumnSpan="2"
+                   Margin="0,0,0,5">
+                    CMake flags can be entered here.<LineBreak/>They will be used whenever the PLCnCLI calls cmake.
+        </TextBlock>
+
+        <TextBox Grid.Row="1"
+                 Grid.ColumnSpan="2"
+                 AcceptsReturn="True"
+                 HorizontalScrollBarVisibility="Auto"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding Path=Flags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 GotFocus="TextBox_GotFocus"
+                 LostFocus="TextBox_LostFocus"
+                 Foreground="{Binding Path=ExampleIsShown, Converter={StaticResource BoolToColorConverter},
+                                                ConverterParameter={x:Static Brushes.Gray}}"/>
+        
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="0,10,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right" >
+            <Button Content="_Save and Close"
+                Padding="3"
+                Margin="0,0,10,0"
+                Command="{Binding CloseButtonClickCommand}"
+                CommandParameter="{Binding ElementName=window}"/>
+            <Button Content="_Cancel"
+                Padding="3"
+                Width="60"
+                Command="{Binding CancelButtonClickCommand}"
+                CommandParameter="{Binding ElementName=window}"
+                />
+        </StackPanel>
+
+    </Grid>
+</platformui:DialogWindow>

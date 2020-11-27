@@ -18,10 +18,10 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
-using PlcNextVSExtension.NewProjectInformationDialog;
+using PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog;
 using PlcNextVSExtension.Properties;
 
-namespace PlcNextVSExtension
+namespace PlcNextVSExtension.PlcNextProject
 {
     class ProjectCreationWizard : IWizard
     {

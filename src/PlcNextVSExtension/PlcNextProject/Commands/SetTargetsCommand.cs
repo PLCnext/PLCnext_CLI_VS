@@ -12,26 +12,24 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TaskStatusCenter;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
-using PlcNextVSExtension.ProjectPropertyEditor;
+using PlcNextVSExtension.PlcNextProject.ProjectTargetsEditor;
 using PlcNextVSExtension.Properties;
 using Path = System.IO.Path;
 using Task = System.Threading.Tasks.Task;
 
-namespace PlcNextVSExtension
+namespace PlcNextVSExtension.PlcNextProject.Commands
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class SetTargetsCommand
+    internal sealed class SetTargetsCommand : PlcNextCommand
     {
         /// <summary>
         /// Command ID.
@@ -44,19 +42,13 @@ namespace PlcNextVSExtension
         public static readonly Guid CommandSet = new Guid("eba1dd59-aabe-4863-b7a6-e018ccba5c32");
 
         /// <summary>
-        /// VS Package that provides this command, not null.
-        /// </summary>
-        private readonly AsyncPackage package;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SetTargetsCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private SetTargetsCommand(AsyncPackage package, OleMenuCommandService commandService)
+        private SetTargetsCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package)
         {
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
@@ -74,17 +66,6 @@ namespace PlcNextVSExtension
         }
 
         /// <summary>
-        /// Gets the service provider from the owner package.
-        /// </summary>
-        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
-
-        /// <summary>
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
@@ -98,50 +79,9 @@ namespace PlcNextVSExtension
             Instance = new SetTargetsCommand(package, commandService);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD010:Invoke single-threaded types on Main thread", Justification = "Checked in GetProject()")]
-        private void QueryStatus(object sender, EventArgs e)
-        {
-            if (sender is OleMenuCommand cmd)
-            {
-                try
-                {
-                    Project project = GetProject();
-                    VCProject p = project.Object as VCProject;
-                    VCConfiguration configuration = p.ActiveConfiguration;
-                    IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
-                    string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
-                    if (!string.IsNullOrEmpty(projectType))
-                    {
-                        cmd.Visible = true;
-                        return;
-                    }
-                }
-                catch(NullReferenceException)
-                {
-                    //cmd visibility will be set to false
-                }
-                cmd.Visible = false;
-            }
-        }
-
         private void ChangeHandler(object sender, EventArgs e)
         {
 
-        }
-
-        private Project GetProject()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            //get project location
-            IServiceProvider serviceProvider = package;
-            DTE2 dte = (DTE2)serviceProvider.GetService(typeof(DTE));
-            var sel = dte.ActiveWindow.Selection;
-            Array selectedItems = (Array)dte.ToolWindows.SolutionExplorer.SelectedItems;
-            if (selectedItems == null || selectedItems.Length > 1)
-                return null;
-            UIHierarchyItem x = selectedItems.GetValue(0) as UIHierarchyItem;
-            return x.Object as Project;
         }
 
         /// <summary>

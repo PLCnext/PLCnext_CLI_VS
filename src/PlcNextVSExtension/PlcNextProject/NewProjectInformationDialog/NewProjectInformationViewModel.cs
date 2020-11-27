@@ -18,7 +18,7 @@ using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
 using PlcNextVSExtension.Properties;
 
-namespace PlcNextVSExtension.NewProjectInformationDialog
+namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 {
     public class NewProjectInformationViewModel : INotifyPropertyChanged
     {

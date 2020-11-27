@@ -13,7 +13,7 @@ using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
 using PlcNextVSExtension.Properties;
 
-namespace PlcNextVSExtension.NewProjectItemDialog
+namespace PlcNextVSExtension.PlcNextProject.NewProjectItemDialog
 {
     public class NewItemModel
     {

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using PlcncliServices.CommandResults;
 
-namespace PlcNextVSExtension
+namespace PlcNextVSExtension.PlcNextProject
 {
     public class TargetViewModel : INotifyPropertyChanged
     {

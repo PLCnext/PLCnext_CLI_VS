@@ -18,11 +18,11 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
-using PlcNextVSExtension.NewProjectItemDialog;
+using PlcNextVSExtension.PlcNextProject.NewProjectItemDialog;
 using PlcNextVSExtension.Properties;
 using Path = System.IO.Path;
 
-namespace PlcNextVSExtension
+namespace PlcNextVSExtension.PlcNextProject
 {
     public class ProjectItemCreationWizard : IWizard
     {
