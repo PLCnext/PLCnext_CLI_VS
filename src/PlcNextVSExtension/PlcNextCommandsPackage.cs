@@ -73,6 +73,7 @@ namespace PlcNextVSExtension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await SetTargetsCommand.InitializeAsync(this);
             await CMakeFlagsCommand.InitializeAsync(this);
+            await ImportProjectCommand.InitializeAsync(this);
         }
 
         #endregion

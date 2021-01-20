@@ -56,9 +56,17 @@
     <Compile Include="..\_Build_\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Converter\TextToVisibilityConverter.cs" />
+    <Compile Include="Converter\VisibilityToBoolConverter.cs" />
     <Compile Include="PlcNextProject\Commands\CMakeFlagsCommand.cs" />
     <Compile Include="PlcNextProject\Commands\PlcNextCommand.cs" />
     <Compile Include="Converter\BoolToColorConverter.cs" />
+    <Compile Include="PlcNextProject\Commands\ImportProjectCommand.cs" />
+    <Compile Include="PlcNextProject\Import\ImportDialogView.xaml.cs">
+      <DependentUpon>ImportDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlcNextProject\Import\ImportDialogModel.cs" />
+    <Compile Include="PlcNextProject\Import\ImportDialogViewModel.cs" />
     <Compile Include="PlcNextProject\NewProjectItemDialog\NewItemDialogView.xaml.cs">
       <DependentUpon>NewItemDialogView.xaml</DependentUpon>
     </Compile>
@@ -78,6 +86,7 @@
     <Compile Include="Converter\InverseBoolToColorConverter.cs" />
     <Compile Include="PlcNextProject\Commands\SetTargetsCommand.cs" />
     <Compile Include="PlcNextCommandsPackage.cs" />
+    <Compile Include="PlcNextProject\SolutionSaveService.cs" />
     <Compile Include="PlcNextProject\TargetViewModel.cs" />
     <Compile Include="PlcNextProject\ProjectCreationWizard.cs" />
     <Compile Include="PlcNextProject\ProjectItemCreationWizard.cs" />
@@ -94,6 +103,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="PlcNextProject\Import\ProjectTemplate\UndefClang.hpp" />
     <Content Include="PlcNextVSExtension.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -132,6 +142,7 @@
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
     </Content>
+    <EmbeddedResource Include="PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -161,6 +172,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="PlcNextProject\Import\ImportDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

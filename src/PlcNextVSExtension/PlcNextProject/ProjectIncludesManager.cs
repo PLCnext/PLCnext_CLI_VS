@@ -38,7 +38,7 @@ namespace PlcNextVSExtension.PlcNextProject
             IEnumerable<CompilerMacroResult> macros = Enumerable.Empty<CompilerMacroResult>();
             IEnumerable<string> includes = Enumerable.Empty < string>();
 
-            TargetResult minCompilerTarget = compilerSpecsCommandResult.Specifications
+            TargetResult minCompilerTarget = compilerSpecsCommandResult?.Specifications
                                                               .SelectMany(x => x.Targets)
                                                               .MinTarget();
             if (minCompilerTarget != null)
@@ -53,11 +53,11 @@ namespace PlcNextVSExtension.PlcNextProject
                                                     .Where(m => !m.Name.StartsWith("__has_include("));
             }
 
-            TargetResult minIncludeTarget = projectInformation.Targets
+            TargetResult minIncludeTarget = projectInformation?.Targets
                                                               .Where(t => t.Available == true)
                                                               .MinTarget();
 
-            includes = projectInformation.IncludePaths
+            includes = projectInformation?.IncludePaths
                                          .Where(x => x.Targets == null ||
                                                      !x.Targets.Any() ||
                                                      (minIncludeTarget != null && x.Targets.Any(t => t.Name.Equals(minIncludeTarget.Name) &&

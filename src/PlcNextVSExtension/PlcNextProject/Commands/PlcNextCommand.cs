@@ -71,7 +71,8 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
             //get project location
             IServiceProvider serviceProvider = package;
             DTE2 dte = (DTE2)serviceProvider.GetService(typeof(DTE));
-            var sel = dte.ActiveWindow.Selection;
+            if (dte == null)
+                return null;
             Array selectedItems = (Array)dte.ToolWindows.SolutionExplorer.SelectedItems;
             if (selectedItems == null || selectedItems.Length > 1)
                 return null;

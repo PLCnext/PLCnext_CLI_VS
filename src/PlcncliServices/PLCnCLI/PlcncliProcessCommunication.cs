@@ -106,7 +106,6 @@ namespace PlcncliServices.PLCnCLI
                     var result = JsonConvert.DeserializeObject(string.Join(string.Empty, messages.SkipWhile(s => !s.Trim().StartsWith("{"))), typeof(T));
                     return (T) result;
                 }
-                catch (PlcncliException) { }
                 catch (JsonException) { }
             }
             return default(T);

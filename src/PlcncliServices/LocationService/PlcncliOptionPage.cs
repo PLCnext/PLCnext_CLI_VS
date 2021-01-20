@@ -23,7 +23,7 @@ namespace PlcncliServices.LocationService
     public class PlcncliOptionPage : DialogPage, INotifyPropertyChanged
     {
         private string _toolLocation;
-        private string _toolLocationFilePath = "C:\\ProgramData\\PHOENIX CONTACT\\PLCnCLI\\PATHS.xml";
+        private readonly string _toolLocationFilePath = "C:\\ProgramData\\PHOENIX CONTACT\\PLCnCLI\\PATHS.xml";
 
         private void TryFindToolLocationFile()
         {

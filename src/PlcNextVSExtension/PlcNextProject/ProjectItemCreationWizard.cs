@@ -84,7 +84,7 @@ namespace PlcNextVSExtension.PlcNextProject
                             }else if (itemType.Equals(Resources.ItemType_component))
                             {
                                 string command = Resources.Command_new_component;
-                                if (projecttype.Equals("acfproject"))
+                                if (projecttype.Equals(Resources.ProjectType_ACF))
                                 {
                                     command = Resources.Command_new_acfcomponent;
                                 }

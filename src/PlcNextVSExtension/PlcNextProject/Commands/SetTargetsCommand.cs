@@ -165,10 +165,18 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                             }
                             catch (PlcncliException ex)
                             {
-                                projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                                try
+                                {
+                                    projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                                }
+                                catch (PlcncliException) {}
                             }
-                            includesBefore = projectInformationBefore.IncludePaths.Select(x => x.PathValue);
 
+                            includesBefore = projectInformationBefore?.IncludePaths.Select(x => x.PathValue);
+                            if (includesBefore == null)
+                            {
+                                includesBefore = Enumerable.Empty<string>();
+                            }
                         }
 
                         if (needCompilerInformation)
@@ -212,7 +220,8 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                         }
 
                         (macrosAfter, includesAfter) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsAfter, projectInformationAfter);
-
+                        if (includesAfter == null)
+                            includesAfter = Enumerable.Empty<string>();
 
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -275,7 +284,7 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
 
 
                         ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
-                            (projectInformationAfter.Targets.Select(t => t.GetNameFormattedForCommandLine()), project);
+                            (projectInformationAfter?.Targets.Select(t => t.GetNameFormattedForCommandLine()), project);
 
 
                         void SetTargets()

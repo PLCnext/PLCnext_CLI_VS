@@ -43,7 +43,7 @@ namespace PlcNextVSExtension.PlcNextProject
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (!targets.Any())
+            if (targets == null || !targets.Any())
                 return;
 
             //*****create a 'target-specific build' solution configuration if not available

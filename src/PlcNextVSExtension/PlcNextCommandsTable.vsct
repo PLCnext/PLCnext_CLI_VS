@@ -62,13 +62,20 @@
 					<ButtonText>Set &amp;Targets</ButtonText>
 				</Strings>
 			</Button>
-		<Button guid="guidPlcNextCommandsPackageCmdSet" id="CMakeFlagsCommandId" priority="0x0200" type="Button">
-			<Parent guid="guidPlcNextCommandsPackageCmdSet" id="PlcNextSubMenuGroup"/>
-			<CommandFlag>DynamicVisibility</CommandFlag>
-			<Strings>
-				<ButtonText>&amp;CMake Flags</ButtonText>
-			</Strings>
-		</Button>
+			<Button guid="guidPlcNextCommandsPackageCmdSet" id="CMakeFlagsCommandId" priority="0x0200" type="Button">
+				<Parent guid="guidPlcNextCommandsPackageCmdSet" id="PlcNextSubMenuGroup"/>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>&amp;CMake Flags</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidPlcNextCommandsPackageCmdSet" id="ImportProjectCommandId" priority="0x0300" type="Button">
+				<Parent guid="guidSHLMainMenu" id="IDG_VS_FILE_NEW_CASCADE"/>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>&amp;Project from existing PLCnCLI project...</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>
 
 		<Menus>
@@ -93,6 +100,7 @@
 			<IDSymbol name="PLCnextMenu" value="0x1100"/>
 			<IDSymbol name="PlcNextSubMenuGroup" value="0x1110"/>
 			<IDSymbol name="CMakeFlagsCommandId" value="0X1200"/>
+			<IDSymbol name="ImportProjectCommandId" value="0X0010"/>
 		</GuidSymbol>
 
 	</Symbols>
