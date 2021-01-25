@@ -11,12 +11,10 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Threading;
 using PlcncliServices.LocationService;
 using IAsyncServiceProvider = Microsoft.VisualStudio.Shell.IAsyncServiceProvider;
 using Task = System.Threading.Tasks.Task;
@@ -26,7 +24,7 @@ namespace PlcncliServices
     public class PlcncliLocationService
     {
         private readonly IAsyncServiceProvider _asyncServiceProvider;
-        
+
         private PlcncliOptionPage optionPage = null;
         private readonly string plcncliFileName = "plcncli.exe";
 
@@ -37,10 +35,8 @@ namespace PlcncliServices
 
         public async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            await TaskScheduler.Default;
-
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            if (_asyncServiceProvider is Package package)
+            if (_asyncServiceProvider is AsyncPackage package)
             {
                 optionPage = package.GetDialogPage(typeof(PlcncliOptionPage)) as PlcncliOptionPage;
 
@@ -63,7 +59,7 @@ namespace PlcncliServices
         {
             string toolLocation = string.Empty;
 
-            if (CheckOption()) 
+            if (CheckOption())
             {
                 return toolLocation;
             }
@@ -75,12 +71,12 @@ namespace PlcncliServices
 
             if (secondTry)
             {
-                if(showMessages)
+                if (showMessages)
                     MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
                 return string.Empty;
             }
 
-            if(showMessages)
+            if (showMessages)
                 MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
             if (_asyncServiceProvider is Package)
             {
@@ -133,3 +129,4 @@ namespace PlcncliServices
         }
     }
 }
+

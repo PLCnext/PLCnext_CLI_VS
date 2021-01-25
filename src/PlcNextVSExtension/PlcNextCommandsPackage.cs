@@ -14,6 +14,7 @@ using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using PlcNextVSExtension.PlcNextProject.Commands;
+using PlcNextVSExtension.PlcNextProject.OnDocSaveService;
 using Task = System.Threading.Tasks.Task;
 
 namespace PlcNextVSExtension
@@ -74,6 +75,8 @@ namespace PlcNextVSExtension
             await SetTargetsCommand.InitializeAsync(this);
             await CMakeFlagsCommand.InitializeAsync(this);
             await ImportProjectCommand.InitializeAsync(this);
+            OnDocSaveService docSaveService = new OnDocSaveService();
+            await docSaveService.InitializeAsync(this);
         }
 
         #endregion

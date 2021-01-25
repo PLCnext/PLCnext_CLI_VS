@@ -24,6 +24,8 @@ namespace PlcncliServices.LocationService
     {
         private string _toolLocation;
         private readonly string _toolLocationFilePath = "C:\\ProgramData\\PHOENIX CONTACT\\PLCnCLI\\PATHS.xml";
+        private bool _askIncludesUpdate = true;
+        private bool _updateIncludes = true;
 
         private void TryFindToolLocationFile()
         {
@@ -61,6 +63,30 @@ namespace PlcncliServices.LocationService
             }
         }
 
+        [Category("PLCnCLI")]
+        [DisplayName("Ask for includes-update every time CMakeLists.txt is saved")]
+        [Description("If set to false, user will not be asked and option 'Update includes' will be used.")]
+        public bool AskIncludesUpdate
+        {
+            get => _askIncludesUpdate;
+            set
+            {
+                _askIncludesUpdate = value;
+                OnPropertyChanged();
+            }
+        }
+        [Category("PLCnCLI")]
+        [DisplayName("Update includes")]
+        [Description("This option is only used if not asked every time.")]
+        public bool UpdateIncludes
+        {
+            get => _updateIncludes;
+            set
+            {
+                _updateIncludes = value;
+                OnPropertyChanged();
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

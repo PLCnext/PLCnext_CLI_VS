@@ -117,27 +117,10 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                 VCProject p = project.Object as VCProject;
                 bool needProjectInformation = false;
                 bool needCompilerInformation = false;
-                foreach (VCConfiguration2 config in p.Configurations)
-                {
-                    // find includes and macros which were set by this extension before
-                    IVCRulePropertyStorage plcnextCommonPropertiesRule = p.ActiveConfiguration?.Rules.Item("PLCnextCommonProperties");
-                    if (plcnextCommonPropertiesRule == null)
-                    {
-                        MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
-                    }
-                    if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Includes")))
-                    {
-                        needProjectInformation = true;
-                    }
-                    if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Macros")))
-                    {
-                        needCompilerInformation = true;
-                    }
-                    if (needCompilerInformation && needProjectInformation)
-                    {
-                        break;
-                    }
-                }
+
+                var (includesSaved, macrosSaved) = ProjectIncludesManager.CheckSavedIncludesAndMacros(p);
+                needProjectInformation = !includesSaved;
+                needCompilerInformation = !macrosSaved;
                 
                 IEnumerable<string> includesBefore = null;
                 IEnumerable<CompilerMacroResult> macrosBefore = Enumerable.Empty<CompilerMacroResult>();

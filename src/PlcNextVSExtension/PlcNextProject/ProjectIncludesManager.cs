@@ -7,9 +7,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace PlcNextVSExtension.PlcNextProject
 {
@@ -68,6 +70,34 @@ namespace PlcNextVSExtension.PlcNextProject
 
 
             return (macros, includes);
+        }
+   
+        public static (bool includesSaved, bool macrosSaved)  CheckSavedIncludesAndMacros(VCProject p)
+        {
+            bool includesSaved = true;
+            bool macrosSaved = true;
+            foreach (VCConfiguration2 config in p.Configurations)
+            {
+                // find includes and macros which were set by this extension before
+                IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
+                if (plcnextCommonPropertiesRule == null)
+                {
+                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                }
+                if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Includes")))
+                {
+                    includesSaved = false;
+                }
+                if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Macros")))
+                {
+                    macrosSaved = false;
+                }
+                if (!includesSaved && !macrosSaved)
+                {
+                    break;
+                }
+            }
+            return (includesSaved, macrosSaved);
         }
     }
 }

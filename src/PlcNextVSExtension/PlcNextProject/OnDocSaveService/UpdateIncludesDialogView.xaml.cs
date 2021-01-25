@@ -9,14 +9,14 @@
 
 using Microsoft.VisualStudio.PlatformUI;
 
-namespace PlcNextVSExtension.PlcNextProject.ProjectTargetsEditor
+namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
 {
     /// <summary>
-    /// Interaction logic for ProjectTargetValueEditorView.xaml
+    /// Interaction logic for UpdateIncludesDialogView.xaml
     /// </summary>
-    public partial class ProjectTargetValueEditorView : DialogWindow
+    public partial class UpdateIncludesDialogView : DialogWindow
     {
-        public ProjectTargetValueEditorView(ProjectTargetValueEditorViewModel viewModel)
+        public UpdateIncludesDialogView(UpdateIncludesViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

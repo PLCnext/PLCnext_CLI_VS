@@ -77,6 +77,13 @@
       <DependentUpon>NewProjectInformationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationViewModel.cs" />
+    <Compile Include="PlcNextProject\OnDocSaveService\IncludesAndMacrosWrapper.cs" />
+    <Compile Include="PlcNextProject\OnDocSaveService\OnDocSaveService.cs" />
+    <Compile Include="PlcNextProject\OnDocSaveService\SaveCMakeListsEventHandler.cs" />
+    <Compile Include="PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml.cs">
+      <DependentUpon>UpdateIncludesDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlcNextProject\OnDocSaveService\UpdateIncludesViewModel.cs" />
     <Compile Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml.cs">
       <DependentUpon>CMakeFlagsEditorView.xaml</DependentUpon>
     </Compile>
@@ -181,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PlcNextProject\NewProjectItemDialog\NewItemDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

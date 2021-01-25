@@ -100,18 +100,18 @@ namespace PlcncliServices.GeneratePortComment
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!(Package.GetGlobalService(typeof(DTE)) is DTE dte))
             {
-                MessageBox.Show("Could not set project targets because dte is null.");
+                MessageBox.Show("Could not generate port comments because dte is null.");
                 return;
             }
             Document activeDocument = dte.ActiveDocument;
             if (activeDocument == null)
             {
-                MessageBox.Show("Could not set project targets because there is no active document.");
+                MessageBox.Show("Could not generate port comments because there is no active document.");
                 return;
             }
             if (!(activeDocument.Selection is TextSelection selection))
             {
-                MessageBox.Show("Could not set project targets because no selection was found.");
+                MessageBox.Show("Could not generate port comments because no selection was found.");
                 return;
             }
 
