@@ -10,6 +10,9 @@
 			<Platform>x86</Platform>
 		</ProjectConfiguration>
 	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="UndefClang.hpp" />
+	</ItemGroup>
 	<PropertyGroup Label="Globals">
 		<ProjectGuid>{$guid1$}</ProjectGuid>
 		<MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
@@ -34,6 +37,7 @@
 	<PropertyGroup Label="UserMacros" />
 	<ItemDefinitionGroup>
 		<ClCompile>
+			<ForcedIncludeFiles>$(ProjectDir)UndefClang.hpp</ForcedIncludeFiles>
 			<CLanguageStandard/>
 			<CppLanguageStandard/>
 		</ClCompile>

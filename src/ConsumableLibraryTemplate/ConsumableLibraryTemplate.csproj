@@ -64,6 +64,7 @@
   <ItemGroup>
     <None Include="ConsumableLibraryTemplate.ico" />
     <Content Include="ProjectTemplate\MyTemplate.vstemplate" />
+    <Content Include="ProjectTemplate\UndefClang.hpp" />
     <Content Include="ProjectTemplate\__TemplateIcon.ico" />
   </ItemGroup>
   <ItemGroup>

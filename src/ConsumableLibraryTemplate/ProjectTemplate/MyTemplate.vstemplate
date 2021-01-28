@@ -14,7 +14,7 @@
   </TemplateData>
   <TemplateContent>
 	  <Project File="ProjectTemplate.vcxproj" ReplaceParameters="true">
-		  <ProjectItem>ProjectTemplate.vcxproj</ProjectItem>
+		  <ProjectItem ReplaceParameters="false" TargetFileName="UndefClang.hpp">UndefClang.hpp</ProjectItem>
 	  </Project>
   </TemplateContent>
   <WizardExtension>
