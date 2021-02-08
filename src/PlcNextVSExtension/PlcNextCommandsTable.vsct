@@ -86,8 +86,13 @@
 				</Strings>
 			</Menu>
 		</Menus>
-
 	</Commands>
+	
+	<CommandPlacements>
+		<CommandPlacement guid="guidPlcNextCommandsPackageCmdSet" id="PlcNextProjectContextMenuGroup" priority="0xE000">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_PROJECT"/>
+		</CommandPlacement>
+	</CommandPlacements>
 
 	<Symbols>
 		<!-- This is the package guid. -->

@@ -52,7 +52,7 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new OleMenuCommand(this.SetTargets, this.ChangeHandler, this.QueryStatus, menuCommandID);
+            var menuItem = new OleMenuCommand(this.SetTargets, this.ChangeHandler, this.QueryStatus, menuCommandID) { Visible = false };
             commandService.AddCommand(menuItem);
         }
 

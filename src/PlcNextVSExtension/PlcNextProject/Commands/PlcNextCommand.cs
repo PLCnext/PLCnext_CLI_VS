@@ -74,7 +74,7 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
             if (dte == null)
                 return null;
             Array selectedItems = (Array)dte.ToolWindows.SolutionExplorer.SelectedItems;
-            if (selectedItems == null || selectedItems.Length > 1)
+            if (selectedItems == null || selectedItems.Length != 1)
                 return null;
             UIHierarchyItem x = selectedItems.GetValue(0) as UIHierarchyItem;
             return x.Object as Project;
