@@ -19,7 +19,6 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 {
     public class NewProjectInformationModel : INotifyPropertyChanged
     {
-        private readonly string _projectDirectory;
         private readonly string _projectName;
         private string _projectNamespace;
         private string _initialComponentName;
@@ -61,11 +60,10 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public NewProjectInformationModel(IPlcncliCommunication plcncliCommunication, string projectDirectory, string projectName,
+        public NewProjectInformationModel(IPlcncliCommunication plcncliCommunication, string projectName,
             string projectType)
         {
             _plcncliCommunication = plcncliCommunication;
-            _projectDirectory = projectDirectory;
             _projectName = projectName;
             ProjectNamespace = _projectName;
             InitialComponentName = $"{_projectName}Component";

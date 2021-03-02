@@ -84,6 +84,7 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
         /// <param name="e">Event args.</param>
         private void ExecuteCommand(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             Project project = GetProject();
             if (project == null)
                 return;

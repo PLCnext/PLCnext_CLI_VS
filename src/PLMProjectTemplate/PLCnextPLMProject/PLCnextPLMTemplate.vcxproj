@@ -26,11 +26,15 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
 	<PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
+	<DisablePLCnCLIGenerate>false</DisablePLCnCLIGenerate>
+	<DisablePLCnCLIDeploy>false</DisablePLCnCLIDeploy>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
-	  <PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
+	<PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
+	<DisablePLCnCLIGenerate>false</DisablePLCnCLIGenerate>
+	<DisablePLCnCLIDeploy>false</DisablePLCnCLIDeploy>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />

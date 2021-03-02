@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcncliSdkOptionPage", "Plc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumableLibraryTemplate", "ConsumableLibraryTemplate\ConsumableLibraryTemplate.csproj", "{8FA04B3B-8039-46BE-995B-5B2320F62A69}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{26D0D41F-1878-426C-AA31-B2D3DBC65071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -218,6 +220,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F9BE3609-4C4F-463E-9656-B13DBE3714DF} = {26D0D41F-1878-426C-AA31-B2D3DBC65071}
+		{3548F0DE-62D9-4EF0-BDC2-255FF09CACF5} = {26D0D41F-1878-426C-AA31-B2D3DBC65071}
+		{BDB4D447-8081-4D1B-A4B1-39181BB78A22} = {26D0D41F-1878-426C-AA31-B2D3DBC65071}
+		{5CA83A70-4095-4829-8C4D-EB66806DC46F} = {26D0D41F-1878-426C-AA31-B2D3DBC65071}
+		{8FA04B3B-8039-46BE-995B-5B2320F62A69} = {26D0D41F-1878-426C-AA31-B2D3DBC65071}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE6DE858-4041-4795-8A09-F7A6A0179217}

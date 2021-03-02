@@ -13,11 +13,13 @@
     <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(VSAPPIDDIR)PublicAssemblies\PlcncliBuild.dll" />
     <Target Name="Build">
         <GenerateTask ProjectDirectory="$(ProjectDir)"
-                  AdditionalOptions="$(PLCnCLIGenerateOptions)"
-			      GenerateDatatypesWorksheet="$(PLCnCLIGenerateDT)"/>
+					  AdditionalOptions="$(PLCnCLIGenerateOptions)"
+					  GenerateDatatypesWorksheet="$(PLCnCLIGenerateDT)"
+				      Condition="$(DisablePLCnCLIGenerate) != true"/>
 	    <CallTarget Targets="PLCnCLIBuild"/>
         <DeployTask ProjectDirectory="$(ProjectDir)"
-                AdditionalOptions="$(PLCnCLIDeployOptions)"
-                Configuration="$(Configuration)"/>
+                    AdditionalOptions="$(PLCnCLIDeployOptions)"
+                    Configuration="$(Configuration)"
+					Condition="$(DisablePLCnCLIDeploy) != true"/>
     </Target>
 </Project>

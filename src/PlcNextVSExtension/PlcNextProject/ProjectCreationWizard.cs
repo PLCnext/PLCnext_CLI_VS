@@ -57,7 +57,7 @@ namespace PlcNextVSExtension.PlcNextProject
                 _projectType = Resources.ProjectType_ConsumableLibrary;
             }
 
-            NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, _projectDirectory, projectName, _projectType);
+            NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, projectName, _projectType);
             NewProjectInformationViewModel viewModel = new NewProjectInformationViewModel(model);
             NewProjectInformationView view = new NewProjectInformationView(viewModel);
 
@@ -74,7 +74,8 @@ namespace PlcNextVSExtension.PlcNextProject
         {
             try
             {
-                GeneratePLCnCLIProject(project);
+                ThreadHelper.ThrowIfNotOnUIThread();
+                GeneratePLCnCLIProject();
             }
             catch (Exception e)
             {
@@ -89,122 +90,124 @@ namespace PlcNextVSExtension.PlcNextProject
 
                 throw e;
             }
-        }
 
-        private void GeneratePLCnCLIProject(Project project)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            _project = project;
-            VCProject p = _project.Object as VCProject;
+            void GeneratePLCnCLIProject()
+            {
+                _project = project;
+                VCProject p = _project.Object as VCProject;
 
-            //**********create new plcncli project**********
-            //**********get project type**********
-            VCConfiguration configuration = p.ActiveConfiguration;
-            IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
-            string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
+                //**********create new plcncli project**********
+                //**********get project type**********
+                VCConfiguration configuration = p.ActiveConfiguration;
+                IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
+                string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
 
-            string newProjectCommand = Resources.Command_new_plmproject;
-            List<string> newProjectArguments = new List<string>
+                string newProjectCommand = Resources.Command_new_plmproject;
+                List<string> newProjectArguments = new List<string>
             {
                 Resources.Option_new_project_output, $"\"{_projectDirectory}\"",
                 Resources.Option_new_project_projectNamespace, _projectNamespace
             };
 
-            if (!projectType.Equals(Resources.ProjectType_ConsumableLibrary))
-            {
-                newProjectArguments.Add(Resources.Option_new_project_componentName);
-                newProjectArguments.Add(_componentName);
-
-                if (projectType.Equals(Resources.ProjectType_PLM))
+                if (!projectType.Equals(Resources.ProjectType_ConsumableLibrary))
                 {
-                    newProjectArguments.Add(Resources.Option_new_project_programName);
-                    newProjectArguments.Add(_programName);
+                    newProjectArguments.Add(Resources.Option_new_project_componentName);
+                    newProjectArguments.Add(_componentName);
+
+                    if (projectType.Equals(Resources.ProjectType_PLM))
+                    {
+                        newProjectArguments.Add(Resources.Option_new_project_programName);
+                        newProjectArguments.Add(_programName);
+                    }
                 }
-            }
 
-            if (projectType.Equals(Resources.ProjectType_ACF))
-            {
-                newProjectCommand = Resources.Command_new_acfproject;
-            }
-            else if (projectType.Equals(Resources.ProjectType_ConsumableLibrary))
-            {
-                newProjectCommand = Resources.Command_new_consumablelibrary;
-            }
-
-            _plcncliCommunication.ExecuteCommand(newProjectCommand, null, null, newProjectArguments.ToArray());
-
-
-            //**********create configurations**********
-            ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
-                (_projectTargets.Select(t => t.GetNameFormattedForCommandLine()), project);
-
-            foreach (TargetResult target in _projectTargets)
-            {
-                //**********set project target**********
-                _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
-                    Resources.Option_set_target_add, Resources.Option_set_target_name, target.Name,
-                    Resources.Option_set_target_version, target.Version, Resources.Option_set_target_project,
-                    $"\"{_projectDirectory}\"");
-            }
-
-
-            //add project items to project
-            IEnumerable<string> projectFiles =
-                Directory.GetFiles(_projectDirectory, "*.*pp", SearchOption.AllDirectories)
-                .Concat(Directory.GetFiles(_projectDirectory, "*.txt", SearchOption.AllDirectories))
-                .Where(f => !f.EndsWith("UndefClang.hpp"));
-
-            foreach (string file in projectFiles)
-            {
-                project.ProjectItems.AddFromFile(file);
-            }
-
-            //**********generate code**********
-            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null, Resources.Option_generate_code_project, $"\"{_projectDirectory}\"");
-
-            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
-
-            CompilerSpecificationCommandResult compilerSpecsCommandResult =
-                _plcncliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
-                        typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{_projectDirectory}\"") as
-                    CompilerSpecificationCommandResult;
-
-            (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsCommandResult, projectInformation);
-
-            if (macros == null || !macros.Any()) return;
-
-            string joinedMacros = string.Join(";",
-                    macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)));
-            string joinedIncludes = string.Join(";", includes);
-
-            foreach (VCConfiguration2 config in p.Configurations)
-            {
-                IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
-                if (plcnextCommonPropertiesRule == null)
+                if (projectType.Equals(Resources.ProjectType_ACF))
                 {
-                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    newProjectCommand = Resources.Command_new_acfproject;
                 }
-                plcnextCommonPropertiesRule.SetPropertyValue("Macros", joinedMacros);
-                plcnextCommonPropertiesRule.SetPropertyValue("Includes", joinedIncludes);
-
-                IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                if (rule == null)
+                else if (projectType.Equals(Resources.ProjectType_ConsumableLibrary))
                 {
-                    MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
+                    newProjectCommand = Resources.Command_new_consumablelibrary;
                 }
-                string propKey = "IncludePath";
-                rule.SetPropertyValue(propKey, joinedIncludes);
 
-                IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-                if (clRule == null)
+                _plcncliCommunication.ExecuteCommand(newProjectCommand, null, null, newProjectArguments.ToArray());
+
+
+                //**********create configurations**********
+                ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
+                    (_projectTargets.Select(t => t.GetNameFormattedForCommandLine()), project);
+
+                foreach (TargetResult target in _projectTargets)
                 {
-                    MessageBox.Show("CL rule was not found in configuration rules collection.");
+                    //**********set project target**********
+                    _plcncliCommunication.ExecuteCommand(Resources.Command_set_target, null, null,
+                        Resources.Option_set_target_add, Resources.Option_set_target_name, target.Name,
+                        Resources.Option_set_target_version, target.Version, Resources.Option_set_target_project,
+                        $"\"{_projectDirectory}\"");
                 }
-                string key = "PreprocessorDefinitions";
-                clRule.SetPropertyValue(key, joinedMacros);
+
+
+                //add project items to project
+                IEnumerable<string> projectFiles =
+                    Directory.GetFiles(_projectDirectory, "*.*pp", SearchOption.AllDirectories)
+                    .Concat(Directory.GetFiles(_projectDirectory, "*.txt", SearchOption.AllDirectories))
+                    .Where(f => !f.EndsWith("UndefClang.hpp"));
+
+                foreach (string file in projectFiles)
+                {
+                    project.ProjectItems.AddFromFile(file);
+                }
+
+                //**********generate code**********
+                _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null, Resources.Option_generate_code_project, $"\"{_projectDirectory}\"");
+
+                ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                    typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
+
+                CompilerSpecificationCommandResult compilerSpecsCommandResult =
+                    _plcncliCommunication.ExecuteCommand(Resources.Command_get_compiler_specifications, null,
+                            typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{_projectDirectory}\"") as
+                        CompilerSpecificationCommandResult;
+
+                (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsCommandResult, projectInformation);
+
+                if (macros == null || !macros.Any())
+                    return;
+
+                string joinedMacros = string.Join(";",
+                        macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)));
+                string joinedIncludes = string.Join(";", includes);
+
+                foreach (VCConfiguration2 config in p.Configurations)
+                {
+                    IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
+                    if (plcnextCommonPropertiesRule == null)
+                    {
+                        MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    }
+                    plcnextCommonPropertiesRule.SetPropertyValue("Macros", joinedMacros);
+                    plcnextCommonPropertiesRule.SetPropertyValue("Includes", joinedIncludes);
+
+                    IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
+                    if (rule == null)
+                    {
+                        MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
+                    }
+                    string propKey = "IncludePath";
+                    rule.SetPropertyValue(propKey, joinedIncludes);
+
+                    IVCRulePropertyStorage clRule = config.Rules.Item("CL");
+                    if (clRule == null)
+                    {
+                        MessageBox.Show("CL rule was not found in configuration rules collection.");
+                    }
+                    string key = "PreprocessorDefinitions";
+                    clRule.SetPropertyValue(key, joinedMacros);
+                }
             }
         }
+
+        
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {

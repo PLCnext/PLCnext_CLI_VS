@@ -25,4 +25,24 @@
 			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIDeployOptions" />
 		</StringProperty.DataSource>
 	</StringProperty>
+	<BoolProperty Name="DisablePLCnCLIGenerate"
+				  Category="Build"
+				  DisplayName="Disable Generate Step"
+				  Description="This option controlls whether the 'generate' step shall be omitted during build. Default is 'No'."
+				  Default="false"
+				  IsRequired="true">
+		<BoolProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIGenerate" />
+		</BoolProperty.DataSource>
+	</BoolProperty>
+	<BoolProperty Name="DisablePLCnCLIDeploy"
+				  Category="Build"
+				  DisplayName="Disable Deploy Step"
+				  Description="This option controlls whether the 'deploy' step shall be omitted during build. Default is 'No'."
+				  Default="false"
+				  IsRequired="true">
+		<BoolProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" />
+		</BoolProperty.DataSource>
+	</BoolProperty>
 </Rule>

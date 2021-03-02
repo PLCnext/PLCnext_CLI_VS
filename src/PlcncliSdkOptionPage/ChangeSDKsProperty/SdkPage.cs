@@ -54,10 +54,14 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
             }
             catch (Exception e)
             {
-                ThreadHelper.ThrowIfNotOnUIThread();
-                IVsActivityLog log = Package.GetGlobalService(typeof(SVsActivityLog)) as IVsActivityLog;
-                log.LogEntry((uint)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR, this.ToString(),
-                    "An error occurred while loading the sdk page: " + e.Message);
+                if (ThreadHelper.CheckAccess())
+                {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    IVsActivityLog log = Package.GetGlobalService(typeof(SVsActivityLog)) as IVsActivityLog;
+                    log.LogEntry((uint)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR, this.ToString(),
+                        "An error occurred while loading the sdk page: " + e.Message);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
+                }
             }
         }
 
