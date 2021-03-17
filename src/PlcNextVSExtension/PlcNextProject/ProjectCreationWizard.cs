@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -27,12 +28,16 @@ namespace PlcNextVSExtension.PlcNextProject
     {
         private readonly IPlcncliCommunication _plcncliCommunication;
         private string _projectDirectory;
+        //private string _oldDestinationDirectory;
         private string _componentName;
         private string _programName;
         private string _projectNamespace;
         private string _projectType;
         private IEnumerable<TargetResult> _projectTargets;
         private Project _project;
+
+        private static readonly Regex ProjectNameRegex = new Regex(@"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[A-Z](?!.*__)[a-zA-Z0-9_]*$", RegexOptions.Compiled);
+
         public ProjectCreationWizard()
         {
             _plcncliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
@@ -42,38 +47,128 @@ namespace PlcNextVSExtension.PlcNextProject
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind,
             object[] customParams)
         {
+
+            //_oldDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
+            //_projectDirectory = Directory.GetParent(_oldDestinationDirectory).FullName;
+
             _projectDirectory = replacementsDictionary["$destinationdirectory$"];
             string projectName = replacementsDictionary["$projectname$"];
+            string solutionDirectory = replacementsDictionary["$solutiondirectory$"];
 
-            _projectType = Resources.ProjectType_PLM;
-            if (customParams[0].ToString().EndsWith("PLCnextACFProject\\MyTemplate.vstemplate") ||
-                customParams[0].ToString().EndsWith("PLCnextACFProject/MyTemplate.vstemplate"))
+            try
             {
-                _projectType = Resources.ProjectType_ACF;
+                CheckProjectName();
+
+                _projectType = Resources.ProjectType_PLM;
+                if (customParams[0].ToString().EndsWith("PLCnextACFProject\\MyTemplate.vstemplate") ||
+                    customParams[0].ToString().EndsWith("PLCnextACFProject/MyTemplate.vstemplate"))
+                {
+                    _projectType = Resources.ProjectType_ACF;
+                }
+                else if (customParams[0].ToString().EndsWith("ConsumableLibraryTemplate\\ProjectTemplate\\MyTemplate.vstemplate") ||
+                         customParams[0].ToString().EndsWith("ConsumableLibraryTemplate/ProjectTemplate/MyTemplate.vstemplate"))
+                {
+                    _projectType = Resources.ProjectType_ConsumableLibrary;
+                }
+
+                NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, projectName, _projectType);
+                NewProjectInformationViewModel viewModel = new NewProjectInformationViewModel(model);
+                NewProjectInformationView view = new NewProjectInformationView(viewModel);
+
+                bool? result = view.ShowModal();
+                if (result != true)
+                {
+                    throw new WizardCancelledException();
+                }
+                _componentName = model.InitialComponentName;
+                _programName = model.InitialProgramName;
+                _projectNamespace = model.ProjectNamespace;
+                _projectTargets = model.ProjectTargets;
+
+                void CheckProjectName()
+                {
+                    if (ProjectNameRegex.IsMatch(projectName))
+                    {
+                        return;
+                    }
+
+                    if (projectName.Length == 0)
+                    {
+                        throw new WizardBackoutException("Project name cannot be empty.");
+                    }
+
+                    if (Char.IsLower(projectName.First()))
+                    {
+                        throw new WizardBackoutException("Project name cannot start with lowercase character.");
+                    }
+
+                    throw new WizardBackoutException("Project name does not match pattern ^[A-Z](?!.*__)[a-zA-Z0-9_]*$");
+                }
             }
-            else if(customParams[0].ToString().EndsWith("ConsumableLibraryTemplate\\ProjectTemplate\\MyTemplate.vstemplate") ||
-                     customParams[0].ToString().EndsWith("ConsumableLibraryTemplate/ProjectTemplate/MyTemplate.vstemplate"))
+            catch (WizardBackoutException e)
             {
-                _projectType = Resources.ProjectType_ConsumableLibrary;
+                try
+                {
+                    DeleteProjectDirectory();
+                    DeleteSolutionFolderIfEmpty();
+                }
+                catch (Exception)
+                { }
+                MessageBox.Show($"{e.Message}\n\n Reopen 'New Project' dialog", "Project creation failed");
+                throw e;
+            }
+            catch(WizardCancelledException e)
+            {
+                try
+                {
+                    DeleteProjectDirectory();
+                    DeleteSolutionFolderIfEmpty();
+                }
+                catch (Exception)
+                { }
+                throw e;
             }
 
-            NewProjectInformationModel model = new NewProjectInformationModel(_plcncliCommunication, projectName, _projectType);
-            NewProjectInformationViewModel viewModel = new NewProjectInformationViewModel(model);
-            NewProjectInformationView view = new NewProjectInformationView(viewModel);
 
-            view.ShowModal();
+            void DeleteProjectDirectory()
+            {
+                string parentDirectory = Directory.GetParent(_projectDirectory).FullName;
+                Directory.Delete(_projectDirectory);
+                Directory.Delete(parentDirectory);
+            }
 
-            _componentName = model.InitialComponentName;
-            _programName = model.InitialProgramName;
-            _projectNamespace = model.ProjectNamespace;
-            _projectTargets = model.ProjectTargets;
+            void DeleteSolutionFolderIfEmpty()
+            {
+                //first check if solution is empty
+                string[] solutionDirectoryEntries = Directory.GetFileSystemEntries(solutionDirectory);
+                if (solutionDirectoryEntries.Where(entry => entry != ".vs").Any())
+                {
+                    return;//solution directory is not empty, do not delete!
+                }
 
+                ThreadHelper.ThrowIfNotOnUIThread();
+                ((DTE)automationObject).Solution.Close();
+
+                Directory.Delete(solutionDirectory, true);
+            }
         }
 
         public void ProjectFinishedGenerating(Project project)
         {
             try
             {
+                //try
+                //{
+                //    //vs creates our projects from templates one level to deep therefore move them one level up
+                //    foreach (string file in Directory.GetFiles(_oldDestinationDirectory))
+                //    {
+                //        File.Move(file, System.IO.Path.Combine(_projectDirectory,System.IO.Path.GetFileName(file)));
+                //    }
+                //    Directory.Delete(_oldDestinationDirectory);
+                //    project.fileName
+                //}
+                //catch (Exception) { }
+
                 ThreadHelper.ThrowIfNotOnUIThread();
                 GeneratePLCnCLIProject();
             }
@@ -81,9 +176,8 @@ namespace PlcNextVSExtension.PlcNextProject
             {
                 try
                 {
-#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    ThreadHelper.ThrowIfNotOnUIThread();
                     project.DTE.Solution.Remove(project);
-#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
                 }
                 catch (Exception)
                 {}
@@ -104,10 +198,10 @@ namespace PlcNextVSExtension.PlcNextProject
 
                 string newProjectCommand = Resources.Command_new_plmproject;
                 List<string> newProjectArguments = new List<string>
-            {
+                {
                 Resources.Option_new_project_output, $"\"{_projectDirectory}\"",
                 Resources.Option_new_project_projectNamespace, _projectNamespace
-            };
+                };
 
                 if (!projectType.Equals(Resources.ProjectType_ConsumableLibrary))
                 {

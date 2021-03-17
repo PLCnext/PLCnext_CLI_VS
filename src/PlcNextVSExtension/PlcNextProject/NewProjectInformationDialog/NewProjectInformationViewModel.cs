@@ -10,11 +10,15 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
 using PlcNextVSExtension.Properties;
 
@@ -30,6 +34,18 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 
         private readonly NewProjectInformationModel _model;
         private string _warningMessage = WarningNoTargetSelected;
+        private string errorText = string.Empty;
+
+        private static readonly Regex ComponentNameRegex = new Regex(@"^[A-Z](?!.*__)[a-zA-Z0-9_]*$", RegexOptions.Compiled);
+        private static readonly Regex ProgramNameRegex = new Regex(@"^[A-Z](?!.*__)[a-zA-Z0-9_]*$", RegexOptions.Compiled);
+        private static readonly Regex ProjectNamespaceRegex = new Regex(@"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z](?!.*__)[a-zA-Z0-9_]*$", RegexOptions.Compiled);
+
+        bool showComponentError = false;
+        bool showProgramError = false;
+        bool showNamespaceError = false;
+        private readonly string NamespaceErrorText = "Namespace does not match pattern ^(?:[a-zA-Z][a-zA-Z0-9_]*\\.)*[a-zA-Z](?!.*__)[a-zA-Z0-9_]*$";
+        private readonly string ComponentErrorText = "Component name does not match pattern ^[A-Z](?!.*__)[a-zA-Z0-9_]*$";
+        private readonly string ProgramErrorText = "Program name does not match pattern ^[A-Z](?!.*__)[a-zA-Z0-9_]*$";
 
         #region Properties
 
@@ -40,17 +56,29 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 
         public string WindowTitle => "Configure your PlcNext Project";
 
-        public string ButtonText => "OK";
+        public string ButtonText => "_OK";
 
         public string WarningMessage
         {
             get => _warningMessage;
-            set 
-            { 
+            set
+            {
                 _warningMessage = value;
                 OnPropertyChanged();
             }
         }
+
+        public string ErrorText
+        {
+            get => errorText;
+            private set
+            {
+                errorText = value;
+                OnPropertyChanged();
+            }
+        }
+        public BitmapSource ErrorImage => Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Error.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
 
         public ObservableCollection<TargetViewModel> Targets { get; } = new ObservableCollection<TargetViewModel>();
 
@@ -75,7 +103,7 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 
         private void TargetOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName.Equals("Selected") && !Targets.Any(t => t.Selected))
+            if (e.PropertyName.Equals("Selected") && !Targets.Any(t => t.Selected))
             {
                 WarningMessage = WarningNoTargetSelected;
             }
@@ -87,13 +115,13 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
 
         private void SetProjectNameProperties()
         {
-            ProjectNameProperties.Add(new KVP(ProjectNamespaceKey, _model.ProjectNamespace));
+            ProjectNameProperties.Add(new KVP(ProjectNamespaceKey, _model.ProjectNamespace, ProjectNamespaceRegex, ErrorType.Namespace, this));
             if (_model.ProjectType != Resources.ProjectType_ConsumableLibrary)
             {
-                ProjectNameProperties.Add(new KVP(InitialComponentNameKey, _model.InitialComponentName));
+                ProjectNameProperties.Add(new KVP(InitialComponentNameKey, _model.InitialComponentName, ComponentNameRegex, ErrorType.Component, this));
                 if (_model.ProjectType == Resources.ProjectType_PLM)
                 {
-                    ProjectNameProperties.Add(new KVP(InitialProgramNameKey, _model.InitialProgramName));
+                    ProjectNameProperties.Add(new KVP(InitialProgramNameKey, _model.InitialProgramName, ProgramNameRegex, ErrorType.Program, this));
                 }
             }
         }
@@ -110,7 +138,7 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
                 MessageBoxResult messageBoxResult =
                     MessageBox.Show("No target was selected. Do you really want to create a project, which supports no target?",
                         "No target selected", MessageBoxButton.OKCancel);
-                if(messageBoxResult == MessageBoxResult.Cancel)
+                if (messageBoxResult == MessageBoxResult.Cancel)
                     return;
             }
 
@@ -142,28 +170,121 @@ namespace PlcNextVSExtension.PlcNextProject.NewProjectInformationDialog
             }
 
             _model.ProjectTargets = Targets.Where(t => t.Selected).Select(t => t.Source);
-
+            window.DialogResult = true;
             window.Close();
         }
 
         #endregion
 
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
+
+        internal void ShowError(ErrorType errortype)
+        {
+            switch (errortype)
+            {
+                case ErrorType.Namespace:
+                    showNamespaceError = true;
+                    break;
+                case ErrorType.Component:
+                    showComponentError = true;
+                    break;
+                case ErrorType.Program:
+                    showProgramError = true;
+                    break;
+                default:
+                    break;
+            }
+            UpdateErrorText();
+        }
+        internal void RemoveError(ErrorType errorType)
+        {
+            switch (errorType)
+            {
+                case ErrorType.Namespace:
+                    showNamespaceError = false;
+                    break;
+                case ErrorType.Component:
+                    showComponentError = false;
+                    break;
+                case ErrorType.Program:
+                    showProgramError = false;
+                    break;
+                default:
+                    break;
+            }
+            UpdateErrorText();
+        }
+
+        private void UpdateErrorText()
+        {
+            if (showNamespaceError)
+            {
+                ErrorText = NamespaceErrorText;
+                return;
+            }
+            if (showComponentError)
+            {
+                ErrorText = ComponentErrorText;
+                return;
+            }
+            if (showProgramError)
+            {
+                ErrorText = ProgramErrorText;
+                return;
+            }
+            ErrorText = string.Empty;
+        }
+
+        internal enum ErrorType
+        {
+            Namespace,
+            Component,
+            Program
+        }
     }
 
     public class KVP
     {
-        public KVP(string name, string value)
+        private string _value;
+        private readonly NewProjectInformationViewModel.ErrorType errorType;
+        private readonly NewProjectInformationViewModel vm;
+        private readonly Regex validNameRegex;
+
+        internal KVP(string name, string value, Regex validNameRegex, 
+            NewProjectInformationViewModel.ErrorType errorType, NewProjectInformationViewModel vm)
         {
+            this.vm = vm;
+            this.errorType = errorType;
+            this.validNameRegex = validNameRegex;
             Name = new AccessText { Text = name };
             Value = value;
         }
         public AccessText Name { get; }
-        public string Value { get; set; }
+        public string Value
+        {
+            get => _value; 
+            set
+            {
+                _value = value;
+                Validate(_value);
+            }
+        }
+
+        private void Validate(string value)
+        {
+            if(validNameRegex.IsMatch(value))
+            {
+                vm.RemoveError(errorType);
+                return;
+            }
+            vm.ShowError(errorType);
+        }
     }
 }
