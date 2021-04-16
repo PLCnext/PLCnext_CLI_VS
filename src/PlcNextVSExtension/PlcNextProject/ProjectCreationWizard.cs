@@ -28,7 +28,6 @@ namespace PlcNextVSExtension.PlcNextProject
     {
         private readonly IPlcncliCommunication _plcncliCommunication;
         private string _projectDirectory;
-        //private string _oldDestinationDirectory;
         private string _componentName;
         private string _programName;
         private string _projectNamespace;
@@ -47,10 +46,6 @@ namespace PlcNextVSExtension.PlcNextProject
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind,
             object[] customParams)
         {
-
-            //_oldDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            //_projectDirectory = Directory.GetParent(_oldDestinationDirectory).FullName;
-
             _projectDirectory = replacementsDictionary["$destinationdirectory$"];
             string projectName = replacementsDictionary["$projectname$"];
             string solutionDirectory = replacementsDictionary["$solutiondirectory$"];
@@ -157,18 +152,6 @@ namespace PlcNextVSExtension.PlcNextProject
         {
             try
             {
-                //try
-                //{
-                //    //vs creates our projects from templates one level to deep therefore move them one level up
-                //    foreach (string file in Directory.GetFiles(_oldDestinationDirectory))
-                //    {
-                //        File.Move(file, System.IO.Path.Combine(_projectDirectory,System.IO.Path.GetFileName(file)));
-                //    }
-                //    Directory.Delete(_oldDestinationDirectory);
-                //    project.fileName
-                //}
-                //catch (Exception) { }
-
                 ThreadHelper.ThrowIfNotOnUIThread();
                 GeneratePLCnCLIProject();
             }
@@ -176,7 +159,6 @@ namespace PlcNextVSExtension.PlcNextProject
             {
                 try
                 {
-                    ThreadHelper.ThrowIfNotOnUIThread();
                     project.DTE.Solution.Remove(project);
                 }
                 catch (Exception)

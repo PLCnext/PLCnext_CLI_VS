@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using PlcncliServices.PLCnCLI;
@@ -25,19 +26,56 @@ namespace PlcncliBuild
 
         public void WriteLine(string line)
         {
+            bool logAsError = false;
+            string rawLine = line;
+            
             InfoMessages.Add(line);
-            string cmake = "[cmake]: ";
-            if (line.Contains(cmake))
-                line = line.Substring(line.IndexOf(cmake) + cmake.Length);
 
+            RemoveCmakePrefix();
+
+            FormatLinkerPrefix();
+            
             // output format of librarybuilder does not match visual studio error format
             string libBuilder = "[EngineeringLibraryBuilder]:";
 
             if (line.TrimStart().StartsWith(libBuilder) && ErrorMessages.Contains(line))
-                _loggingHelper.LogError(line);
+            {
+                logAsError = true; 
+            }
+
+            if (logAsError)
+            {
+                _loggingHelper.LogMessageFromText("error: "+line, MessageImportance.High);
+            }
             else
+            {
                 _loggingHelper.LogMessageFromText(line, MessageImportance.Normal);
-            
+            }
+
+            void RemoveCmakePrefix()
+            {
+                string cmake = "[cmake]: ";
+                if (line.Contains(cmake))
+                    line = line.Substring(line.IndexOf(cmake) + cmake.Length);
+            }
+
+            void FormatLinkerPrefix()
+            {
+                string linker = "real-ld.exe";
+                if (line.Contains(linker + ":"))
+                {
+                    string linkerPath = line.Substring(0, line.IndexOf(linker) + linker.Length);
+                    if (File.Exists(linkerPath))
+                    {
+                        if (ErrorMessages.Contains(rawLine))
+                        {
+                            logAsError = true;
+                        }
+                            
+                        line = line.Substring(line.IndexOf(linker) + linker.Length + 1) + $"(message from {linkerPath})";
+                    }
+                }
+            }
         }
 
         public void WriteError(string error)
