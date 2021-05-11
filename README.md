@@ -5,7 +5,7 @@ This repository is part of the PLCnext Toolchain and provides a Visual Studio ID
 ## Installation & First Steps
 
 If you want the latest release version of the PLCnext CLI, you can find it in the [PLCnext Technology controller download area](https://www.phoenixcontact.com/qr/2404267/softw).
-For more information and first steps with PLCnext Technology please visit our [PLCnext Community](https://www.plcnext-community.net/en/hn-knowledge-base/hn-get-started/hn-get-started-programming.html).
+For more information and first steps with PLCnext Technology please visit our [PLCnext Community](https://www.plcnext.help/te/Programming/Introduction.htm).
 
 ## Test a local build
 
