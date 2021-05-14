@@ -353,42 +353,8 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                                         typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{projectDirectory}\"") as
                                     CompilerSpecificationCommandResult;
 
-                            (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsCommandResult, projectInformation);
-
-                            if (macros == null || !macros.Any())
-                                return;
-
-                            string joinedMacros = string.Join(";",
-                                    macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)));
-                            string joinedIncludes = string.Join(";", includes);
-
                             VCProject vcProject = project.Object as VCProject;
-                            foreach (VCConfiguration2 config in vcProject.Configurations)
-                            {
-                                IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
-                                if (plcnextCommonPropertiesRule == null)
-                                {
-                                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
-                                }
-                                plcnextCommonPropertiesRule.SetPropertyValue("Macros", joinedMacros);
-                                plcnextCommonPropertiesRule.SetPropertyValue("Includes", joinedIncludes);
-
-                                IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                                if (rule == null)
-                                {
-                                    MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
-                                }
-                                string propKey = "IncludePath";
-                                rule.SetPropertyValue(propKey, joinedIncludes);
-
-                                IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-                                if (clRule == null)
-                                {
-                                    MessageBox.Show("CL rule was not found in configuration rules collection.");
-                                }
-                                string key = "PreprocessorDefinitions";
-                                clRule.SetPropertyValue(key, joinedMacros);
-                            }
+                            ProjectIncludesManager.SetIncludesForNewProject(vcProject, compilerSpecsCommandResult, projectInformation);
                         }
                     }
                 });

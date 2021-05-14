@@ -34,6 +34,7 @@ namespace PlcNextVSExtension.PlcNextProject
         private string _projectType;
         private IEnumerable<TargetResult> _projectTargets;
         private Project _project;
+        private string _solutionDirectory;
 
         private static readonly Regex ProjectNameRegex = new Regex(@"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[A-Z](?!.*__)[a-zA-Z0-9_]*$", RegexOptions.Compiled);
 
@@ -48,7 +49,7 @@ namespace PlcNextVSExtension.PlcNextProject
         {
             _projectDirectory = replacementsDictionary["$destinationdirectory$"];
             string projectName = replacementsDictionary["$projectname$"];
-            string solutionDirectory = replacementsDictionary["$solutiondirectory$"];
+            _solutionDirectory = replacementsDictionary["$solutiondirectory$"];
 
             try
             {
@@ -105,7 +106,9 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     DeleteProjectDirectory();
-                    DeleteSolutionFolderIfEmpty();
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    DeleteSolutionFolderIfEmpty((DTE)automationObject);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
                 }
                 catch (Exception)
                 { }
@@ -117,7 +120,9 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     DeleteProjectDirectory();
-                    DeleteSolutionFolderIfEmpty();
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    DeleteSolutionFolderIfEmpty((DTE)automationObject);
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
                 }
                 catch (Exception)
                 { }
@@ -131,21 +136,21 @@ namespace PlcNextVSExtension.PlcNextProject
                 Directory.Delete(_projectDirectory);
                 Directory.Delete(parentDirectory);
             }
+        }
 
-            void DeleteSolutionFolderIfEmpty()
+        private void DeleteSolutionFolderIfEmpty(DTE dte)
+        {
+            //first check if solution is empty
+            string[] solutionDirectoryEntries = Directory.GetFileSystemEntries(_solutionDirectory);
+            if (solutionDirectoryEntries.Where(entry => entry != ".vs").Any())
             {
-                //first check if solution is empty
-                string[] solutionDirectoryEntries = Directory.GetFileSystemEntries(solutionDirectory);
-                if (solutionDirectoryEntries.Where(entry => entry != ".vs").Any())
-                {
-                    return;//solution directory is not empty, do not delete!
-                }
-
-                ThreadHelper.ThrowIfNotOnUIThread();
-                ((DTE)automationObject).Solution.Close();
-
-                Directory.Delete(solutionDirectory, true);
+                return;//solution directory is not empty, do not delete!
             }
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+            dte.Solution.Close();
+
+            Directory.Delete(_solutionDirectory, true);
         }
 
         public void ProjectFinishedGenerating(Project project)
@@ -160,6 +165,7 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     project.DTE.Solution.Remove(project);
+                    DeleteSolutionFolderIfEmpty(project.DTE);
                 }
                 catch (Exception)
                 {}
@@ -175,7 +181,11 @@ namespace PlcNextVSExtension.PlcNextProject
                 //**********create new plcncli project**********
                 //**********get project type**********
                 VCConfiguration configuration = p.ActiveConfiguration;
-                IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
+                IVCRulePropertyStorage plcnextRule = configuration.Rules.Item(Constants.PLCnextRuleName);
+                if (plcnextRule == null)
+                {
+                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                }
                 string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
 
                 string newProjectCommand = Resources.Command_new_plmproject;
@@ -245,41 +255,7 @@ namespace PlcNextVSExtension.PlcNextProject
                             typeof(CompilerSpecificationCommandResult), Resources.Option_get_compiler_specifications_project, $"\"{_projectDirectory}\"") as
                         CompilerSpecificationCommandResult;
 
-                (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsCommandResult, projectInformation);
-
-                if (macros == null || !macros.Any())
-                    return;
-
-                string joinedMacros = string.Join(";",
-                        macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)));
-                string joinedIncludes = string.Join(";", includes);
-
-                foreach (VCConfiguration2 config in p.Configurations)
-                {
-                    IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
-                    if (plcnextCommonPropertiesRule == null)
-                    {
-                        MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
-                    }
-                    plcnextCommonPropertiesRule.SetPropertyValue("Macros", joinedMacros);
-                    plcnextCommonPropertiesRule.SetPropertyValue("Includes", joinedIncludes);
-
-                    IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                    if (rule == null)
-                    {
-                        MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
-                    }
-                    string propKey = "IncludePath";
-                    rule.SetPropertyValue(propKey, joinedIncludes);
-
-                    IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-                    if (clRule == null)
-                    {
-                        MessageBox.Show("CL rule was not found in configuration rules collection.");
-                    }
-                    string key = "PreprocessorDefinitions";
-                    clRule.SetPropertyValue(key, joinedMacros);
-                }
+                ProjectIncludesManager.SetIncludesForNewProject(p, compilerSpecsCommandResult, projectInformation);
             }
         }
 

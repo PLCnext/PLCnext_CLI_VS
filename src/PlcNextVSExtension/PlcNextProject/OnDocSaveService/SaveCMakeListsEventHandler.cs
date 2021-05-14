@@ -178,7 +178,11 @@ namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
                             {
                                 projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
                             }
-                            includesBefore = projectInformationBefore.IncludePaths.Select(x => x.PathValue);
+                            includesBefore = projectInformationBefore?.IncludePaths.Select(x => x.PathValue);
+                            if (includesBefore == null)
+                            {
+                                includesBefore = Enumerable.Empty<string>();
+                            }
                         }
 
                         if (!macrosSaved)
@@ -249,66 +253,11 @@ namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
                 }
 
                 progress.Report(new ThreadedWaitDialogProgressData("Computing includes and macros."));
-                var (macrosAfter, includesAfter) = ProjectIncludesManager.FindMacrosAndIncludes(compilerSpecsAfter, projectInformationAfter);
-
+                
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                foreach (VCConfiguration2 config in vcProject.Configurations)
-                {
-                    IEnumerable<string> configIncludesBefore = wrapper.Includes;
-                    IEnumerable<CompilerMacroResult> configMacrosBefore = wrapper.Macros;
-                    IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item("PLCnextCommonProperties");
-                    string savedIncludes = plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Includes");
-                    string savedMacros = plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue("Macros");
-                    if (!string.IsNullOrEmpty(savedIncludes))
-                    {
-                        configIncludesBefore = savedIncludes.Split(';');
-                    }
-                    if (!string.IsNullOrEmpty(savedMacros))
-                    {
-                        configMacrosBefore = savedMacros.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                                        .Select(x => x.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
-                                                        .Select(x => new CompilerMacroResult { Name = x[0], Value = x.Length == 2 ? x[1].Trim() : null });
-                    }
-
-
-                    IVCRulePropertyStorage rule = config.Rules.Item("ConfigurationDirectories");
-                    string includePathKey = "IncludePath";
-                    IEnumerable<string> currentIncludes = rule.GetUnevaluatedPropertyValue(includePathKey).Split(';');
-
-                    string includes = string.Join(";",
-                                                  currentIncludes.Where(value => !configIncludesBefore.Contains(value))
-                                                                 .Concat(includesAfter));
-
-                    rule.SetPropertyValue(includePathKey, includes);
-                    plcnextCommonPropertiesRule.SetPropertyValue("Includes", string.Join(";", includesAfter));
-
-                    if (configMacrosBefore == null && macrosAfter == null)
-                        continue;
-                    if (macrosAfter == null)
-                        macrosAfter = Enumerable.Empty<CompilerMacroResult>();
-
-                    IVCRulePropertyStorage clRule = config.Rules.Item("CL");
-                    string macroKey = "PreprocessorDefinitions";
-                    IEnumerable<CompilerMacroResult> currentMacros =
-                        clRule.GetUnevaluatedPropertyValue(macroKey)
-                              .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                              .Select(m => m.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
-                              .Select(m => new CompilerMacroResult { Name = m[0], Value = m.Length == 2 ? m[1].Trim() : null });
-
-                    if (configMacrosBefore != null)
-                    {
-                        currentMacros = currentMacros.Where(x => !configMacrosBefore.Any(y => y.Name.Equals(x.Name) &&
-                                                                                             (y.Value != null ?
-                                                                                                (x.Value == null ? string.IsNullOrEmpty(y.Value.Trim()) : y.Value.Trim().Equals(x.Value.Trim())) :
-                                                                                                string.IsNullOrEmpty(x.Value?.Trim()))))
-                                                     .Concat(macrosAfter);
-                    }
-                    string joinedMacros = string.Join(";", currentMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))));
-                    clRule.SetPropertyValue(macroKey, joinedMacros);
-                    plcnextCommonPropertiesRule.SetPropertyValue("Macros",
-                        string.Join(";", macrosAfter.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value)))));
-                }
+                ProjectIncludesManager.UpdateIncludesAndMacrosForExistingProject(vcProject, wrapper.Macros, compilerSpecsAfter, 
+                                                                                 wrapper.Includes, projectInformationAfter);
             });
 
 

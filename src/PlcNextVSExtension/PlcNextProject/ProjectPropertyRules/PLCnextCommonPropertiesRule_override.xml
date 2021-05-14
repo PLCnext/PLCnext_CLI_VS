@@ -21,22 +21,22 @@
 			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIProjectType" />
 		</StringProperty.DataSource>
 	</StringProperty>
-	<StringProperty Name="Includes" 
-					DisplayName="Project Includes"
+	<StringProperty Name="PLCnCLIIncludes" 
+					DisplayName="PLCnext Includes"
 					Category="General"
-					Description="The includes which were computed for the project based on the project targets."
+					Description="The includes which were computed for the project based on the plcnext project targets."
 					Visible="false">
 		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="ProjectIncludes" />
+			<DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="true" PersistedName="PLCnCLIIncludes"/>
 		</StringProperty.DataSource>
 	</StringProperty>
-	<StringProperty Name="Macros"
-					DisplayName="Project Macros"
+	<StringProperty Name="PLCnCLIMacros"
+					DisplayName="PLCnext Macros"
 					Category="General"
-				    Description="The macros which were computed for the project based on the project targets."
+				    Description="The macros which were computed for the project based on the plcnext project targets."
 				    Visible="false">
 		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="ProjectMacros" />
+			<DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="true" PersistedName="PLCnCLIMacros"/>
 		</StringProperty.DataSource>
 	</StringProperty>
 	<StringProperty Name="BuildOptions_"

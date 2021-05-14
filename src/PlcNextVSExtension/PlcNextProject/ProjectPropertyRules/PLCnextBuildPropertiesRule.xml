@@ -6,9 +6,6 @@
 	  OverrideMode="Extend"
       xmlns="http://schemas.microsoft.com/build/2009/properties"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<Rule.DataSource>
-		<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
-	</Rule.DataSource>
 	<StringProperty Name="GenerateOptions_"
 					Category="Build"
 					DisplayName="Additional Generate Options"
@@ -32,7 +29,7 @@
 				  Default="false"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIGenerate" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIGenerate" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 	<BoolProperty Name="DisablePLCnCLIDeploy"
@@ -42,7 +39,7 @@
 				  Default="false"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 </Rule>

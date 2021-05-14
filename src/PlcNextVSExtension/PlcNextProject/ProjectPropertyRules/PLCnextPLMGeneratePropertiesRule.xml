@@ -6,9 +6,6 @@
 	  OverrideMode="Extend"
       xmlns="http://schemas.microsoft.com/build/2009/properties"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<Rule.DataSource>
-		<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" />
-	</Rule.DataSource>
 	<BoolProperty Name="GenerateDT"
 				  Category="Build"
 				  DisplayName="Generate Datatypes Worksheet"
@@ -16,7 +13,7 @@
 				  Default="true"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIGenerateDT" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="PLCnCLIGenerateDT" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 </Rule>

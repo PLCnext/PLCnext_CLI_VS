@@ -17,8 +17,8 @@ namespace PlcNextVSExtension.PlcNextProject
 {
     internal class ProjectConfigurationManager
     {
-        const string releaseConfigurationNameRaw = "Release {0}";
-        const string debugConfigurationNameRaw = "Debug {0}";
+        internal const string releaseConfigurationNameRaw = "Release {0}";
+        internal const string debugConfigurationNameRaw = "Debug {0}";
         const string targetBuildConfigName = "Project-specific";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD010:Invoke single-threaded types on Main thread", Justification = "Handled in calling method")]
