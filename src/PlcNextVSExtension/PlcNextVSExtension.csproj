@@ -119,27 +119,22 @@
     </Content>
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
     </Content>
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
     </Content>
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextCommonPropertiesRule_override.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
     </Content>
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT\PropertyRules</VSIXSubPath>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnCLI.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
     </Content>
     <VSCTCompile Include="PlcNextCommandsTable.vsct">
@@ -148,7 +143,6 @@
     <None Include="key.snk" />
     <Content Include="PlcNextProject\ProjectPropertyRules\PLCnCLIBuild.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>PHOENIX CONTACT</VSIXSubPath>
     </Content>
     <EmbeddedResource Include="PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
@@ -235,7 +229,6 @@
       <Name>PlcncliBuild</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-      <InstallRoot>PublicAssemblies</InstallRoot>
     </ProjectReference>
     <ProjectReference Include="..\PlcncliSdkOptionPage\PlcncliSdkOptionPage.csproj">
       <Project>{B9CBA487-48FA-4C86-AEDC-EFBC30263810}</Project>

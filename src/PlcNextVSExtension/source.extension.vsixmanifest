@@ -7,7 +7,7 @@
         <License>PhoenixContactSoftwareLicenseTerms.txt</License>
         <Icon>PlcNextVSExtension.ico</Icon>
     </Metadata>
-    <Installation AllUsers="true">
+    <Installation AllUsers="false">
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
     </Installation>
     <Dependencies>
