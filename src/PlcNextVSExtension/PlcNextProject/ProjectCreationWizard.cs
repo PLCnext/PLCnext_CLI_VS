@@ -128,21 +128,21 @@ namespace PlcNextVSExtension.PlcNextProject
                 { }
                 throw e;
             }
-
-
-            void DeleteProjectDirectory()
-            {
-                string parentDirectory = Directory.GetParent(_projectDirectory).FullName;
-                Directory.Delete(_projectDirectory);
-                Directory.Delete(parentDirectory);
-            }
         }
+
+        private void DeleteProjectDirectory()
+        {
+            string parentDirectory = Directory.GetParent(_projectDirectory).FullName;
+            Directory.Delete(_projectDirectory, true);
+            Directory.Delete(parentDirectory);
+        }
+        
 
         private void DeleteSolutionFolderIfEmpty(DTE dte)
         {
             //first check if solution is empty
             string[] solutionDirectoryEntries = Directory.GetFileSystemEntries(_solutionDirectory);
-            if (solutionDirectoryEntries.Where(entry => entry != ".vs").Any())
+            if (solutionDirectoryEntries.Where(entry => entry != System.IO.Path.Combine(_solutionDirectory, ".vs")).Any())
             {
                 return;//solution directory is not empty, do not delete!
             }
@@ -165,6 +165,7 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     project.DTE.Solution.Remove(project);
+                    DeleteProjectDirectory();
                     DeleteSolutionFolderIfEmpty(project.DTE);
                 }
                 catch (Exception)
@@ -184,7 +185,7 @@ namespace PlcNextVSExtension.PlcNextProject
                 IVCRulePropertyStorage plcnextRule = configuration.Rules.Item(Constants.PLCnextRuleName);
                 if (plcnextRule == null)
                 {
-                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    throw new NullReferenceException("PLCnextCommonProperties rule was not found in configuration rules collection.");
                 }
                 string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
 
