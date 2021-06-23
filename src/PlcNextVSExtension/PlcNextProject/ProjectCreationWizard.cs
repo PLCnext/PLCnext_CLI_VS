@@ -106,9 +106,8 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     DeleteProjectDirectory();
-#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    ThreadHelper.ThrowIfNotOnUIThread();
                     DeleteSolutionFolderIfEmpty((DTE)automationObject);
-#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
                 }
                 catch (Exception)
                 { }
@@ -120,9 +119,8 @@ namespace PlcNextVSExtension.PlcNextProject
                 try
                 {
                     DeleteProjectDirectory();
-#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+                    ThreadHelper.ThrowIfNotOnUIThread();
                     DeleteSolutionFolderIfEmpty((DTE)automationObject);
-#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
                 }
                 catch (Exception)
                 { }
@@ -136,7 +134,7 @@ namespace PlcNextVSExtension.PlcNextProject
             Directory.Delete(_projectDirectory, true);
             Directory.Delete(parentDirectory);
         }
-        
+
 
         private void DeleteSolutionFolderIfEmpty(DTE dte)
         {
@@ -257,11 +255,11 @@ namespace PlcNextVSExtension.PlcNextProject
                         CompilerSpecificationCommandResult;
 
                 ProjectIncludesManager.SetIncludesForNewProject(p, compilerSpecsCommandResult, projectInformation);
-            }
-        }
+                    }
+                    }
+
 
         
-
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
         }
