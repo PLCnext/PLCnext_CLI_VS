@@ -155,6 +155,10 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                     await task;
                 }
             }));
+
+            if(model.SdkChangesCollector.SdksToInstall.Count > 0)
+                MessageBox.Show("Installing sdks in background. This may take a while. New sdks are available after background task has finished." +
+                    " Check lower left corner for active background tasks.", "Background installation started", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
