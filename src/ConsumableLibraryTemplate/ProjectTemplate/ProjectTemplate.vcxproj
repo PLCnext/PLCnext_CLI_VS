@@ -35,17 +35,26 @@
 	<ImportGroup Label="Shared" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros" />
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 	<ItemDefinitionGroup>
 		<ClCompile>
 			<ForcedIncludeFiles>$(ProjectDir)UndefClang.hpp</ForcedIncludeFiles>
 			<CLanguageStandard/>
 			<CppLanguageStandard/>
+			<PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'">$(PLCnCLIMacros)</PreprocessorDefinitions>
+			<PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'">$(PLCnCLIMacros)</PreprocessorDefinitions>
 		</ClCompile>
 	</ItemDefinitionGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-	<ImportGroup Label="ExtensionTargets" />
-	<Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLIBuild.targets" />
 	<PropertyGroup>
 		<PLCnCLIProjectType>consumablelibrary</PLCnCLIProjectType>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'">
+		<IncludePath>$(PLCnCLIIncludes)</IncludePath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'">
+		<IncludePath>$(PLCnCLIIncludes)</IncludePath>
+	</PropertyGroup>
+	<ImportGroup Label="ExtensionTargets" />
+	<Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLIBuild.targets" />
+	
 </Project>

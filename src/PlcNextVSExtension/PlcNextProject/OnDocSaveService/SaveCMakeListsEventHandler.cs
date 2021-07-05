@@ -60,6 +60,8 @@ namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
 
                 UpdateIncludesOnAfterSave();
                 SaveAndReset();
+                ProjectIncludesManager.AddTargetsFileToOldProjects(vcProject);
+                vcProject = null;
                 return VSConstants.S_OK;
 
             }
@@ -75,6 +77,13 @@ namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
                 }
                 catch (Exception) {/*try to log error in activity log*/}
                 return VSConstants.S_OK;
+            }
+
+            void SaveAndReset()
+            {
+                projectDirectory = string.Empty;
+                wrapper = null;
+                vcProject.Save();
             }
         }
 
@@ -261,14 +270,6 @@ namespace PlcNextVSExtension.PlcNextProject.OnDocSaveService
             });
 
 
-        }
-    
-        private void SaveAndReset()
-        {
-            projectDirectory = string.Empty;
-            wrapper = null;
-            vcProject.Save();
-            vcProject = null;
         }
 
         private void Reset()

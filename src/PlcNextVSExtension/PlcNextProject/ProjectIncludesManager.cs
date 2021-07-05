@@ -7,6 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using Microsoft.Build.Construction;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using System;
@@ -72,22 +73,32 @@ namespace PlcNextVSExtension.PlcNextProject
             IEnumerable<CompilerMacroResult> macros = Enumerable.Empty<CompilerMacroResult>();
             IEnumerable<string> includes = Enumerable.Empty < string>();
 
-            TargetResult minCompilerTarget = compilerSpecsCommandResult?.Specifications
-                                                              .SelectMany(x => x.Targets)
-                                                              .MinTarget();
+            TargetResult minCompilerTarget = FindMinTargetForMacros(compilerSpecsCommandResult);
             if (minCompilerTarget != null)
             {
                 macros = GetMacrosForTarget(minCompilerTarget, compilerSpecsCommandResult);
             }
 
-            TargetResult minIncludeTarget = projectInformation?.Targets
-                                                              .Where(t => t.Available == true)
-                                                              .MinTarget();
+            TargetResult minIncludeTarget = FindMinTargetForIncludes(projectInformation);
 
             includes = GetIncludesForTarget(minIncludeTarget, projectInformation);
 
 
             return (macros, includes);
+        }
+
+        public static TargetResult FindMinTargetForMacros(CompilerSpecificationCommandResult compilerSpecsCommandResult)
+        {
+            return compilerSpecsCommandResult?.Specifications
+                                              .SelectMany(x => x.Targets)
+                                              .MinTarget();
+        }
+
+        public static TargetResult FindMinTargetForIncludes(ProjectInformationCommandResult projectInformation)
+        {
+            return projectInformation?.Targets
+                                      .Where(t => t.Available == true)
+                                      .MinTarget();
         }
 
         private static IEnumerable<string> GetIncludesForTarget(TargetResult target, ProjectInformationCommandResult projectInformation)
@@ -164,7 +175,7 @@ namespace PlcNextVSExtension.PlcNextProject
                     MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
                 }
 
-                string joinedMacros = macros.Any() ? string.Join(";", 
+                string joinedMacros = macros.Any() ? string.Join(";",
                         macros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value.Trim()) ? null : "=" + m.Value)))
                         : string.Empty;
                 string joinedIncludes = includes.Any() ? string.Join(";", includes) : string.Empty;
@@ -172,21 +183,37 @@ namespace PlcNextVSExtension.PlcNextProject
                 plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, joinedMacros);
                 plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, joinedIncludes);
 
-                IVCRulePropertyStorage rule = config.Rules.Item(Constants.VCppIncludesRuleName);
-                if (rule == null)
-                {
-                    MessageBox.Show("ConfigurationDirectories rule was not found in configuration rules collection.");
-                }
-                rule.SetPropertyValue(Constants.VCppIncludesKey, $"$({Constants.PLCnextIncludesKey})");
-
-                IVCRulePropertyStorage clRule = config.Rules.Item(Constants.CLRuleName);
-                if (clRule == null)
-                {
-                    MessageBox.Show("CL rule was not found in configuration rules collection.");
-                }
-                clRule.SetPropertyValue(Constants.VCPreprocessorsKey, $"$({Constants.PLCnextMacrosKey})");
+                
             }
         }
+
+        public static void AddTargetsFileToOldProjects(VCProject vcProject)
+        {
+            string projectFilePath = vcProject.ProjectFile;
+            ProjectRootElement projectRootElement = ProjectRootElement.Open(projectFilePath);
+            ICollection<ProjectImportElement> imports = projectRootElement.Imports;
+            ProjectPropertyGroupElement userMacrosPropertyGroup = projectRootElement.PropertyGroups.Where(g => g.Label.Equals("UserMacros")).FirstOrDefault();
+            ProjectImportElement userFileImport = imports.Where(i => i.Project.Equals("$(VCTargetsPath)\\Microsoft.Cpp.targets")).FirstOrDefault();
+
+            if (userMacrosPropertyGroup != null && !userMacrosPropertyGroup.NextSibling.Equals(userFileImport))
+            {
+                projectRootElement.RemoveChild(userFileImport);
+
+                projectRootElement.InsertAfterChild(userFileImport, userMacrosPropertyGroup);
+
+                //delete all occurences of PLCnCLIIncludes and PLCnCLIMacros -> saved in .users file now
+                IEnumerable<ProjectPropertyElement> elementsToDelete = projectRootElement.PropertyGroups
+                                  .Where(g => g.Label.Equals("Configuration"))
+                                  .SelectMany(g => g.Properties
+                                                    .Where(p => p.Name.Equals("PLCnCLIMacros") || p.Name.Equals("PLCnCLIIncludes")));
+                elementsToDelete.ToList().ForEach(e => e.Parent.RemoveChild(e));
+
+                MessageBox.Show("The project file needs to be updated outside of the environment. Please choose 'Reload all...' in the next dialog.",
+                                "Project update needed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                projectRootElement.Save();
+            }
+        }
+
         public static void UpdateIncludesAndMacrosForExistingProject(VCProject vcProject,
                                                                      IEnumerable<CompilerMacroResult> oldMacros,
                                                                      CompilerSpecificationCommandResult newCompilerSpecs,
@@ -201,24 +228,26 @@ namespace PlcNextVSExtension.PlcNextProject
             if (newIncludes == null)
                 newIncludes = Enumerable.Empty<string>();
 
+            IVCRulePropertyStorage plcnextCommonPropertiesRule = vcProject.ActiveConfiguration.Rules.Item(Constants.PLCnextRuleName);
+
+            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, newIncludes.Any() ?
+                                                                                           string.Join(";", newIncludes) :
+                                                                                           string.Empty);
+
+            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, newMacros.Any() ?
+                string.Join(";", newMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))))
+                : string.Empty);
+
+
             foreach (VCConfiguration2 config in vcProject.Configurations)
             {
-                IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item(Constants.PLCnextRuleName);
+                plcnextCommonPropertiesRule = config.Rules.Item(Constants.PLCnextRuleName);
 
                 CheckIncludesVariableIsInProjectIncludes(config);
                 CheckMacrosVariableIsInProjectMacros(config);
                 
                 DeleteObsoleteIncludes();
                 DeleteObsoleteMacros();
-
-                plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, newIncludes.Any() ?
-                                                                                           string.Join(";", newIncludes) :
-                                                                                           string.Empty);
-               
-                plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, newMacros.Any() ?
-                    string.Join(";", newMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))))
-                    : string.Empty);
-
 
                 void DeleteObsoleteIncludes()
                 {

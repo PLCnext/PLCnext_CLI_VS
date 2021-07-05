@@ -212,6 +212,8 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
 
                         p.Save();
 
+                        ProjectIncludesManager.AddTargetsFileToOldProjects(p);
+
                         void SetTargets()
                         {
                             foreach (TargetResult target in model.TargetsToAdd)
