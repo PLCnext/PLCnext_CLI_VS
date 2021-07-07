@@ -15,11 +15,13 @@
         <GenerateTask ProjectDirectory="$(ProjectDir)"
 					  AdditionalOptions="$(PLCnCLIGenerateOptions)"
 					  GenerateDatatypesWorksheet="$(PLCnCLIGenerateDT)"
+					  SourceFoldersRaw="$(SourceFolders)"
 				      Condition="$(DisablePLCnCLIGenerate) != true"/>
 	    <CallTarget Targets="PLCnCLIBuild"/>
         <DeployTask ProjectDirectory="$(ProjectDir)"
                     AdditionalOptions="$(PLCnCLIDeployOptions)"
                     Configuration="$(Configuration)"
+					SourceFoldersRaw="$(SourceFolders)"
 					Condition="$(DisablePLCnCLIDeploy) != true"/>
     </Target>
 </Project>

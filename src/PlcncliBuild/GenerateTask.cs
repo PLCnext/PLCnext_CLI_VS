@@ -33,6 +33,12 @@ namespace PlcncliBuild
                 args = args.Append("--no-datatypes-worksheet").ToArray();
             }
 
+            if (SourceFolders.Any())
+            {
+                args = args.Append("--sources").Append(string.Join(",",SourceFolders)).ToArray();
+                
+            }
+
             args = args.Append(AdditionalOptions).ToArray();
 
             try
@@ -52,5 +58,16 @@ namespace PlcncliBuild
         }
 
         public bool GenerateDatatypesWorksheet { get; set; }
+
+        private IEnumerable<string> SourceFolders
+        {
+            get
+            {
+                return string.IsNullOrEmpty(SourceFoldersRaw)
+                             ? Enumerable.Empty<string>()
+                             : SourceFoldersRaw.Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            }
+        }
+        public string SourceFoldersRaw { get; set; }
     }
 }

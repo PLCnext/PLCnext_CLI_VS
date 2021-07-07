@@ -42,4 +42,12 @@
 			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
+	<StringListProperty Name="SourceFolders"
+						Category="Build"
+						DisplayName="Source Folders"
+						Description="If the project has source folders different from the standard folder 'src' then all folders have to be listed here, e.g.: src,otherfolder,andanother. Note that the folderstructure from the filesystem is relevant and not the solution explorer's structure.">
+		<StringListProperty.DataSource>
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false"/>
+		</StringListProperty.DataSource>
+	</StringListProperty>
 </Rule>

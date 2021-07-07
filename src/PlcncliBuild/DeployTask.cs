@@ -34,6 +34,14 @@ namespace PlcncliBuild
 
             options = options.Append("-b");
             options = options.Append(buildType);
+
+
+            if (SourceFolders.Any())
+            {
+                options = options.Append("--sources").Append(string.Join(",", SourceFolders)).ToArray();
+
+            }
+
             options = options.Append(AdditionalOptions);
 
             try
@@ -50,6 +58,15 @@ namespace PlcncliBuild
             return true;
         }
         public string Configuration { get; set; }
+        private IEnumerable<string> SourceFolders { 
+            get 
+            { 
+                return string.IsNullOrEmpty(SourceFoldersRaw) 
+                             ? Enumerable.Empty<string>()
+                             : SourceFoldersRaw.Split(new[] { ';', ',' },System.StringSplitOptions.RemoveEmptyEntries); 
+            } 
+        }
+        public string SourceFoldersRaw { get; set; }
 
     }
 }

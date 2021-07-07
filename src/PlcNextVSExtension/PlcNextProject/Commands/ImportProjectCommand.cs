@@ -358,6 +358,9 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                         }
                     }
                 });
+
+            MessageBox.Show("If the imported project has source folders different from the standard 'src', they have to be set manually in the project properties.",
+                                        "Successfully imported project", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
