@@ -42,6 +42,16 @@ namespace PlcncliBuild
 
             }
 
+            if (!string.IsNullOrEmpty(LibraryVersion))
+            {
+                options = options.Append($"--libraryversion \"{LibraryVersion}\"");
+            }
+
+            if (!string.IsNullOrEmpty(LibraryDescription))
+            {
+                options = options.Append($"--librarydescription \"{LibraryDescription}\"");
+            }
+
             options = options.Append(AdditionalOptions);
 
             try
@@ -58,15 +68,20 @@ namespace PlcncliBuild
             return true;
         }
         public string Configuration { get; set; }
-        private IEnumerable<string> SourceFolders { 
-            get 
-            { 
-                return string.IsNullOrEmpty(SourceFoldersRaw) 
+        private IEnumerable<string> SourceFolders
+        {
+            get
+            {
+                return string.IsNullOrEmpty(SourceFoldersRaw)
                              ? Enumerable.Empty<string>()
-                             : SourceFoldersRaw.Split(new[] { ';', ',' },System.StringSplitOptions.RemoveEmptyEntries); 
-            } 
+                             : SourceFoldersRaw.Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            }
         }
         public string SourceFoldersRaw { get; set; }
+
+        public string LibraryVersion { get; set; }
+
+        public string LibraryDescription { get; set; }
 
     }
 }
