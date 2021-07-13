@@ -42,15 +42,19 @@ namespace PlcncliBuild
 
             }
 
-            if (!string.IsNullOrEmpty(LibraryVersion))
+            if (LibraryVersion == null)
             {
-                options = options.Append($"--libraryversion \"{LibraryVersion}\"");
+                LibraryVersion = string.Empty;
             }
+            options = options.Append($"--libraryversion \"{LibraryVersion}\"");
 
-            if (!string.IsNullOrEmpty(LibraryDescription))
+
+            if (LibraryDescription == null)
             {
-                options = options.Append($"--librarydescription \"{LibraryDescription}\"");
+                LibraryDescription = string.Empty;
             }
+            options = options.Append($"--librarydescription \"{LibraryDescription}\"");
+
 
             options = options.Append(AdditionalOptions);
 
