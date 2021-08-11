@@ -1,25 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
     <Name>PLCnext PLM Project</Name>
-    <Description>This is a project template for user programs. They are managed by the PLM (Program Library Manager). For more information visit the Help Center in the PLCnext Community.</Description>
+	<Description>This is a project template for user programs. They are managed by the PLM (Program Library Manager). For more information visit the Help Center in the PLCnext Community.</Description>
     <ProjectType>VC</ProjectType>
-    <ProjectSubType>
-    </ProjectSubType>
     <SortOrder>1000</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>PLMProject</DefaultName>
+    <DefaultName>PLCnextPLMProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>PLMProjectTemplate.ico</Icon>
+	<Icon>PLMProjectTemplate.ico</Icon>
     <LanguageTag>cpp</LanguageTag>
     <PlatformTag>PLCnext Technology</PlatformTag>
-	  <ProjectTypeTag>Library</ProjectTypeTag>
+	<ProjectTypeTag>library</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
-    <ProjectCollection>
-      <ProjectTemplateLink ProjectName="$projectname$">PLCnextPLMProject\MyTemplate.vstemplate</ProjectTemplateLink>
-    </ProjectCollection>
+    <Project File="PLCnextPLMTemplate.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="UndefClang.hpp">UndefClang.hpp</ProjectItem>
+    </Project>
   </TemplateContent>
+  <WizardExtension>
+    <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=87c72726285801ba</Assembly>
+    <FullClassName>PlcNextVSExtension.PlcNextProject.ProjectCreationWizard</FullClassName>
+  </WizardExtension>
 </VSTemplate>

@@ -1,22 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>PLCnext Consumable Library</Name>
+	<Name>PLCnext Consumable Library</Name>
     <Description>This is a template for consumable libraries. A consumable library can be used by other PLCnext projects. For more information visit the Help Center in the PLCnext Community.</Description>
-    <Icon>ConsumableLibraryTemplate.ico</Icon>
     <ProjectType>VC</ProjectType>
     <SortOrder>1000</SortOrder>
-    <TemplateID>32cbb59f-79cd-4a37-a0d9-06e66aa9eb73</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>ConsumableLibrary</DefaultName>
+    <DefaultName>PLCnextConsumableLibrary</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>ConsumableLibraryTemplate.ico</Icon>
 	<LanguageTag>cpp</LanguageTag>
 	<PlatformTag>PLCnext Technology</PlatformTag>
 	<ProjectTypeTag>Library</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
-	  <ProjectCollection>
-		  <ProjectTemplateLink ProjectName="$projectname$">ProjectTemplate\MyTemplate.vstemplate</ProjectTemplateLink>
-	  </ProjectCollection>
+	  <Project File="ProjectTemplate.vcxproj" ReplaceParameters="true">
+		  <ProjectItem ReplaceParameters="false" TargetFileName="UndefClang.hpp">UndefClang.hpp</ProjectItem>
+	  </Project>
   </TemplateContent>
+  <WizardExtension>
+    <Assembly>PlcNextVSExtension, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=87c72726285801ba</Assembly>
+    <FullClassName>PlcNextVSExtension.PlcNextProject.ProjectCreationWizard</FullClassName>
+  </WizardExtension>
 </VSTemplate>

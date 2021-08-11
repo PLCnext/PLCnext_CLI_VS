@@ -55,7 +55,7 @@ namespace PlcncliServices
             return SearchPlcncliTool();
         }
 
-        private string SearchPlcncliTool(bool secondTry = false, bool showMessages = true)
+        private string SearchPlcncliTool(bool isSecondTry = false, bool showMessages = true)
         {
             string toolLocation = string.Empty;
 
@@ -69,15 +69,21 @@ namespace PlcncliServices
                 return toolLocation;
             }
 
-            if (secondTry)
+            if (isSecondTry)
             {
                 if (showMessages)
-                    MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
+                {
+                    _ = MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
+                }
+
                 return string.Empty;
             }
 
             if (showMessages)
-                MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
+            {
+                _ = MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
+            }
+
             if (_asyncServiceProvider is Package)
             {
                 DTE2 dte = (DTE2)Package.GetGlobalService(typeof(DTE));
@@ -92,7 +98,7 @@ namespace PlcncliServices
 
             bool CheckOption()
             {
-                string location = optionPage.ToolLocation;
+                string location = optionPage?.ToolLocation;
                 if (!string.IsNullOrEmpty(location) && File.Exists(Path.Combine(location, plcncliFileName)))
                 {
                     toolLocation = Path.Combine(location, plcncliFileName);
@@ -107,12 +113,12 @@ namespace PlcncliServices
                 if (pathVariable != null)
                 {
                     string[] pathParts = pathVariable.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var path in pathParts)
+                    foreach (string path in pathParts)
                     {
                         DirectoryInfo fileInfo = new DirectoryInfo(path);
                         if (fileInfo.Exists)
                         {
-                            var files = fileInfo.GetFiles();
+                            FileInfo[] files = fileInfo.GetFiles();
                             foreach (FileInfo file in files)
                             {
                                 if (file.Name.Equals(plcncliFileName))
@@ -129,4 +135,3 @@ namespace PlcncliServices
         }
     }
 }
-

@@ -40,6 +40,7 @@ namespace PlcncliServices.LocationService
             }
         }
 
+        #region Properties
         [Category("PLCnCLI")]
         [DisplayName("PLCnCLI Folder")]
         [Description("Path to a folder containing the plcncli.exe. If this path is not a valid path to a PLCnCLI the 'PATH' environment variable will be used to find the PLCnCLI.")]
@@ -87,11 +88,15 @@ namespace PlcncliServices.LocationService
                 OnPropertyChanged();
             }
         }
+        #endregion
+
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
     }
 }

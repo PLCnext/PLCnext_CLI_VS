@@ -111,10 +111,10 @@ namespace PlcNextVSExtension.PlcNextProject
                 }
                 catch (Exception)
                 { }
-                MessageBox.Show($"{e.Message}\n\n Reopen 'New Project' dialog", "Project creation failed");
+                MessageBox.Show(e.Message, "Problem during project creation", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw e;
             }
-            catch(WizardCancelledException e)
+            catch(WizardCancelledException)
             {
                 try
                 {
@@ -124,15 +124,13 @@ namespace PlcNextVSExtension.PlcNextProject
                 }
                 catch (Exception)
                 { }
-                throw e;
+                throw new WizardBackoutException();
             }
         }
 
         private void DeleteProjectDirectory()
         {
-            string parentDirectory = Directory.GetParent(_projectDirectory).FullName;
             Directory.Delete(_projectDirectory, true);
-            Directory.Delete(parentDirectory);
         }
 
 

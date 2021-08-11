@@ -55,16 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ACFProjectTemplate.ico" />
-    <None Include="PLCnextACFProject\PLCnextACFTemplate.vcxproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <VSTemplate Include="ACFProjectTemplate.vstemplate" />
+    <None Include="PLCnextACFTemplate.vcxproj" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="PLCnextACFProject\MyTemplate.vstemplate" />
-    <Content Include="PLCnextACFProject\UndefClang.hpp" />
-    <Content Include="PLCnextACFProject\__TemplateIcon.ico" />
+    <VSTemplate Include="ACFProjectTemplate.vstemplate" />
+    <Content Include="UndefClang.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\_Build_\Version.cs">

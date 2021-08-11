@@ -27,7 +27,6 @@
     <CopyVsixManifestToOutput>false</CopyVsixManifestToOutput>
     <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
-    <DeployExtension>false</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,17 +53,13 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLCnextPLMProject\PLCnextPLMTemplate.vcxproj" />
+    <None Include="PLCnextPLMTemplate.vcxproj" />
     <None Include="PLMProjectTemplate.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <VSTemplate Include="PLMProjectTemplate.vstemplate" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="PLCnextPLMProject\MyTemplate.vstemplate" />
-    <Content Include="PLCnextPLMProject\UndefClang.hpp" />
-    <Content Include="PLCnextPLMProject\__TemplateIcon.ico" />
+    <VSTemplate Include="PLMProjectTemplate.vstemplate" />
+    <Content Include="UndefClang.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\_Build_\Version.cs">
@@ -73,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VsSDKToolsPath)\..\Microsoft.VsSDK.targets" Condition="'$(VsSDKToolsPath)' != ''" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
