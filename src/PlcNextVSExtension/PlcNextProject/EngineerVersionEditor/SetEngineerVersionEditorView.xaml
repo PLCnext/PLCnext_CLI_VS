@@ -6,11 +6,12 @@
                          xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                          xmlns:local="clr-namespace:PlcNextVSExtension.PlcNextProject.EngineerVersionEditor"
                          xmlns:converter="clr-namespace:PlcNextVSExtension.Converter"
-                         Height="300" Width="520"
+                         Height="240" Width="435"
                          Title="Set Engineer Version"
                          Name="window">
     <Window.Resources>
         <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+        <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -60,6 +61,7 @@
                     Margin="0,0,10,0"
                     Command="{Binding CloseButtonClickCommand}"
                     CommandParameter="{Binding ElementName=window}"
+                    IsEnabled="{Binding ErrorText, Converter={StaticResource TextToBoolConverter}}"
                     />
             <Button Content="_Cancel"
                     Padding="3"
