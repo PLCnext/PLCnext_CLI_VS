@@ -55,6 +55,10 @@ namespace PlcncliBuild
             }
             options = options.Append($"--librarydescription \"{LibraryDescription}\"");
 
+            if (EngineerVersion != null)
+            {
+                options = options.Append($"--engineerversion \"{EngineerVersion}\"");
+            }
 
             options = options.Append(AdditionalOptions);
 
@@ -86,6 +90,8 @@ namespace PlcncliBuild
         public string LibraryVersion { get; set; }
 
         public string LibraryDescription { get; set; }
+
+        public string EngineerVersion { get; set; }
 
     }
 }

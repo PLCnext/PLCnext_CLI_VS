@@ -69,6 +69,13 @@
 					<ButtonText>&amp;CMake Flags</ButtonText>
 				</Strings>
 			</Button>
+			<Button guid="guidPlcNextCommandsPackageCmdSet" id="EngineerVersionCommandId" priority="0x0300" type="Button">
+				<Parent guid="guidPlcNextCommandsPackageCmdSet" id="PlcNextSubMenuGroup"/>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Set &amp;Engineer Version</ButtonText>
+				</Strings>
+			</Button>
 			<Button guid="guidPlcNextCommandsPackageCmdSet" id="ImportProjectCommandId" priority="0x0300" type="Button">
 				<Parent guid="guidSHLMainMenu" id="IDG_VS_FILE_NEW_CASCADE"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
@@ -106,6 +113,7 @@
 			<IDSymbol name="PlcNextSubMenuGroup" value="0x1110"/>
 			<IDSymbol name="CMakeFlagsCommandId" value="0X1200"/>
 			<IDSymbol name="ImportProjectCommandId" value="0X0010"/>
+			<IDSymbol name="EngineerVersionCommandId" value="0x1300"/>
 		</GuidSymbol>
 
 	</Symbols>

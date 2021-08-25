@@ -64,7 +64,12 @@
     <Compile Include="PlcNextProject\Commands\PlcNextCommand.cs" />
     <Compile Include="Converter\BoolToColorConverter.cs" />
     <Compile Include="PlcNextProject\Commands\ImportProjectCommand.cs" />
+    <Compile Include="PlcNextProject\Commands\SetEngineerVersionCommand.cs" />
     <Compile Include="PlcNextProject\Constants.cs" />
+    <Compile Include="PlcNextProject\EngineerVersionEditor\SetEngineerVersionEditorView.xaml.cs">
+      <DependentUpon>SetEngineerVersionEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlcNextProject\EngineerVersionEditor\SetEngineerVersionEditorViewModel.cs" />
     <Compile Include="PlcNextProject\Import\ImportDialogView.xaml.cs">
       <DependentUpon>ImportDialogView.xaml</DependentUpon>
     </Compile>
@@ -178,6 +183,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="PlcNextProject\EngineerVersionEditor\SetEngineerVersionEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PlcNextProject\Import\ImportDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

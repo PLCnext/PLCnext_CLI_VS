@@ -1,0 +1,72 @@
+﻿<platformui:DialogWindow x:Class="PlcNextVSExtension.PlcNextProject.EngineerVersionEditor.SetEngineerVersionEditorView"
+                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                         xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+                         xmlns:local="clr-namespace:PlcNextVSExtension.PlcNextProject.EngineerVersionEditor"
+                         xmlns:converter="clr-namespace:PlcNextVSExtension.Converter"
+                         Height="300" Width="520"
+                         Title="Set Engineer Version"
+                         Name="window">
+    <Window.Resources>
+        <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="WrapWithOverflow"
+                   Grid.ColumnSpan="999"
+                   Margin="5,0,0,25">
+                   A PLCnext Engineer version can be entered here.<LineBreak/>It will be used to create a PLCnext Engineer library for the selected version.
+        </TextBlock>
+
+        <Label Content="Engineer Version: " 
+               Grid.Row="1" 
+               />
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="2"
+                 Text="{Binding Path=EngineerVersion, UpdateSourceTrigger=PropertyChanged}"
+                 />
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2"
+                    Grid.ColumnSpan="99">
+            <Image Name="Errorimage"
+               Source="{Binding ErrorImage}"
+               Height="19"
+               Visibility="{Binding ErrorText, Converter={StaticResource TextToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding ErrorText}" 
+                   Margin="10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                    Grid.Column="2"
+                    Margin="0,10,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
+            <Button Content="_Save and Close"
+                    Padding="3"
+                    Margin="0,0,10,0"
+                    Command="{Binding CloseButtonClickCommand}"
+                    CommandParameter="{Binding ElementName=window}"
+                    />
+            <Button Content="_Cancel"
+                    Padding="3"
+                    Width="60"
+                    Command="{Binding CancelButtonClickCommand}"
+                    CommandParameter="{Binding ElementName=window}"
+                    />
+        </StackPanel>
+    </Grid>
+</platformui:DialogWindow>

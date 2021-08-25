@@ -21,6 +21,7 @@ namespace PlcNextVSExtension.PlcNextProject
         public const string PLCnextIncludesKey = "PLCnCLIIncludes";
         public const string PLCnextMacrosKey = "PLCnCLIMacros";
         public const string PLCnextRuleName = "PLCnextCommonProperties";
+        public const string PLCnextEngineerVersion = "PLCnCLIEngineerVersion";
 
         //VS
         public const string VCppIncludesRuleName = "ConfigurationDirectories";

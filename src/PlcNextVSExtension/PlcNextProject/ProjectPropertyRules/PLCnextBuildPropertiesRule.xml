@@ -66,4 +66,11 @@
 			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" PersistedName="PLCnCLILibraryDescription"/>
 		</StringProperty.DataSource>
 	</StringProperty>
+	<StringProperty Name="PLCnCLIEngineerVersion"
+					Category="Build"
+					Visible="false">
+		<StringProperty.DataSource>
+			<DataSource Persistence="UserFile" HasConfigurationCondition="false" PersistedName="PLCnCLIEngineerVersion"/>
+		</StringProperty.DataSource>
+	</StringProperty>
 </Rule>
