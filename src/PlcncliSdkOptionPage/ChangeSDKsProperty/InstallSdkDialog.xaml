@@ -4,15 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlcncliSdkOptionPage.ChangeSDKsProperty"
+             xmlns:converter="clr-namespace:PlcncliSdkOptionPage.Common.Converter"
              mc:Ignorable="d" 
                           Height="260" 
                           Width="670"
                           Title="Install SDK"
                           Name="InstallDialog">
     <platformui:DialogWindow.Resources>
-        <local:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
-        <local:StringToBooleanConverter x:Key="StringToBooleanConverter" />
+        <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+        <converter:StringToBooleanConverter x:Key="StringToBooleanConverter" />
     </platformui:DialogWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>

@@ -34,7 +34,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
             try
             {
                 SdksCommandResult commandResult = plcncli.ExecuteCommand("get sdks", null, typeof(SdksCommandResult)) as SdksCommandResult;
-                Sdks = commandResult.Sdks.Select(sdk => new SdkViewModel(sdk.PathValue));
+                Sdks = commandResult.Sdks.Select(sdk => new SdkViewModel(sdk.PathValue, sdk.Targets));
             }
             catch(PlcncliException e)
             {
@@ -43,7 +43,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                 {
                     SdkPathsSettingCommandResult commandResult =
                         plcncli.ExecuteCommand("get setting", null, typeof(SdkPathsSettingCommandResult), "SdkPaths") as SdkPathsSettingCommandResult;
-                    Sdks = commandResult.Settings.SdkPaths.Split(';').Select(sdk => new SdkViewModel(sdk));
+                    Sdks = commandResult.Settings.SdkPaths.Split(';').Select(sdk => new SdkViewModel(sdk, Enumerable.Empty<TargetResult>()));
                 }
                 catch(PlcncliException e1)
                 {

@@ -7,7 +7,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using PlcncliServices.CommandResults;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace PlcncliSdkOptionPage.ChangeSDKsProperty
@@ -26,15 +30,18 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
         private SdkState sdkState;
         private string tooltip;
 
-        public SDKPageViewModel ParentViewModel { get; set; }
-
-        public SdkViewModel(string path, SdkState sdkState = SdkState.unchanged)
+        public SdkViewModel(string path, IEnumerable<TargetResult> targets, SdkState sdkState = SdkState.unchanged)
         {
             Path = path;
             SdkState = sdkState;
+            Targets = targets?.Select(target => new TargetViewModel(target.GetDisplayName(), this));
         }
 
+        #region Properties
+        public SDKPageViewModel ParentViewModel { get; set; }
         public string Path { get; }
+
+        public IEnumerable<TargetViewModel> Targets { get; }
 
         public bool IsSelected
         {
@@ -63,6 +70,18 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
             }
         }
 
+        public string Tooltip
+        {
+            get => tooltip;
+            set
+            {
+                tooltip = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region private methods
         private void SetToolTip(SdkState state)
         {
             switch (state)
@@ -85,16 +104,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                     break;
             }
         }
-
-        public string Tooltip
-        {
-            get => tooltip;
-            set
-            {
-                tooltip = value;
-                OnPropertyChanged();
-            }
-        }
+        #endregion
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

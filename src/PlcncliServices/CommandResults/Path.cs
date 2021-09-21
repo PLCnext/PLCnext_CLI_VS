@@ -29,4 +29,10 @@ namespace PlcncliServices.CommandResults
         [JsonProperty(PropertyName = "targets")]
         public IEnumerable<TargetResult> Targets { get; set; }
     }
+
+    public class SdkPath : Path
+    {
+        [JsonProperty(PropertyName = "targets")]
+        public IEnumerable<TargetResult> Targets { get; set; }
+    }
 }

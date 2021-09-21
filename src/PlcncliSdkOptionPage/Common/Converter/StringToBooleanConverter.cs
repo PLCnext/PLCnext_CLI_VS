@@ -9,18 +9,17 @@
 
 using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
-namespace PlcncliSdkOptionPage.ChangeSDKsProperty
+namespace PlcncliSdkOptionPage.Common.Converter
 {
-    [ValueConversion(typeof(string), typeof(Visibility))]
-    public class TextToVisibilityConverter : IValueConverter
+    [ValueConversion(typeof(string), typeof(bool))]
+    public class StringToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string text = (string)value;
-            return string.IsNullOrEmpty(text) ? Visibility.Hidden : Visibility.Visible;
+            return string.IsNullOrEmpty(text);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

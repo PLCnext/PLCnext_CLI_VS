@@ -74,11 +74,12 @@
     <Compile Include="ChangeSDKsProperty\SDKPageModel.cs" />
     <Compile Include="ChangeSDKsProperty\SDKPageViewModel.cs" />
     <Compile Include="ChangeSDKsProperty\SDKsOptionPage.cs" />
-    <Compile Include="ChangeSDKsProperty\SdkStateToColorConverter.cs" />
-    <Compile Include="ChangeSDKsProperty\SdkStateToFocusableConverter.cs" />
+    <Compile Include="Common\Converter\SdkStateToColorConverter.cs" />
+    <Compile Include="Common\Converter\SdkStateToFocusableConverter.cs" />
     <Compile Include="ChangeSDKsProperty\SdkViewModel.cs" />
-    <Compile Include="ChangeSDKsProperty\StringToBooleanConverter.cs" />
-    <Compile Include="ChangeSDKsProperty\TextToVisibilityConverter.cs" />
+    <Compile Include="Common\Converter\StringToBooleanConverter.cs" />
+    <Compile Include="ChangeSDKsProperty\TargetViewModel.cs" />
+    <Compile Include="Common\Converter\TextToVisibilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SdkOptionPagePackage.cs" />
   </ItemGroup>

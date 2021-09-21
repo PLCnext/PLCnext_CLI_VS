@@ -9,6 +9,7 @@
 
 using Microsoft.Build.Tasks;
 using Microsoft.VisualStudio.PlatformUI;
+using PlcncliServices.CommandResults;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -113,7 +114,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                     }
                     else
                     {
-                        SdkList.Add(new SdkViewModel(viewModel.SdkRootPath, SdkState.added) { ParentViewModel = this }) ;
+                        SdkList.Add(new SdkViewModel(viewModel.SdkRootPath, Enumerable.Empty<TargetResult>(), SdkState.added) { ParentViewModel = this }) ;
                         model.SdkChangesCollector.AddSdk(viewModel.SdkRootPath);
                     }
                 }
@@ -144,7 +145,7 @@ namespace PlcncliSdkOptionPage.ChangeSDKsProperty
                     }
                     else
                     {
-                        SdkList.Add(new SdkViewModel(viewModel.SdkDestination, SdkState.installed) { ParentViewModel = this});
+                        SdkList.Add(new SdkViewModel(viewModel.SdkDestination, Enumerable.Empty<TargetResult>(), SdkState.installed) { ParentViewModel = this});
                         model.SdkChangesCollector.InstallSdk(viewModel.ArchiveFilePath, viewModel.SdkDestination, viewModel.Force);
                     }
                 }

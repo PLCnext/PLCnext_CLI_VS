@@ -7,24 +7,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
+using PlcncliSdkOptionPage.ChangeSDKsProperty;
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace PlcncliSdkOptionPage.ChangeSDKsProperty
+namespace PlcncliSdkOptionPage.Common.Converter
 {
-    [ValueConversion(typeof(SdkState), typeof(Brush))]
-    public class SdkStateToColorConverter : IValueConverter
+    [ValueConversion(typeof(SdkState), typeof(bool))]
+    public class SdkStateToFocusableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             SdkState state = (SdkState)value;
-            if (state == SdkState.unchanged)
-                return Brushes.Black;
-            if (state == SdkState.removed)
-                return Brushes.Gray;
-            return Brushes.Blue;
+            if(state == SdkState.removed)
+            {
+                return false;
+            }
+            return true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

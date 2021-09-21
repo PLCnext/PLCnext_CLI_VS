@@ -14,12 +14,12 @@ namespace PlcncliServices.CommandResults
 {
     public class SdksCommandResult : CommandResult
     {
-        public SdksCommandResult(IEnumerable<Path> sdks)
+        public SdksCommandResult(IEnumerable<SdkPath> sdks)
         {
             Sdks = sdks;
         }
 
         [JsonProperty(PropertyName = "sdks")]
-        public IEnumerable<Path> Sdks { get; }
+        public IEnumerable<SdkPath> Sdks { get; }
     }
 }
