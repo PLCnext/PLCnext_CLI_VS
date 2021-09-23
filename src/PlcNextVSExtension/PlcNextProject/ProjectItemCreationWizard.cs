@@ -37,7 +37,6 @@ namespace PlcNextVSExtension.PlcNextProject
             object[] customParams)
         {
             string itemName = replacementsDictionary["$safeitemname$"];
-            //executed first
             ThreadHelper.ThrowIfNotOnUIThread();
 
             if (automationObject is DTE dte)
@@ -50,7 +49,7 @@ namespace PlcNextVSExtension.PlcNextProject
                     if (project != null)
                     {
                         IEnumerable<string> validProjectTypes = Enumerable.Empty<string>();
-                        string itemType = String.Empty;
+                        string itemType = string.Empty;
                         GetWizardDataFromTemplate();
 
                         string projectDirectory = Path.GetDirectoryName(project.FullName);
@@ -63,8 +62,11 @@ namespace PlcNextVSExtension.PlcNextProject
                         if (projecttype == null || !validProjectTypes.Contains(projecttype))
                         {
                             MessageBox.Show(
-                                $"This template is not available for the selected project. The template is available for the project types{validProjectTypes.Aggregate(string.Empty, (s1, s2) => s1 + $"\n'{s2}'")}\nbut the selected project is of type\n'{projecttype}'.");
-                            return;
+                                $"This template is not available for the selected project. The template is available for the project types" +
+                                $"{validProjectTypes.Aggregate(string.Empty, (s1, s2) => s1 + $"\n'{s2}'")}\nbut the selected project is of type\n'{projecttype}'.",
+                                "Template not available for project type",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                            throw new WizardBackoutException();
                         }
 
                         NewItemModel model = new NewItemModel(_plcncliCommunication, projectDirectory, itemType);
@@ -74,35 +76,42 @@ namespace PlcNextVSExtension.PlcNextProject
                         bool? result = view.ShowModal();
                         if (result != null && result == true)
                         {
-                            if (itemType.Equals(Resources.ItemType_program))
+                            try
                             {
-                                _plcncliCommunication.ExecuteCommand(Resources.Command_new_program, null, null,
-                                    Resources.Option_new_program_project, $"\"{projectDirectory}\"",
-                                    Resources.Option_new_program_name, itemName,
-                                    Resources.Option_new_program_component, model.SelectedComponent,
-                                    Resources.Option_new_program_namespace, model.SelectedNamespace);
-                            }else if (itemType.Equals(Resources.ItemType_component))
-                            {
-                                string command = Resources.Command_new_component;
-                                if (projecttype.Equals(Resources.ProjectType_ACF))
+                                if (itemType.Equals(Resources.ItemType_program))
                                 {
-                                    command = Resources.Command_new_acfcomponent;
+                                    _plcncliCommunication.ExecuteCommand(Resources.Command_new_program, null, null,
+                                        Resources.Option_new_program_project, $"\"{projectDirectory}\"",
+                                        Resources.Option_new_program_name, itemName,
+                                        Resources.Option_new_program_component, model.SelectedComponent,
+                                        Resources.Option_new_program_namespace, model.SelectedNamespace);
                                 }
-                                _plcncliCommunication.ExecuteCommand(command, null, null,
-                                    Resources.Option_new_component_project, $"\"{projectDirectory}\"",
-                                    Resources.Option_new_component_name, itemName,
-                                    Resources.Option_new_component_namespace, model.SelectedNamespace);
-                            }
+                                else if (itemType.Equals(Resources.ItemType_component))
+                                {
+                                    string command = Resources.Command_new_component;
+                                    if (projecttype.Equals(Resources.ProjectType_ACF))
+                                    {
+                                        command = Resources.Command_new_acfcomponent;
+                                    }
+                                    _plcncliCommunication.ExecuteCommand(command, null, null,
+                                        Resources.Option_new_component_project, $"\"{projectDirectory}\"",
+                                        Resources.Option_new_component_name, itemName,
+                                        Resources.Option_new_component_namespace, model.SelectedNamespace);
+                                }
 
-                            string[] itemFiles = Directory.GetFiles(Path.Combine(projectDirectory, "src"), $"{itemName}.*pp");
-                            foreach (string itemFile in itemFiles)
+                                string[] itemFiles = Directory.GetFiles(Path.Combine(projectDirectory, "src"), $"{itemName}.*pp");
+                                foreach (string itemFile in itemFiles)
+                                {
+                                    project.ProjectItems.AddFromFile(itemFile);
+                                }
+
+                                _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null,
+                                    Resources.Option_generate_code_project, $"\"{projectDirectory}\"");
+                            }catch(PlcncliException e)
                             {
-                                project.ProjectItems.AddFromFile(itemFile);
+                                MessageBox.Show(e.Message, "Error occured", MessageBoxButton.OK, MessageBoxImage.Error);
+                                throw new WizardBackoutException();
                             }
-
-                            _plcncliCommunication.ExecuteCommand(Resources.Command_generate_code, null, null,
-                                Resources.Option_generate_code_project, $"\"{projectDirectory}\"");
-
                         }
 
 
