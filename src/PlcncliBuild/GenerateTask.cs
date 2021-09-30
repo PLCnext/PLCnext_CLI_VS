@@ -48,7 +48,7 @@ namespace PlcncliBuild
             catch (PlcncliException ex)
             {
                 if(!Log.HasLoggedErrors)
-                    Log.LogErrorFromException(ex);
+                    Log.LogErrorFromException(ex, false, true, "-");
                 return false;
             }
 

@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
@@ -44,7 +45,7 @@ namespace PlcncliBuild
             catch (PlcncliException ex)
             {
                 if (!Log.HasLoggedErrors)
-                    Log.LogErrorFromException(ex);
+                    Log.LogErrorFromException(ex, false, true, "-");
                 return false;
             }
             Log.LogMessage(MessageImportance.Low, "plcncli build task finished.");

@@ -230,14 +230,6 @@ namespace PlcNextVSExtension.PlcNextProject
 
             IVCRulePropertyStorage plcnextCommonPropertiesRule = vcProject.ActiveConfiguration.Rules.Item(Constants.PLCnextRuleName);
 
-            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, newIncludes.Any() ?
-                                                                                           string.Join(";", newIncludes) :
-                                                                                           string.Empty);
-
-            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, newMacros.Any() ?
-                string.Join(";", newMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))))
-                : string.Empty);
-
 
             foreach (VCConfiguration2 config in vcProject.Configurations)
             {
@@ -286,6 +278,14 @@ namespace PlcNextVSExtension.PlcNextProject
 
                 }
             }
+
+            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, newIncludes.Any() ?
+                                                                                           string.Join(";", newIncludes) :
+                                                                                           string.Empty);
+
+            plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, newMacros.Any() ?
+                string.Join(";", newMacros.Select(m => m.Name + (string.IsNullOrEmpty(m.Value?.Trim()) ? string.Empty : ("=" + m.Value))))
+                : string.Empty);
 
 
             void CheckIncludesVariableIsInProjectIncludes(VCConfiguration2 config)
