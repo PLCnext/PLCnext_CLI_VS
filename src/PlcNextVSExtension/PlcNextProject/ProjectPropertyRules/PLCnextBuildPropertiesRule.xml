@@ -50,27 +50,4 @@
 			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false"/>
 		</StringListProperty.DataSource>
 	</StringListProperty>
-	<StringProperty Name="LibraryVersion"
-					Category="Build"
-					DisplayName="Library Version"
-					Description="A version for the PLCnext Engineer Library.">
-		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" PersistedName="PLCnCLILibraryVersion"/>
-		</StringProperty.DataSource>
-	</StringProperty>
-	<StringProperty Name="LibraryDescription"
-					Category="Build"
-					DisplayName="Library Description"
-					Description="A description for the PLCnext Engineer Library.">
-		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false" PersistedName="PLCnCLILibraryDescription"/>
-		</StringProperty.DataSource>
-	</StringProperty>
-	<StringProperty Name="PLCnCLIEngineerVersion"
-					Category="Build"
-					Visible="false">
-		<StringProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="false" PersistedName="PLCnCLIEngineerVersion"/>
-		</StringProperty.DataSource>
-	</StringProperty>
 </Rule>

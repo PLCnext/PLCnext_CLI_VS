@@ -42,24 +42,6 @@ namespace PlcncliBuild
 
             }
 
-            if (LibraryVersion == null)
-            {
-                LibraryVersion = string.Empty;
-            }
-            options = options.Append($"--libraryversion \"{LibraryVersion}\"");
-
-
-            if (LibraryDescription == null)
-            {
-                LibraryDescription = string.Empty;
-            }
-            options = options.Append($"--librarydescription \"{LibraryDescription}\"");
-
-            if (EngineerVersion != null)
-            {
-                options = options.Append($"--engineerversion \"{EngineerVersion}\"");
-            }
-
             options = options.Append(AdditionalOptions);
 
             try
@@ -86,12 +68,6 @@ namespace PlcncliBuild
             }
         }
         public string SourceFoldersRaw { get; set; }
-
-        public string LibraryVersion { get; set; }
-
-        public string LibraryDescription { get; set; }
-
-        public string EngineerVersion { get; set; }
 
     }
 }

@@ -22,9 +22,6 @@
                     AdditionalOptions="$(PLCnCLIDeployOptions)"
                     Configuration="$(Configuration)"
 					SourceFoldersRaw="$(SourceFolders)"
-					LibraryVersion="$(PLCnCLILibraryVersion)"
-					LibraryDescription="$(PLCnCLILibraryDescription)"
-					EngineerVersion="$(PLCnCLIEngineerVersion)"
 					Condition="$(DisablePLCnCLIDeploy) != true"/>
     </Target>
 </Project>
