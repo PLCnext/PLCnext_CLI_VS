@@ -21,10 +21,13 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
         /// VS Package that provides this command, not null.
         /// </summary>
         protected readonly AsyncPackage package;
+        private readonly DTE2 dte;
 
         public PlcNextCommand(AsyncPackage package)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
+            IServiceProvider serviceProvider = package;
+            dte = (DTE2)serviceProvider.GetService(typeof(DTE));
         }
 
         /// <summary>
@@ -46,17 +49,22 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                 try
                 {
                     Project project = GetProject();
-                    VCProject p = project.Object as VCProject;
-                    VCConfiguration configuration = p.ActiveConfiguration;
-                    IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
-                    string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
-                    if (!string.IsNullOrEmpty(projectType))
+                    if (project != null)
                     {
-                        cmd.Visible = true;
-                        return;
+                        if (project.Object is VCProject p)
+                        {
+                            VCConfiguration configuration = p.ActiveConfiguration;
+                            IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties");
+                            string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
+                            if (!string.IsNullOrEmpty(projectType))
+                            {
+                                cmd.Visible = true;
+                                return;
+                            }
+                        }
                     }
                 }
-                catch (NullReferenceException)
+                catch (Exception)
                 {
                     //cmd visibility will be set to false
                 }
@@ -68,16 +76,13 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            //get project location
-            IServiceProvider serviceProvider = package;
-            DTE2 dte = (DTE2)serviceProvider.GetService(typeof(DTE));
             if (dte == null)
                 return null;
             Array selectedItems = (Array)dte.ToolWindows.SolutionExplorer.SelectedItems;
             if (selectedItems == null || selectedItems.Length != 1)
                 return null;
             UIHierarchyItem x = selectedItems.GetValue(0) as UIHierarchyItem;
-            return x.Object as Project;
+            return x?.Object as Project;
         }
     }
 }

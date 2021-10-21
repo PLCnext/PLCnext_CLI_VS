@@ -12,7 +12,7 @@
     <Window.Resources>
         <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
     </Window.Resources>
-    <Grid Margin="10">
+    <Grid Margin="11">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -25,7 +25,7 @@
 
         <TextBlock TextWrapping="WrapWithOverflow" 
                    Grid.ColumnSpan="2"
-                   Margin="0,0,0,5">
+                   Margin="0,0,0,11">
                     CMake flags can be entered here.<LineBreak/>They will be used whenever the PLCnCLI calls cmake.
         </TextBlock>
 
@@ -37,24 +37,27 @@
                  Text="{Binding Path=Flags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  GotFocus="TextBox_GotFocus"
                  LostFocus="TextBox_LostFocus"
-                 Foreground="{Binding Path=ExampleIsShown, Converter={StaticResource BoolToColorConverter},
-                                                ConverterParameter={x:Static Brushes.Gray}}"/>
+                 Foreground="{Binding Path=ExampleIsShown, 
+                              Converter={StaticResource BoolToColorConverter},
+                              ConverterParameter={x:Static Brushes.Gray}}"/>
         
         <StackPanel Grid.Row="2"
                     Grid.Column="1"
-                    Margin="0,10,0,0"
+                    Margin="0,11,0,0"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right" >
-            <Button Content="_Save and Close"
-                Padding="3"
-                Margin="0,0,10,0"
-                Command="{Binding CloseButtonClickCommand}"
-                CommandParameter="{Binding ElementName=window}"/>
+            <Button Content="_Save &amp; Close"
+                    Margin="7,0,0,0"
+                    Height="23"
+                    Width="75"
+                    Command="{Binding CloseButtonClickCommand}"
+                    CommandParameter="{Binding ElementName=window}"/>
             <Button Content="_Cancel"
-                Padding="3"
-                Width="60"
-                Command="{Binding CancelButtonClickCommand}"
-                CommandParameter="{Binding ElementName=window}"
+                    Margin="7,0,0,0"
+                    Height="23"
+                    Width="75"
+                    Command="{Binding CancelButtonClickCommand}"
+                    CommandParameter="{Binding ElementName=window}"
                 />
         </StackPanel>
 

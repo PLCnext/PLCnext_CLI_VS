@@ -9,7 +9,7 @@
              SizeToContent="WidthAndHeight"
              Title="Update Includes"
              Name="UpdateIncludesDialog">
-    <Grid>
+    <Grid Margin="11">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -22,13 +22,14 @@
         </Grid.ColumnDefinitions>
         <Image Source="{Binding QuestionImage}"
                Width="30"
-               Margin="15"/>
+               Margin="0,0,11,0"/>
         <TextBlock Text="{Binding Message}"
-                   Margin="0,20,20,20"
+                   Margin="0,0,0,11"
                    Grid.Column="1"
                    Grid.ColumnSpan="2"/>
         <CheckBox Grid.Row="1"
                   Grid.Column="1"
+                  Margin="0,0,0,11"
                   Content="_Remember decision and do not ask again"
                   IsChecked="{Binding RememberDecision}"/>
         <Button Content="_OK" 
@@ -36,9 +37,9 @@
                 Grid.Column="1"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
-                Width="90"
-                Height="22"
-                Margin="0,0,10,15"
+                Height="23"
+                Width="75"
+                Margin="7,0,0,0"
                 Command="{Binding OkButtonClickCommand}"
                 CommandParameter="{Binding ElementName=UpdateIncludesDialog}"/>
         <Button Content="_Cancel"
@@ -46,9 +47,9 @@
                 Grid.Column="2"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Width="90"
-                Height="22"
-                Margin="0,0,20,15"
+                Height="23"
+                Width="75"
+                Margin="7,0,0,0"
                 Command="{Binding CancelButtonClickCommand}"
                 CommandParameter="{Binding ElementName=UpdateIncludesDialog}"/>
     </Grid>

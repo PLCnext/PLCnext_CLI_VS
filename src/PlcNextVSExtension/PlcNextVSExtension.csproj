@@ -57,6 +57,7 @@
     <Compile Include="..\_Build_\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\TextToBoolConverter.cs" />
     <Compile Include="Converter\TextToVisibilityConverter.cs" />
     <Compile Include="Converter\VisibilityToBoolConverter.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="PlcNextProject\Commands\PlcNextCommand.cs" />
     <Compile Include="Converter\BoolToColorConverter.cs" />
     <Compile Include="PlcNextProject\Commands\ImportProjectCommand.cs" />
+    <Compile Include="PlcNextProject\Commands\ProjectConfigWindowCommand.cs" />
     <Compile Include="PlcNextProject\Constants.cs" />
     <Compile Include="PlcNextProject\Import\ImportDialogView.xaml.cs">
       <DependentUpon>ImportDialogView.xaml</DependentUpon>
@@ -92,6 +94,10 @@
     </Compile>
     <Compile Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorViewModel.cs" />
     <Compile Include="PlcNextProject\ProjectConfigurationManager.cs" />
+    <Compile Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml.cs">
+      <DependentUpon>ProjectConfigWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowViewModel.cs" />
     <Compile Include="PlcNextProject\ProjectIncludesManager.cs" />
     <Compile Include="Converter\InverseBoolToColorConverter.cs" />
     <Compile Include="PlcNextProject\Commands\SetTargetsCommand.cs" />
@@ -197,6 +203,10 @@
     <Page Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml">
       <SubType>Designer</SubType>

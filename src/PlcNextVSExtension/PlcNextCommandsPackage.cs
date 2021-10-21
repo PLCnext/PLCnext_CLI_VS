@@ -41,7 +41,6 @@ namespace PlcNextVSExtension
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PlcNextCommandsPackage.PackageGuidString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class PlcNextCommandsPackage : AsyncPackage
     {
         /// <summary>
@@ -75,6 +74,7 @@ namespace PlcNextVSExtension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await SetTargetsCommand.InitializeAsync(this);
             await CMakeFlagsCommand.InitializeAsync(this);
+            await ProjectConfigWindowCommand.InitializeAsync(this);
             await ImportProjectCommand.InitializeAsync(this);
             OnDocSaveService docSaveService = new OnDocSaveService();
             await docSaveService.InitializeAsync(this);
