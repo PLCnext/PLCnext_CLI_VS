@@ -72,6 +72,10 @@ namespace PlcncliServices.LocationService
             get => _askIncludesUpdate;
             set
             {
+                if (value == _askIncludesUpdate)
+                {
+                    return;
+                }
                 _askIncludesUpdate = value;
                 OnPropertyChanged();
             }
@@ -84,6 +88,10 @@ namespace PlcncliServices.LocationService
             get => _updateIncludes;
             set
             {
+                if (value == _updateIncludes)
+                {
+                    return;
+                }
                 _updateIncludes = value;
                 OnPropertyChanged();
             }

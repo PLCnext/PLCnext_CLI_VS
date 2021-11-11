@@ -38,11 +38,6 @@ namespace PlcncliServices.PLCnCLI
             }
         }
 
-        public Task InitializeAsync(CancellationToken cancellationToken)
-        {
-            return _locationService.InitializeAsync(cancellationToken);
-        }
-
         public CommandResult ExecuteCommand(string command, IOutputReceiver receiver = null, Type resultType = null, params string[] arguments)
         {
             if (receiver == null)

@@ -71,6 +71,7 @@
     <Compile Include="LocationService\PlcncliOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="LocationService\ToolLocationFinder.cs" />
     <Compile Include="PlcncliServicePackage.cs" />
     <Compile Include="LocationService\PlcncliLocationService.cs" />
     <Compile Include="PLCnCLI\OutputCollector.cs" />

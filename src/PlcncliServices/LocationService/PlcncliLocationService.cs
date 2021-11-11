@@ -9,7 +9,6 @@
 
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using EnvDTE;
@@ -26,8 +25,7 @@ namespace PlcncliServices
         private readonly IAsyncServiceProvider _asyncServiceProvider;
 
         private PlcncliOptionPage optionPage = null;
-        private readonly string plcncliFileName = "plcncli.exe";
-
+        
         public PlcncliLocationService(IAsyncServiceProvider sp)
         {
             _asyncServiceProvider = sp;
@@ -35,20 +33,32 @@ namespace PlcncliServices
 
         public async Task InitializeAsync(CancellationToken cancellationToken)
         {
+            if (Initialized)
+                return;
+
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             if (_asyncServiceProvider is AsyncPackage package)
             {
                 optionPage = package.GetDialogPage(typeof(PlcncliOptionPage)) as PlcncliOptionPage;
 
-                OnOptionPagePropertyChanged(null, null);
+                OnOptionPagePropertyChanged(null, new PropertyChangedEventArgs(nameof(optionPage.ToolLocation)));
                 optionPage.PropertyChanged += OnOptionPagePropertyChanged;
+                Initialized = true;
             }
         }
 
         private void OnOptionPagePropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            Environment.SetEnvironmentVariable("plcncli_toollocation", SearchPlcncliTool(true, false));
+            if (!propertyChangedEventArgs.PropertyName.Equals(nameof(optionPage.ToolLocation)))
+            { return; }
+            string toolLocation = SearchPlcncliTool(true, false);
+            if (!string.IsNullOrEmpty(toolLocation))
+            {
+                Environment.SetEnvironmentVariable("plcncli_toollocation", toolLocation);
+            }
         }
+
+        private bool Initialized { get; set; } = false;
 
         public string GetLocation()
         {
@@ -57,18 +67,11 @@ namespace PlcncliServices
 
         private string SearchPlcncliTool(bool isSecondTry = false, bool showMessages = true)
         {
-            string toolLocation = string.Empty;
-
-            if (CheckOption())
+            string toolLocation = ToolLocationFinder.SearchPlcncliTool(optionPage);
+            if (!string.IsNullOrEmpty(toolLocation))
             {
                 return toolLocation;
             }
-
-            if (CheckPathVariable())
-            {
-                return toolLocation;
-            }
-
             if (isSecondTry)
             {
                 if (showMessages)
@@ -93,45 +96,7 @@ namespace PlcncliServices
                     return SearchPlcncliTool(true);
                 }
             }
-
             return string.Empty;
-
-            bool CheckOption()
-            {
-                string location = optionPage?.ToolLocation;
-                if (!string.IsNullOrEmpty(location) && File.Exists(Path.Combine(location, plcncliFileName)))
-                {
-                    toolLocation = Path.Combine(location, plcncliFileName);
-                    return true;
-                }
-                return false;
-            }
-
-            bool CheckPathVariable()
-            {
-                string pathVariable = Environment.GetEnvironmentVariable("PATH");
-                if (pathVariable != null)
-                {
-                    string[] pathParts = pathVariable.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string path in pathParts)
-                    {
-                        DirectoryInfo fileInfo = new DirectoryInfo(path);
-                        if (fileInfo.Exists)
-                        {
-                            FileInfo[] files = fileInfo.GetFiles();
-                            foreach (FileInfo file in files)
-                            {
-                                if (file.Name.Equals(plcncliFileName))
-                                {
-                                    toolLocation = file.FullName;
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
         }
     }
 }

@@ -42,8 +42,7 @@ namespace PlcncliServices
     [ProvideOptionPage(typeof(PlcncliOptionPage), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
-    [Guid(PlcncliServicePackage.PackageGuidString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [Guid(PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class PlcncliServicePackage : AsyncPackage
     {
@@ -75,22 +74,20 @@ namespace PlcncliServices
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await base.InitializeAsync(cancellationToken, progress);
-            this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
             _locationService = new PlcncliLocationService(this);
             await _locationService.InitializeAsync(cancellationToken);
+            this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
             await GeneratePortComment.PortCommentCommand.InitializeAsync(this);
         }
 
         private PlcncliLocationService _locationService = null;
 
-        private async Task<object> CreateServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
+        private Task<object> CreateServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
         {
             if (typeof(SPlcncliCommunication) == serviceType)
             {
-                
                 PlcncliProcessCommunication service = new PlcncliProcessCommunication(_locationService);
-                await service.InitializeAsync(cancellationToken);
-                return service;
+                return Task.FromResult<object>(service);
             }
             return null;
         }
