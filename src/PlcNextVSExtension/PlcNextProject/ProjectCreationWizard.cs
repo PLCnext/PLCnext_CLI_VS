@@ -56,13 +56,11 @@ namespace PlcNextVSExtension.PlcNextProject
                 CheckProjectName();
 
                 _projectType = Resources.ProjectType_PLM;
-                if (customParams[0].ToString().EndsWith("PLCnextACFProject\\MyTemplate.vstemplate") ||
-                    customParams[0].ToString().EndsWith("PLCnextACFProject/MyTemplate.vstemplate"))
+                if (customParams[0].ToString().EndsWith("ACFProjectTemplate.vstemplate"))
                 {
                     _projectType = Resources.ProjectType_ACF;
                 }
-                else if (customParams[0].ToString().EndsWith("ConsumableLibraryTemplate\\ProjectTemplate\\MyTemplate.vstemplate") ||
-                         customParams[0].ToString().EndsWith("ConsumableLibraryTemplate/ProjectTemplate/MyTemplate.vstemplate"))
+                else if (customParams[0].ToString().EndsWith("ConsumableLibraryTemplate.vstemplate"))
                 {
                     _projectType = Resources.ProjectType_ConsumableLibrary;
                 }
