@@ -31,14 +31,13 @@ namespace PlcncliServices.GeneratePortComment
             Line = line;
             PortAttributes = new Collection<PortAttributeViewModel>
             {
-                new PortAttributeViewModel("Input"),
-                new PortAttributeViewModel("Output"),
-                new PortAttributeViewModel("ReadOnly"),
-                new PortAttributeViewModel("Retain"),
-                new PortAttributeViewModel("Opc"),
-                new PortAttributeViewModel("Ehmi"),
-                new PortAttributeViewModel("ProfiCloud"),
-                new PortAttributeViewModel("Archive"),
+                new PortAttributeViewModel("Input", "The variable is defined as IN port."),
+                new PortAttributeViewModel("Output", "The variable is defined as OUT port."),
+                new PortAttributeViewModel("Retain", "The variable value is retained in case of a warm and hot restart (only initialized in case of a cold restart)."),
+                new PortAttributeViewModel("Opc", "The variable is visible for OPC UA."),
+                new PortAttributeViewModel("Ehmi", "The variable is visible for the PLCnext Engineer  HMI.( Note: This attribute is currently not implemented. Implementation is planned.)"),
+                new PortAttributeViewModel("ProfiCloud", "The variable is visible for Proficloud (for OUT ports only)."),
+                new PortAttributeViewModel("Redundant", "This attribute is relevant only for PLCnext Technology controllers with redundancy function.This variable is synchronized from PRIMARY controller to BACKUP controller. From FW 2022.0 LTS")
             };
             foreach (PortAttributeViewModel attributeVM in PortAttributes)
             {
@@ -58,7 +57,7 @@ namespace PlcncliServices.GeneratePortComment
                             ? string.Empty
                             : "\n" + leadingWhitespaces + string.Format(nameComment, Name);
 
-            Preview = part1  + part2 + part3; 
+            Preview = part1 + part2 + part3;
         }
 
         public IEnumerable<PortAttributeViewModel> PortAttributes { get; }
@@ -87,6 +86,8 @@ namespace PlcncliServices.GeneratePortComment
 
         public string Line { get; }
 
+        #region Commands
+
         public ICommand OkCommand { get; } = new DelegateCommand<DialogWindow>(OnOkButtonClicked);
         public ICommand CancelCommand { get; } = new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
 
@@ -101,6 +102,7 @@ namespace PlcncliServices.GeneratePortComment
             window.DialogResult = false;
             window.Close();
         }
+        #endregion
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -123,9 +125,10 @@ namespace PlcncliServices.GeneratePortComment
     {
         private bool selected = false;
 
-        public PortAttributeViewModel(string label)
+        public PortAttributeViewModel(string label, string description)
         {
             Label = label;
+            Description = description;
         }
         public string Label { get; }
         public bool Selected
@@ -137,6 +140,8 @@ namespace PlcncliServices.GeneratePortComment
                 OnPropertyChanged();
             }
         }
+
+        public string Description { get; }
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
