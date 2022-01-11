@@ -172,27 +172,22 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
 
                     async Task<ProjectInformationCommandResult> GetProjectInformation()
                     {
-                        try
-                        {
-                            ProjectInformationCommandResult result = null;
+                        ProjectInformationCommandResult result = null;
                             await Task.Run(() =>
                             {
-                                result = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                                    typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
-                                    $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
+                                try
+                                {
+                                    return _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                                        typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
+                                        $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
+                                }
+                                catch (PlcncliException ex)
+                                {
+                                    result = _plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                                    throw ex;
+                                }
                             });
                             return result;
-                        }
-                        catch (PlcncliException ex)
-                        {
-
-                            ProjectInformationCommandResult result = _plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
-                            if (result == null)
-                            {
-                                MessageBox.Show(ex.Message + ex.StackTrace ?? string.Empty, $"Could not fetch project information for project {projectFilePath}");
-                            }
-                            return result;
-                        }
                     }
 
                     async Task CreateVSProject(string projectType, string projectDirectory, string projectName, IEnumerable<TargetResult> projectTargets)

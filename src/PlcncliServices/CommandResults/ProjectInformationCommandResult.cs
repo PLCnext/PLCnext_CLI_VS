@@ -14,7 +14,7 @@ namespace PlcncliServices.CommandResults
 {
     public class ProjectInformationCommandResult : CommandResult
     {
-        [JsonProperty(PropertyName = "name")]
+        [JsonProperty(PropertyName = "name", Required =Required.Always)]
         public string Name { get; set; }
 
         [JsonProperty(PropertyName = "namespace")]
