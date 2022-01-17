@@ -177,7 +177,7 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                             {
                                 try
                                 {
-                                    return _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                                    result =  _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
                                         typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
                                         $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
                                 }
