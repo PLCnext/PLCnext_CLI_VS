@@ -16,7 +16,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
@@ -153,6 +152,8 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
 
                         await CreateVSProject(projectType, projectDirectory, projectName, projectTargets);
 
+                        MessageBox.Show("If the imported project has source folders different from the standard 'src', they have to be set manually in the project properties.",
+                                        "Successfully imported project", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
 
                     bool OpenImportWizard()
@@ -173,21 +174,21 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                     async Task<ProjectInformationCommandResult> GetProjectInformation()
                     {
                         ProjectInformationCommandResult result = null;
-                            await Task.Run(() =>
+                        await Task.Run(() =>
+                        {
+                            try
                             {
-                                try
-                                {
-                                    result =  _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
-                                        typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
-                                        $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
-                                }
-                                catch (PlcncliException ex)
-                                {
-                                    result = _plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
-                                    throw ex;
-                                }
-                            });
-                            return result;
+                                result = _plcncliCommunication.ExecuteCommand(Resources.Command_get_project_information, null,
+                                    typeof(ProjectInformationCommandResult), Resources.Option_get_project_information_project,
+                                    $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
+                            }
+                            catch (PlcncliException ex)
+                            {
+                                result = _plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                                throw ex;
+                            }
+                        });
+                        return result;
                     }
 
                     async Task CreateVSProject(string projectType, string projectDirectory, string projectName, IEnumerable<TargetResult> projectTargets)
@@ -353,9 +354,6 @@ namespace PlcNextVSExtension.PlcNextProject.Commands
                         }
                     }
                 });
-
-            MessageBox.Show("If the imported project has source folders different from the standard 'src', they have to be set manually in the project properties.",
-                                        "Successfully imported project", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
