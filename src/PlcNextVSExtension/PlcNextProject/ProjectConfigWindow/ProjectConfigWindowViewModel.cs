@@ -152,7 +152,7 @@ namespace PlcNextVSExtension.PlcNextProject.ProjectConfigWindow
 
             if (System.Version.TryParse(value, out System.Version version))
             {
-                if (version.Major > 2019)
+                if (version.Major > 2019 && version.Major < 2030)
                 {
                     return true;
                 }
