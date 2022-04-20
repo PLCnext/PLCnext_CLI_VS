@@ -55,6 +55,6 @@
 		<IncludePath>$(PLCnCLIIncludes)</IncludePath>
 	</PropertyGroup>
 	<ImportGroup Label="ExtensionTargets" />
-	<Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLIBuild.targets" />
+	<Import Project="$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLIBuild.targets" />
 	
 </Project>

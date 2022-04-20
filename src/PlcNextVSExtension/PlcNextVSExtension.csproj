@@ -9,9 +9,6 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -24,9 +21,9 @@
     <RootNamespace>PlcNextVSExtension</RootNamespace>
     <AssemblyName>PlcNextVSExtension</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <GeneratePkgDefFile>true</GeneratePkgDefFile>
-    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
-    <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
@@ -57,102 +54,33 @@
     <Compile Include="..\_Build_\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converter\TextToBoolConverter.cs" />
-    <Compile Include="Converter\TextToVisibilityConverter.cs" />
-    <Compile Include="Converter\VisibilityToBoolConverter.cs" />
-    <Compile Include="PlcNextProject\Commands\CMakeFlagsCommand.cs" />
-    <Compile Include="PlcNextProject\Commands\PlcNextCommand.cs" />
-    <Compile Include="Converter\BoolToColorConverter.cs" />
-    <Compile Include="PlcNextProject\Commands\ImportProjectCommand.cs" />
-    <Compile Include="PlcNextProject\Commands\ProjectConfigWindowCommand.cs" />
-    <Compile Include="PlcNextProject\Constants.cs" />
-    <Compile Include="PlcNextProject\Import\ImportDialogView.xaml.cs">
-      <DependentUpon>ImportDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\Import\ImportDialogModel.cs" />
-    <Compile Include="PlcNextProject\Import\ImportDialogViewModel.cs" />
-    <Compile Include="PlcNextProject\NewProjectItemDialog\NewItemDialogView.xaml.cs">
-      <DependentUpon>NewItemDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\NewProjectItemDialog\NewItemModel.cs" />
-    <Compile Include="PlcNextProject\NewProjectItemDialog\NewItemViewModel.cs" />
-    <Compile Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationModel.cs" />
-    <Compile Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationView.xaml.cs">
-      <DependentUpon>NewProjectInformationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationViewModel.cs" />
-    <Compile Include="PlcNextProject\OnDocSaveService\IncludesAndMacrosWrapper.cs" />
-    <Compile Include="PlcNextProject\OnDocSaveService\OnDocSaveService.cs" />
-    <Compile Include="PlcNextProject\OnDocSaveService\SaveCMakeListsEventHandler.cs" />
-    <Compile Include="PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml.cs">
-      <DependentUpon>UpdateIncludesDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\OnDocSaveService\UpdateIncludesViewModel.cs" />
-    <Compile Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml.cs">
-      <DependentUpon>CMakeFlagsEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorViewModel.cs" />
-    <Compile Include="PlcNextProject\ProjectConfigurationManager.cs" />
-    <Compile Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml.cs">
-      <DependentUpon>ProjectConfigWindowControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowViewModel.cs" />
-    <Compile Include="PlcNextProject\ProjectIncludesManager.cs" />
-    <Compile Include="Converter\InverseBoolToColorConverter.cs" />
-    <Compile Include="PlcNextProject\Commands\SetTargetsCommand.cs" />
-    <Compile Include="PlcNextCommandsPackage.cs" />
-    <Compile Include="PlcNextProject\SolutionSaveService.cs" />
-    <Compile Include="PlcNextProject\TargetViewModel.cs" />
-    <Compile Include="PlcNextProject\ProjectCreationWizard.cs" />
-    <Compile Include="PlcNextProject\ProjectItemCreationWizard.cs" />
-    <Compile Include="PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorModel.cs" />
-    <Compile Include="PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorViewModel.cs" />
-    <Compile Include="PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml.cs">
-      <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PlcNextProject\Import\ProjectTemplate\UndefClang.hpp" />
     <Content Include="PlcNextVSExtension.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
+    <Content Include="ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
+    <Content Include="ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextCommonPropertiesRule_override.xml">
+    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT\PropertyRules</VSIXSubPath>
+    <Content Include="ProjectPropertyRules\PLCnCLI.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnCLI.targets">
+    <Content Include="ProjectPropertyRules\PLCnCLIBuild.targets">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT</VSIXSubPath>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <VSCTCompile Include="PlcNextCommandsTable.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-    </VSCTCompile>
-    <None Include="key.snk" />
-    <Content Include="PlcNextProject\ProjectPropertyRules\PLCnCLIBuild.targets">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>MSBuild\PHOENIX CONTACT</VSIXSubPath>
-    </Content>
-    <EmbeddedResource Include="PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -163,55 +91,6 @@
     <PackageReference Include="Microsoft.VSSDK.Vsixsigntool">
       <Version>16.2.29116.78</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.VCProjectEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="PlcNextProject\Import\ImportDialogView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PlcNextProject\NewProjectInformationDialog\NewProjectInformationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlcNextProject\NewProjectItemDialog\NewItemDialogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">
@@ -240,11 +119,11 @@
       <Name>PlcncliBuild</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-      <VSIXSubPath>PublicAssemblies</VSIXSubPath>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
     </ProjectReference>
-    <ProjectReference Include="..\PlcncliSdkOptionPage\PlcncliSdkOptionPage.csproj">
-      <Project>{B9CBA487-48FA-4C86-AEDC-EFBC30263810}</Project>
-      <Name>PlcncliSdkOptionPage</Name>
+    <ProjectReference Include="..\PlcncliFeatures\PlcncliFeatures.csproj">
+      <Project>{b9cba487-48fa-4c86-aedc-efbc30263810}</Project>
+      <Name>PlcncliFeatures</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
@@ -252,6 +131,12 @@
       <Project>{31f51e8c-c031-4bb5-9f4b-75452d136cce}</Project>
       <Name>PlcncliServices</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PlcncliTemplateWizards\PlcncliTemplateWizards.csproj">
+      <Project>{25CA7CAF-88D2-43B0-9FBF-EC89EC129E5F}</Project>
+      <Name>PlcncliTemplateWizards</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\PLMProgramItemTemplate\PLMProgramItemTemplate.csproj">
       <Project>{BDB4D447-8081-4D1B-A4B1-39181BB78A22}</Project>
@@ -267,12 +152,6 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\PlcNextCli\Setups\Tools\PhoenixContactSoftwareLicenseTerms.txt">

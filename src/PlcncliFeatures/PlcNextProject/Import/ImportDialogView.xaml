@@ -1,0 +1,91 @@
+﻿<platformui:DialogWindow x:Class="PlcncliFeatures.PlcNextProject.Import.ImportDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0" 
+             xmlns:converter="clr-namespace:PlcncliCommonUtils.Converter;assembly=PlcncliCommonUtils"
+             mc:Ignorable="d" 
+             Name="Window" Height="250" Width="650"
+             Title="Import existing PLCnCLI project">
+    <Window.Style>
+        <Style>
+            <Setter Property="Window.Foreground" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+            <Setter Property="Window.Background" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+            <Setter Property="platformui:ThemedDialogStyleLoader.UseDefaultThemedDialogStyles" Value="True"/>
+        </Style>
+    </Window.Style>
+    <Window.Resources>
+        <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+        <converter:VisibilityToBoolConverter x:Key="VisibilityToBoolConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Margin="10,20,10,30"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="3"
+                   FontSize="15"
+                   TextWrapping="Wrap"
+                   Text="{Binding Description}"/>
+
+        <Label Grid.Row="1"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Content="PLCnCLI project file (.proj):" 
+               Target="{Binding ElementName=PropertyTextBox}" 
+               Margin="10,0,5,0"/>
+        <TextBox Grid.Row="1"
+                 Grid.Column="2"
+                 Name="PropertyTextBox" 
+                 Margin="5,0,5,0" 
+                 Text="{Binding ProjectFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
+                 VerticalContentAlignment="Center"/>
+        <Button Grid.Row="1"
+                Grid.Column="3"
+                Content="_Browse"
+                Command="{Binding BrowseFileCommand}"
+                Margin="5,0,10,0"/>
+        
+        <Image Name="Errorimage"
+               Source="{Binding ErrorImage}"
+               Grid.Row="2"
+               HorizontalAlignment="Right"
+               Height="19"
+               Visibility="{Binding ErrorText, Converter={StaticResource TextToVisibilityConverter}}"/>
+        <TextBlock Text="{Binding ErrorText}" 
+                   Grid.Row="2" 
+                   Grid.Column="1"
+                   Grid.ColumnSpan="99"
+                   Margin="10"/>
+        
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Grid.Row="3"
+                Grid.Column="2"
+                Margin="0,0,0,20"
+                Command="{Binding OkButtonClickCommand}"
+                CommandParameter="{Binding ElementName=Window}"
+                Content="_OK"
+                IsEnabled="{Binding ElementName=Errorimage, Path=Visibility, Converter={StaticResource VisibilityToBoolConverter}}"/>
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Grid.Row="3"
+                Grid.Column="3"
+                Margin="10,0,20,20"
+                Command="{Binding CancelButtonClickCommand}"
+                CommandParameter="{Binding ElementName=Window}"
+                Content="_Cancel"/>
+    </Grid>
+</platformui:DialogWindow>

@@ -9,9 +9,6 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -63,11 +60,6 @@
     <Compile Include="CommandResults\SdksCommandResult.cs" />
     <Compile Include="CommandResults\SdkPathsSettingCommandResult.cs" />
     <Compile Include="CommandResults\TargetsCommandResult.cs" />
-    <Compile Include="GeneratePortComment\GeneratePortCommentControl.xaml.cs">
-      <DependentUpon>GeneratePortCommentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GeneratePortComment\GeneratePortCommentViewModel.cs" />
-    <Compile Include="GeneratePortComment\PortCommentCommand.cs" />
     <Compile Include="LocationService\PlcncliOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -84,7 +76,6 @@
     <Compile Include="PLCnCLI\SPlcncliCommunication.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Key.snk" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -92,13 +83,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.202" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="VSPackage.resx">
-      <MergeWithCTO>true</MergeWithCTO>
-      <ManifestResourceName>VSPackage</ManifestResourceName>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -113,16 +97,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GeneratePortComment\GeneratePortCommentControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <VSCTCompile Include="GeneratePortComment\PlcncliServicePackage.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-    </VSCTCompile>
-    <Content Include="GeneratePortComment\Resources\Port.16.png" />
     <Content Include="Resources\PlcncliLocationService.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

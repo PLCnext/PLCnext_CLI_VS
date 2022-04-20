@@ -1,0 +1,27 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildThisFileDirectory)PLCnCLIBuild.targets" />
+	<ItemGroup>
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)PLCnextBuildPropertiesRule.xml" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(PLCnCLIProjectType)' == 'project'">
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)PLCnextPLMGeneratePropertiesRule.xml" />
+	</ItemGroup>
+	<PropertyGroup Condition="'$(PLCnCLIGenerateDT)' == '' ">
+		<PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
+	</PropertyGroup>
+    <UsingTask TaskName="PlcncliBuild.GenerateTask" AssemblyFile="$(PLCnextCPPBuildTools)" />
+    <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(PLCnextCPPBuildTools)" />
+    <Target Name="Build">
+        <GenerateTask ProjectDirectory="$(ProjectDir)"
+					  AdditionalOptions="$(PLCnCLIGenerateOptions)"
+					  GenerateDatatypesWorksheet="$(PLCnCLIGenerateDT)"
+					  SourceFoldersRaw="$(SourceFolders)"
+				      Condition="$(DisablePLCnCLIGenerate) != true"/>
+	    <CallTarget Targets="PLCnCLIBuild"/>
+        <DeployTask ProjectDirectory="$(ProjectDir)"
+                    AdditionalOptions="$(PLCnCLIDeployOptions)"
+                    Configuration="$(Configuration)"
+					SourceFoldersRaw="$(SourceFolders)"
+					Condition="$(DisablePLCnCLIDeploy) != true"/>
+    </Target>
+</Project>

@@ -8,7 +8,6 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,7 +76,6 @@ namespace PlcncliServices
             _locationService = new PlcncliLocationService(this);
             await _locationService.InitializeAsync(cancellationToken);
             this.AddService(typeof(SPlcncliCommunication), CreateServiceAsync, true);
-            await GeneratePortComment.PortCommentCommand.InitializeAsync(this);
         }
 
         private PlcncliLocationService _locationService = null;

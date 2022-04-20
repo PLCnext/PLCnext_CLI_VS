@@ -1,0 +1,63 @@
+﻿<platformui:DialogWindow x:Class="PlcncliTemplateWizards.NewProjectItemDialog.NewItemDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+             mc:Ignorable="d" 
+             Name="Window" Height="300" Width="450"
+             Title="{Binding Path=ItemType, StringFormat='Create New {0}'}">
+    <Window.Style>
+        <Style>
+            <Setter Property="Window.Foreground" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+            <Setter Property="Window.Background" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+            <Setter Property="platformui:ThemedDialogStyleLoader.UseDefaultThemedDialogStyles" Value="True"/>
+        </Style>
+    </Window.Style>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    <Grid Margin="11">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Margin="0,0,0,11"
+                   Grid.Row="0"
+                   FontSize="15"
+                   TextWrapping="Wrap"
+                   Text="{Binding Description}"/>
+        <StackPanel Grid.Row="1">
+            <Label Content="{Binding NamespaceLabel}" 
+                   Target="{Binding ElementName=PropertyTextBox}" 
+                   Padding="0"
+                   Margin="0,0,0,5"/>
+            <TextBox Name="PropertyTextBox" 
+                     Margin="0,0,0,11"
+                     Height="23"
+                     Text="{Binding Namespace}"  
+                     VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" 
+                    Visibility="{Binding IsProgramWizard, Converter={StaticResource VisibilityConverter}}">
+            <Label Content="{Binding ComponentLabel}" 
+                   Target="{Binding ElementName=PropertyTextBox2}" 
+                   Margin="0,0,0,5"
+                   Padding="0"/>
+            <ComboBox Name="PropertyTextBox2" 
+                      Margin="0,0,0,11"
+                      Height="23"
+                      ItemsSource="{Binding Components}" 
+                      SelectedItem="{Binding SelectedComponent}" 
+                      VerticalContentAlignment="Center"
+                      />
+        </StackPanel>
+        <Button HorizontalAlignment="Right"
+                Grid.Row="3"
+                Command="{Binding OkButtonClickCommand}"
+                CommandParameter="{Binding ElementName=Window}"
+                Content="{Binding ButtonText}"/>
+    </Grid>
+</platformui:DialogWindow>
