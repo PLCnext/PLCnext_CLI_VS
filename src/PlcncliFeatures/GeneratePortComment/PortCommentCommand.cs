@@ -124,7 +124,6 @@ namespace PlcncliFeatures.GeneratePortComment
             {
                 selection.LineUp();
                 selection.EndOfLine();
-                selection.NewLine();
                 selection.Insert(vm.Preview);
             }
             vm.Dispose();
