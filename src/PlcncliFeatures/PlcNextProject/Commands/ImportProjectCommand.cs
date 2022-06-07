@@ -241,7 +241,7 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                             .Where(f => !f.EndsWith("UndefClang.hpp"))
                             .Concat(directories.SelectMany(d => Directory.GetFiles(d, "*.*pp", SearchOption.AllDirectories)
                                                                      .Concat(Directory.GetFiles(d, "*.txt", SearchOption.AllDirectories)))
-                                               .Where(f => !f.EndsWith("UndefClang.hpp"))
+                                               .Where(f => !f.EndsWith("UndefClang.hpp") && !f.EndsWith("ADD_DEPENDENT_LIBRARIES_HERE.txt"))
                             );
 
                         foreach (string file in projectFiles)

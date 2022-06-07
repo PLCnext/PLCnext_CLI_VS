@@ -233,7 +233,7 @@ namespace PlcncliTemplateWizards
                 IEnumerable<string> projectFiles =
                     Directory.GetFiles(_projectDirectory, "*.*pp", SearchOption.AllDirectories)
                     .Concat(Directory.GetFiles(_projectDirectory, "*.txt", SearchOption.AllDirectories))
-                    .Where(f => !f.EndsWith("UndefClang.hpp"));
+                    .Where(f => !f.EndsWith("UndefClang.hpp") && !f.EndsWith("ADD_DEPENDENT_LIBRARIES_HERE.txt"));
 
                 foreach (string file in projectFiles)
                 {
