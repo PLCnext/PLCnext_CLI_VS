@@ -39,12 +39,11 @@ namespace PlcncliFeatures
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideOptionPage(typeof(SDKsOptionPage), "PLCnext Technology", "SDKs", 0, 0, false)]
+    [ProvideOptionPage(typeof(SDKsOptionPage), PlcncliServices.NamingConstants.OptionsCategoryName, "SDKs", 0, 0, false)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PlcncliFeaturesPackage.PackageGuidString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class PlcncliFeaturesPackage : AsyncPackage
     {
         /// <summary>

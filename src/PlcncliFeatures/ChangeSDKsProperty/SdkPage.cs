@@ -10,6 +10,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TaskStatusCenter;
+using PlcncliServices;
 using PlcncliServices.PLCnCLI;
 using System;
 using System.IO;
@@ -107,7 +108,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, "PLCnCLI error");
+                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);
@@ -128,7 +129,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, "PLCnCLI error");
+                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);
@@ -148,7 +149,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, "PLCnCLI error");
+                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);

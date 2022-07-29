@@ -9,6 +9,7 @@
 
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
+using PlcncliServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -38,7 +39,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
             }
             catch(PlcncliException e)
             {
-                MessageBox.Show(e.Message, "PLCnCLI error");
+                MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
                 try
                 {
                     SdkPathsSettingCommandResult commandResult =
@@ -47,7 +48,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                 }
                 catch(PlcncliException e1)
                 {
-                    MessageBox.Show(e1.Message, "PLCnCLI get settings error");
+                    MessageBox.Show(e1.Message, $"{NamingConstants.ToolName} get settings error");
                 }
             }
             SdkChangesCollector = new SdkChangesCollector();

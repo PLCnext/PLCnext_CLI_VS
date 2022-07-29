@@ -8,19 +8,18 @@
 #endregion
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PLMProjectTemplate.Properties")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PLMProjectTemplate")]
+[assembly: AssemblyDescription(BuildVariables.AssemblyDescription_PLMProjectTemplate)]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PLMProjectTemplate.Properties")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany(BuildVariables.AssemblyCompany)]
+[assembly: AssemblyProduct("PLMProjectTemplate")]
+[assembly: AssemblyCopyright(BuildVariables.AssemblyCopyright)]
+[assembly: AssemblyTrademark(BuildVariables.AssemblyTrademark)]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

@@ -42,6 +42,9 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\BuildVariables.cs">
+      <Link>Properties\BuildVariables.cs</Link>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Converter\BoolToColorConverter.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />

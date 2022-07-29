@@ -10,6 +10,7 @@
 using System;
 using PlcncliServices.LocationService;
 using PlcncliServices.PLCnCLI;
+using PlcncliServices;
 using Task = Microsoft.Build.Utilities.Task;
 
 namespace PlcncliBuild
@@ -24,7 +25,7 @@ namespace PlcncliBuild
                 PlcncliLocation = ToolLocationFinder.SearchPlcncliTool(null);
                 if (string.IsNullOrEmpty(PlcncliLocation))
                 {
-                    throw new ArgumentException("PLCnCLI tool location could not be resolved.");
+                    throw new ArgumentException($"{NamingConstants.ToolName} tool location could not be resolved.");
                 }
             }
             Communication = new PlcncliProcessCommunication(null, PlcncliLocation);

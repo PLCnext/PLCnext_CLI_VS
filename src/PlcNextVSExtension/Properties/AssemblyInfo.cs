@@ -8,19 +8,18 @@
 #endregion
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PlcNextVSExtension")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(BuildVariables.AssemblyDescription_PlcNextVSExtension)]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany(BuildVariables.AssemblyCompany)]
 [assembly: AssemblyProduct("PlcNextVSExtension")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright(BuildVariables.AssemblyCopyright)]
+[assembly: AssemblyTrademark(BuildVariables.AssemblyTrademark)]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

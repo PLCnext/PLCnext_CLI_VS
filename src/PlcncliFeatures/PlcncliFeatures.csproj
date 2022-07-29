@@ -50,6 +50,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\BuildVariables.cs">
+      <Link>Properties\BuildVariables.cs</Link>
+    </Compile>
     <Compile Include="ChangeSDKsProperty\AddSdkDialog.xaml.cs">
       <DependentUpon>AddSdkDialog.xaml</DependentUpon>
     </Compile>

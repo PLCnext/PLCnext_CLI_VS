@@ -38,7 +38,7 @@ namespace PlcncliServices
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideService(typeof(SPlcncliCommunication), IsAsyncQueryable = true)]
-    [ProvideOptionPage(typeof(PlcncliOptionPage), "PLCnext Technology", "PLCnCLI", 0, 0, true)]
+    [ProvideOptionPage(typeof(PlcncliOptionPage), NamingConstants.OptionsCategoryName, NamingConstants.ToolName, 0, 0, true)]
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PackageGuidString)]

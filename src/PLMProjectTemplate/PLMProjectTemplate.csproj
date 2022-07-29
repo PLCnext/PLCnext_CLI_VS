@@ -62,6 +62,9 @@
     <Content Include="UndefClang.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\BuildVariables.cs">
+      <Link>Properties\BuildVariables.cs</Link>
+    </Compile>
     <Compile Include="..\_Build_\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>

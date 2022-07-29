@@ -76,7 +76,8 @@ namespace PlcncliServices
             {
                 if (showMessages)
                 {
-                    _ = MessageBox.Show("PLCnCLI not found. PLCnext Technology Extension will not work properly. Set location in Tools->Options->PLCnext Technology.");
+                    _ = MessageBox.Show($"PLCnCLI not found. {NamingConstants.TechnologyName}" +
+                        $" Extension will not work properly. Set location in Tools->Options->{NamingConstants.OptionsCategoryName}.");
                 }
 
                 return string.Empty;
@@ -84,7 +85,7 @@ namespace PlcncliServices
 
             if (showMessages)
             {
-                _ = MessageBox.Show("PLCnCLI not found. Please enter correct location in Tools->Options->PLCnext Technology");
+                _ = MessageBox.Show($"PLCnCLI not found. Please enter correct location in Tools->Options->{NamingConstants.OptionsCategoryName}");
             }
 
             if (_asyncServiceProvider is Package)

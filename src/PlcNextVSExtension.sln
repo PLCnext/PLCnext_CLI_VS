@@ -27,6 +27,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcncliTemplateWizards", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlcncliCommonUtils", "PlcncliCommonUtils\PlcncliCommonUtils.csproj", "{B674C221-6BCA-4A7B-94F4-45292BF41964}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Build_", "_Build_", "{C39EEDB8-4512-4273-8E3C-CE32A8B23C29}"
+	ProjectSection(SolutionItems) = preProject
+		_Build_\BuildVariables.cs = _Build_\BuildVariables.cs
+		_Build_\LICENSE = _Build_\LICENSE
+		_Build_\MSBuildVars.bat = _Build_\MSBuildVars.bat
+		_Build_\README.md = _Build_\README.md
+		_Build_\Version.cs = _Build_\Version.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

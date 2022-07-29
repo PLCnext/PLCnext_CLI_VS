@@ -8,12 +8,11 @@
 #endregion
 
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
+using PlcncliServices;
 
 namespace PlcncliBuild
 {
@@ -21,7 +20,7 @@ namespace PlcncliBuild
     {
         public override bool Execute()
         {
-            Log.LogMessage(MessageImportance.Low, "Starting plcncli build task.");
+            Log.LogMessage(MessageImportance.Low, $"Starting {NamingConstants.ToolName} build task.");
             Log.LogMessage(MessageImportance.Low, "Additional build options value: \"" + AdditionalOptions + "\"");
 
             string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
@@ -48,7 +47,7 @@ namespace PlcncliBuild
                     Log.LogErrorFromException(ex, false, true, "-");
                 return false;
             }
-            Log.LogMessage(MessageImportance.Low, "plcncli build task finished.");
+            Log.LogMessage(MessageImportance.Low, $"{NamingConstants.ToolName} build task finished.");
 
             return true;
         }

@@ -8,19 +8,18 @@
 #endregion
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PlcncliTemplateWizards")]
-[assembly: AssemblyDescription("Contains wizards for the PLCnext Technology C++ Templates")]
+[assembly: AssemblyDescription(BuildVariables.AssemblyDescription_PlcncliTemplateWizards)]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("PHOENIX CONTACT GmbH & Co. KG")]
+[assembly: AssemblyCompany(BuildVariables.AssemblyCompany)]
 [assembly: AssemblyProduct("PlcncliTemplateWizards")]
-[assembly: AssemblyCopyright("Copyright © PHOENIX CONTACT GmbH & Co. KG 2022")]
-[assembly: AssemblyTrademark("PHOENIX CONTACT GmbH & Co. KG")]
+[assembly: AssemblyCopyright(BuildVariables.AssemblyCopyright)]
+[assembly: AssemblyTrademark(BuildVariables.AssemblyTrademark)]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

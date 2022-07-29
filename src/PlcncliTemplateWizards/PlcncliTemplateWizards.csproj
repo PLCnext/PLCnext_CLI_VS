@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\_Build_\BuildVariables.cs">
+      <Link>Properties\BuildVariables.cs</Link>
+    </Compile>
     <Compile Include="NewProjectInformationDialog\NewProjectInformationModel.cs" />
     <Compile Include="NewProjectInformationDialog\NewProjectInformationView.xaml.cs">
       <DependentUpon>NewProjectInformationView.xaml</DependentUpon>

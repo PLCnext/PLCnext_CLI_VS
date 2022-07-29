@@ -9,6 +9,7 @@
 
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
+using PlcncliServices;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace PlcncliBuild
         public override bool Execute()
         {
             Log.LogMessage(MessageImportance.Low, "Starting generate task.");
-            Log.LogMessage(MessageImportance.Low, "Plcncli location: \"" + PlcncliLocation + "\"");
+            Log.LogMessage(MessageImportance.Low, $"{NamingConstants.ToolName} location: \"{PlcncliLocation}\"");
             Log.LogMessage(MessageImportance.Low, "Additional generate options value: \"" + AdditionalOptions + "\"");
 
             string[] args =new string[]
