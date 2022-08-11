@@ -66,11 +66,20 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
             _plcncliCommunication = plcncliCommunication;
             _projectName = projectName;
             ProjectNamespace = _projectName;
-            InitialComponentName = $"{_projectName}Component";
-            InitialProgramName = $"{_projectName}Program";
+            InitialComponentName = $"{FormatProjectName(_projectName)}Component";
+            InitialProgramName = $"{FormatProjectName(_projectName)}Program";
             ProjectType = projectType;
 
             UpdateTargets();
+
+            string FormatProjectName(string name)
+            {
+                if (!name.Contains('.'))
+                {
+                    return name;
+                }
+                return name.Substring(name.LastIndexOf('.') + 1);
+            }
         }
 
         public void UpdateTargets()
