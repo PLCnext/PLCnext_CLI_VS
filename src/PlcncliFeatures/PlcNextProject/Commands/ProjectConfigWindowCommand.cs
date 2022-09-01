@@ -9,6 +9,7 @@
 
 using Microsoft.VisualStudio.Shell;
 using PlcncliFeatures.PlcNextProject.ProjectConfigWindow;
+using PlcncliServices.PLCnCLI;
 using System;
 using System.ComponentModel.Design;
 using Task = System.Threading.Tasks.Task;
@@ -30,6 +31,8 @@ namespace PlcncliFeatures.PlcNextProject.Commands
         /// </summary>
         public static readonly Guid CommandSet = new Guid("d03b062f-5831-4deb-b619-beb902e75a3e");
 
+        private readonly IPlcncliCommunication plcncliCommunication;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectConfigWindowCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -43,6 +46,7 @@ namespace PlcncliFeatures.PlcNextProject.Commands
             var menuCommandID = new CommandID(CommandSet, CommandId);
             var menuItem = new OleMenuCommand(this.Execute, this.ChangeHandler, this.QueryStatus, menuCommandID) { Visible = false };
             commandService.AddCommand(menuItem);
+            plcncliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
         }
 
         private void ChangeHandler(object sender, EventArgs e)
@@ -79,7 +83,7 @@ namespace PlcncliFeatures.PlcNextProject.Commands
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            ProjectConfigWindowControl control = new ProjectConfigWindowControl(new ProjectConfigWindowViewModel());
+            ProjectConfigWindowControl control = new ProjectConfigWindowControl(new ProjectConfigWindowViewModel(plcncliCommunication));
             _ = control.ShowModal();
         }
     }

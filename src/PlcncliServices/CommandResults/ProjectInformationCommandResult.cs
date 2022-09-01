@@ -31,6 +31,9 @@ namespace PlcncliServices.CommandResults
 
         [JsonProperty(PropertyName = "includePaths")]
         public IEnumerable<IncludePath> IncludePaths { get; set; }
+
+        [JsonProperty(PropertyName = "externalLibraries")]
+        public IEnumerable<Path> ExternalLibraries { get; set; }
     }
 
     public class EntityResult

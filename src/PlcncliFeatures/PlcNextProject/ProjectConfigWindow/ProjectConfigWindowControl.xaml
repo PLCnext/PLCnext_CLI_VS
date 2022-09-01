@@ -5,15 +5,17 @@
                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                          xmlns:converter="clr-namespace:PlcncliCommonUtils.Converter;assembly=PlcncliCommonUtils"
+                         xmlns:local="clr-namespace:PlcncliFeatures.PlcNextProject.ProjectConfigWindow"
                          mc:Ignorable="d"
-                         Height="400"
                          Width="600"
+                         SizeToContent="Height"
                          Name="window"
                          Title="PLCnext Project Configuration">
     <Window.Resources>
         <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
         <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
+        <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
     </Window.Resources>
     <Grid Margin="11">
         <Grid.RowDefinitions>
@@ -25,7 +27,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -37,54 +41,10 @@
                    Margin="0,0,0,11"
                    TextWrapping="Wrap">Project properties for PLCnext C++ Projects.<LineBreak/>
 Rebuild the project after saving your changes to transfer the configuration to the library.</TextBlock>
-        
-        <Label Grid.Row="1" 
-               Grid.ColumnSpan="99"
-               Padding="0"
-               Content="Library _Description"
-               Target="{Binding ElementName=textbox1}"
-               Margin="0,0,0,5"/>
-        <TextBox Grid.Row="2"
-                 Grid.ColumnSpan="99"
-                 Name="textbox1"
-                 AcceptsReturn="True" 
-                 Height="87" 
-                 VerticalScrollBarVisibility="Auto"
-                 Margin="0,0,0,11"
-                 Text="{Binding LibraryDescription}"/>
 
-        <Label Grid.Row="3" 
-               Grid.ColumnSpan="99" 
-               Padding="0"
-               Content="Library _Version"
-               Target="{Binding ElementName=textbox2}"
-               Margin="0,0,0,5"/>
-        <TextBox Grid.Row="4"
-                 Grid.ColumnSpan="99" 
-                 Margin="0,0,0,11"
-                 Height="23"
-                 VerticalContentAlignment="Center"
-                 Name="textbox2"
-                 AcceptsReturn="False"
-                 Text="{Binding LibraryVersion}"/>
-
-        <Label Grid.Row="5" 
-               Grid.ColumnSpan="99" 
-               Padding="0"
-               Content="_Engineer Version"
-               Target="{Binding ElementName=textbox3}"
-               Margin="0,0,0,5"/>
-        <TextBox Grid.Row="6"
-                 Grid.ColumnSpan="99"
-                 Margin="0,0,0,5"
-                 Height="23"
-                 VerticalContentAlignment="Center"
-                 Name="textbox3"
-                 AcceptsReturn="False"
-                 Text="{Binding EngineerVersion, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal"
-                    Grid.Row="7"
                     Grid.ColumnSpan="99"
+                    Grid.Row="1"
                     Margin="0,0,0,11">
             <Image Name="Errorimage"
                Source="{Binding ErrorImage}"
@@ -93,9 +53,78 @@ Rebuild the project after saving your changes to transfer the configuration to t
             <TextBlock Text="{Binding ErrorText}" 
                    Margin="10,0,0,0"/>
         </StackPanel>
+        
+        <Label Grid.Row="2" 
+               Grid.ColumnSpan="99"
+               Padding="0"
+               Content="Library _Description"
+               Target="{Binding ElementName=textbox1}"
+               Margin="0,0,0,5"/>
+        <TextBox Grid.Row="3"
+                 Grid.ColumnSpan="99"
+                 Name="textbox1"
+                 AcceptsReturn="True" 
+                 Height="87" 
+                 VerticalScrollBarVisibility="Auto"
+                 Margin="0,0,0,11"
+                 Text="{Binding LibraryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="4" 
+               Grid.ColumnSpan="99" 
+               Padding="0"
+               Content="Library _Version"
+               Target="{Binding ElementName=textbox2}"
+               Margin="0,0,0,5"/>
+        <TextBox Grid.Row="5"
+                 Grid.ColumnSpan="99" 
+                 Margin="0,0,0,11"
+                 Height="23"
+                 VerticalContentAlignment="Center"
+                 Name="textbox2"
+                 AcceptsReturn="False"
+                 Text="{Binding LibraryVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="6" 
+               Grid.ColumnSpan="99" 
+               Padding="0"
+               Content="_Engineer Version"
+               Target="{Binding ElementName=textbox3}"
+               Margin="0,0,0,5"/>
+        <TextBox Grid.Row="7"
+                 Grid.ColumnSpan="99"
+                 Margin="0,0,0,11"
+                 Height="23"
+                 VerticalContentAlignment="Center"
+                 Name="textbox3"
+                 AcceptsReturn="False"
+                 Text="{Binding EngineerVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="8"
+               Grid.ColumnSpan="99"
+               Margin="0,0,0,5" 
+               Padding="0" 
+               Content="{Binding ExcludedFilesLabel}"
+               Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <ListBox Name="TargetsListBox" 
+                 MinHeight="23"
+                 Grid.Row="9"
+                 Margin="0,0,0,11"
+                 Grid.ColumnSpan="99"
+                 ItemsSource="{Binding ExcludedFiles}"
+                 Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"
+                 IsEnabled="{Binding EnableExcludedFiles}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:LibViewModel}">
+                    <CheckBox Content="{Binding Name}" 
+                              IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Foreground="{Binding Invalid, Converter={StaticResource BoolToColorConverter}, ConverterParameter={x:Static Brushes.Gray}}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <StackPanel Orientation="Horizontal"
-                    Grid.Row="8" 
+                    Grid.Row="10" 
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">

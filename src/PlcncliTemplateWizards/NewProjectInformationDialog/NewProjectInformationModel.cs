@@ -84,8 +84,7 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
 
         public void UpdateTargets()
         {
-            var result = _plcncliCommunication.ExecuteCommand(Constants.Command_get_targets, null, typeof(TargetsCommandResult)) as TargetsCommandResult;
-            if (result != null)
+            if (_plcncliCommunication.ExecuteCommand(Constants.Command_get_targets, null, typeof(TargetsCommandResult)) is TargetsCommandResult result)
             {
                 AllTargets = result.Targets;
             }

@@ -11,7 +11,11 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
+using PlcncliServices.CommandResults;
+using PlcncliServices.PLCnCLI;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -22,6 +26,8 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
+using Constants = PlcncliCommonUtils.Constants;
+using Path = System.IO.Path;
 
 namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 {
@@ -32,11 +38,15 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private readonly string libraryDescriptionElementName = "LibraryDescription";
         private readonly string libraryVersionElementName = "LibraryVersion";
         private readonly string engineerVersionElementName = "EngineerVersion";
+        private readonly string excludedFilesElementName = "ExcludedFiles";
+        private readonly string fileElementName = "File";
         private readonly string configFilePath;
         private DTE2 dte;
+        private readonly LibViewModel selectAll;
 
-        public ProjectConfigWindowViewModel()
+        public ProjectConfigWindowViewModel(IPlcncliCommunication plcncliCommunication)
         {
+            selectAll = new LibViewModel(this, "Select/Deselect all elements");
             string projectDirectory = GetProjectLocation();
             string GetProjectLocation()
             {
@@ -59,7 +69,17 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             {
                 return;
             }
+
+            ProjectInformationCommandResult projectInformation  = GetProjectInformation();
+            IEnumerable<string> externalLibs = Enumerable.Empty<string>();
+            if (projectInformation != null)
+            {
+                externalLibs = projectInformation.ExternalLibraries.Select(p => Path.GetFileName(p.PathValue));
+            }
+
             configFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), configFileName);
+
+            IEnumerable<LibViewModel> libs = null;
             LoadFromFile();
             void LoadFromFile()
             {
@@ -82,12 +102,72 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                         EngineerVersion = settings?.Elements(settings.GetDefaultNamespace() + engineerVersionElementName)
                                                   .FirstOrDefault()
                                                   ?.Value;
+                        libs = settings?.Elements(settings.GetDefaultNamespace() + excludedFilesElementName)
+                                .FirstOrDefault()
+                                ?.Elements(settings.GetDefaultNamespace() + fileElementName)
+                                .Select(e => new LibViewModel(this, e.Value, selected: true));
+
                     }
                     catch (Exception e)
                     {
                         _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
                     }
                 }
+            }
+            
+            ExcludedFiles = libs != null
+                                ? new ObservableCollection<LibViewModel>(libs)
+                                : new ObservableCollection<LibViewModel>();
+
+            if (projectInformation.Type != Constants.ProjectType_PLM)
+            {
+                ShowExcludedFiles = false;
+                return;
+            }
+
+            foreach (string lib in externalLibs)
+            {
+                if (!ExcludedFiles.Select(f => f.Name).Contains(lib))
+                {
+                    ExcludedFiles.Add(new LibViewModel(this, lib));
+                }
+            }
+
+            if (!ExcludedFiles.Any())
+            {
+                ExcludedFiles.Add(new LibViewModel(this, "No files found", invalid: true));
+                EnableExcludedFiles = false;
+            }
+            else
+            {
+                ExcludedFiles.Insert(0,selectAll);
+                if (ExcludedFiles.Count == libs.Count() + 1)
+                {
+                    selectAll.SetSelected(true);
+                }
+            }
+
+            foreach (LibViewModel lib in ExcludedFiles.Where(f => !externalLibs.Contains(f.Name) && f != selectAll))
+            {
+                lib.SetInvalid();
+            }
+
+            ProjectInformationCommandResult GetProjectInformation()
+            {
+                ProjectInformationCommandResult result = null;
+                ThreadHelper.JoinableTaskFactory.Run(
+                "Fetching project information",
+                async (progress) =>
+                {
+                    progress.Report(new ThreadedWaitDialogProgressData("Fetching external libraries..."));
+
+                    result = plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
+                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, Path.GetDirectoryName(projectDirectory))
+                    as ProjectInformationCommandResult;
+
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                }, TimeSpan.FromMilliseconds(5));
+                return result;
             }
         }
 
@@ -136,7 +216,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         }
         private void SetErrorMessage()
         {
-            ErrorText = "No valid version! Please use format: 202x.x or 202x.x.x";
+            ErrorText = "Engineer Version not valid! Please use format: 202x.x or 202x.x.x";
         }
 
         private void ClearErrorMessage()
@@ -175,6 +255,12 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                                                                               Int32Rect.Empty,
                                                                               BitmapSizeOptions.FromEmptyOptions());
 
+        public string ExcludedFilesLabel => "Excluded Files - checked files will not be added to pcwlx";
+
+        public ObservableCollection<LibViewModel> ExcludedFiles { get; }
+
+        public bool ShowExcludedFiles { get; private set; } = true;
+        public bool EnableExcludedFiles { get; private set; } = true;
         #endregion
         #region Commands
 
@@ -191,7 +277,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
             if (string.IsNullOrEmpty(LibraryDescription)
                 && string.IsNullOrEmpty(LibraryVersion)
-                && string.IsNullOrEmpty(EngineerVersion))
+                && string.IsNullOrEmpty(EngineerVersion)
+                && ExcludedFiles.Count < 1)
             {
                 if (File.Exists(configFilePath))
                 {
@@ -228,9 +315,34 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                         new XAttribute(XNamespace.Xmlns + "xsd", "http://www.w3.org/2001/XMLSchema"),
                         new XElement(xmlns + nameof(LibraryDescription), LibraryDescription),
                         new XElement(xmlns + nameof(LibraryVersion), LibraryVersion),
-                        new XElement(xmlns + nameof(EngineerVersion), EngineerVersion)
+                        new XElement(xmlns + nameof(EngineerVersion), EngineerVersion),
+                        new XElement(xmlns + nameof(ExcludedFiles), ExcludedFiles.Where(e => e.Selected && e != selectAll)
+                                                                .Select(e => new XElement(xmlns + "File",e.Name))
+                                                                .ToArray())
                         )
                     );
+            }
+        }
+
+        internal void SelectionChanged(LibViewModel element, bool isSelected)
+        {
+            if (element == selectAll)
+            {
+                foreach (LibViewModel lib in ExcludedFiles.Where(f => f != selectAll))
+                {
+                    lib.SetSelected(isSelected);
+                }
+            }
+            else
+            {
+                if (selectAll.Selected && ExcludedFiles.Any(l => !l.Selected))
+                {
+                    selectAll.SetSelected(false);
+                }
+                else if(!selectAll.Selected && ExcludedFiles.Where(l => l != selectAll).All(l => l.Selected))
+                {
+                    selectAll.SetSelected(true);
+                }
             }
         }
 
@@ -244,5 +356,61 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion        
+    }
+
+    public class LibViewModel : INotifyPropertyChanged
+    {
+        private bool selected;
+        private bool invalid;
+        private ProjectConfigWindowViewModel parent;
+
+        public LibViewModel(ProjectConfigWindowViewModel parent, string name, bool selected = false, bool invalid = false)
+        {
+            Name = name;
+            this.selected = selected;
+            this.invalid = invalid;
+            this.parent = parent;
+        }
+
+        public bool Selected
+        {
+            get => selected;
+            set
+            {
+                selected = value;
+                OnPropertyChanged();
+                parent.SelectionChanged(this, value);
+            }
+        }
+
+        public string Name { get; }
+
+        public bool Invalid 
+        {
+            get => invalid;
+            private set
+            {
+                invalid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void SetInvalid()
+        {
+            Invalid = true;
+        }
+
+        internal void SetSelected(bool value)
+        {
+            selected = value;
+            OnPropertyChanged(nameof(Selected));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
