@@ -49,5 +49,8 @@
 		<StringListProperty.DataSource>
 			<DataSource Persistence="ProjectFile" HasConfigurationCondition="false"/>
 		</StringListProperty.DataSource>
+	<StringListProperty.ValueEditors>
+		<ValueEditor EditorType="NonexistingEditor" />
+	</StringListProperty.ValueEditors>
 	</StringListProperty>
 </Rule>
