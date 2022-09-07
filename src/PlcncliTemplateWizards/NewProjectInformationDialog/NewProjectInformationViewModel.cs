@@ -43,9 +43,11 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
         bool showComponentError = false;
         bool showProgramError = false;
         bool showNamespaceError = false;
+        bool showComponentNamespaceEqualError = false;
         private readonly string NamespaceErrorText = "Namespace does not match pattern ^(?:[a-zA-Z][a-zA-Z0-9_]*\\.)*[a-zA-Z](?!.*__)[a-zA-Z0-9_]*$";
         private readonly string ComponentErrorText = "Component name does not match pattern ^[A-Z](?!.*__)[a-zA-Z0-9_]*$";
         private readonly string ProgramErrorText = "Program name does not match pattern ^[A-Z](?!.*__)[a-zA-Z0-9_]*$";
+        private readonly string ComponentNamespaceEqualErrorText = "Component name and namespace should not be the same";
 
         #region Properties
 
@@ -198,6 +200,9 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
                 case ErrorType.Program:
                     showProgramError = true;
                     break;
+                case ErrorType.ComponentNamespace:
+                    showComponentNamespaceEqualError = true;
+                    break;
                 default:
                     break;
             }
@@ -215,6 +220,9 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
                     break;
                 case ErrorType.Program:
                     showProgramError = false;
+                    break;
+                case ErrorType.ComponentNamespace:
+                    showComponentNamespaceEqualError = false;
                     break;
                 default:
                     break;
@@ -239,6 +247,11 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
                 ErrorText = ProgramErrorText;
                 return;
             }
+            if (showComponentNamespaceEqualError)
+            {
+                ErrorText = ComponentNamespaceEqualErrorText;
+                return;
+            }
             ErrorText = string.Empty;
         }
 
@@ -246,7 +259,23 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
         {
             Namespace,
             Component,
-            Program
+            Program,
+            ComponentNamespace
+        }
+
+        internal void ValidateNames()
+        {
+            string ns = ProjectNameProperties.Where(x => x.Name.Text == ProjectNamespaceKey).FirstOrDefault()?.Value;
+            if ( ns ==
+                ProjectNameProperties.Where(y => y.Name.Text == InitialComponentNameKey).FirstOrDefault()?.Value
+                && ns!= null)
+            {
+                ShowError(ErrorType.ComponentNamespace);
+            }
+            else
+            {
+                RemoveError(ErrorType.ComponentNamespace);
+            }
         }
     }
 
@@ -279,7 +308,8 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
 
         private void Validate(string value)
         {
-            if(validNameRegex.IsMatch(value))
+            vm.ValidateNames();
+            if (validNameRegex.IsMatch(value))
             {
                 vm.RemoveError(errorType);
                 return;
