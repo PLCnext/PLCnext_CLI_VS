@@ -16,4 +16,14 @@
   <Target Name="Build">
 		<CallTarget Targets="PLCnCLIBuild"/>
 	</Target>
+  
+  <!-- CLEAN TARGETS -->
+  <PropertyGroup>
+    <IntermediateDirectory>$(ProjectDir)intermediate</IntermediateDirectory>
+    <BinDirectory>$(ProjectDir)bin</BinDirectory>
+  </PropertyGroup>
+
+  <Target Name="CleanStepsPLCnext" AfterTargets="Clean">
+    <RemoveDir Directories="$(IntermediateDirectory);$(BinDirectory)"/>
+  </Target>
 </Project>
