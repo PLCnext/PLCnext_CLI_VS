@@ -9,6 +9,12 @@
   <PropertyGroup Condition="'$(PLCnCLIGenerateDT)' == '' ">
     <PLCnCLIGenerateDT>true</PLCnCLIGenerateDT>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(DisablePLCnCLIGenerate)' == '' ">
+    <DisablePLCnCLIGenerate>false</DisablePLCnCLIGenerate>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DisablePLCnCLIDeploy)' == '' ">
+    <DisablePLCnCLIDeploy>false</DisablePLCnCLIDeploy>
+  </PropertyGroup>
   <UsingTask TaskName="PlcncliBuild.GenerateTask" AssemblyFile="$(PLCnextCPPBuildTools)" />
   <UsingTask TaskName="PlcncliBuild.DeployTask" AssemblyFile="$(PLCnextCPPBuildTools)" />
   <Target Name="PLCnCLIGenerate">
