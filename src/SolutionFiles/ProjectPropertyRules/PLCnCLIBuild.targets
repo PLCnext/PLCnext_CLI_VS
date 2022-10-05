@@ -1,0 +1,32 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+    <PLCnextCPPBuildTools>$(MSBuildThisFileDirectory)PlcncliBuild.dll</PLCnextCPPBuildTools>
+  </PropertyGroup>
+  
+  <ItemGroup>
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)PLCnextCommonPropertiesRule.xml" />
+	</ItemGroup>
+	<UsingTask TaskName="PlcncliBuild.BuildTask" AssemblyFile="$(PLCnextCPPBuildTools)" />
+  <Target Name="PLCnCLIBuild">
+    <BuildTask ProjectDirectory="$(ProjectDir)"
+               AdditionalOptions="$(PLCnCLIBuildOptions)"
+               Configuration="$(Configuration)"/>
+  </Target>
+  <Target Name="Build">
+		<CallTarget Targets="PLCnCLIBuild"/>
+	</Target>
+  
+  <!-- CLEAN TARGETS -->
+  <PropertyGroup>
+    <IntermediateDirectory>$(ProjectDir)intermediate</IntermediateDirectory>
+    <BinDirectory>$(ProjectDir)bin</BinDirectory>
+  </PropertyGroup>
+
+  <Target Name="CleanStepsPLCnext" AfterTargets="Clean">
+    <RemoveDir Directories="$(IntermediateDirectory);$(BinDirectory)"/>
+  </Target>
+  
+  <!-- Fix for Designtimebuild failure -->
+  <Target Name="_ResolveWSLTarget" />
+</Project>

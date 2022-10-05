@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>aebbdb97-4810-4c06-922c-b19805f5838d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PlcncliBuildShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BuildTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeployTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GenerateTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcncliTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskLogger.cs" />
+  </ItemGroup>
+</Project>

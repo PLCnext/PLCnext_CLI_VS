@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>29f79683-7672-4be7-8b8d-d258fdaab46d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PlcncliServicesShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\CommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\CompilerSpecificationCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\Path.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\ProjectInformationCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\SdkPathsSettingCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\SdksCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\TargetsCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LocationService\PlcncliLocationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LocationService\PlcncliOptionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)LocationService\ToolLocationFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NamingConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcncliServicePackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IOutputReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IplcncliCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\OutputCollector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PlcncliException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PlcncliProcessCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\ProcessFacade.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\SPlcncliCommunication.cs" />
+  </ItemGroup>
+</Project>

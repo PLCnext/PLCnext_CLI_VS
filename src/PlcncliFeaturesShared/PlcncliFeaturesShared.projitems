@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f5b5a57a-7d09-452f-b7bd-a2b60b39a339</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PlcncliFeaturesShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\AddSdkDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\InstallSdkDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\RemoveSdkDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SDKPageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)GeneratePortComment\GeneratePortCommentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\AddSdkDialog.xaml.cs">
+      <DependentUpon>AddSdkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\AddSdkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\InstallSdkDialog.xaml.cs">
+      <DependentUpon>InstallSdkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\InstallSdkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\ISdkChangesCollector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\RemoveSdkDialog.xaml.cs">
+      <DependentUpon>RemoveSdkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\RemoveSdkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SdkChangesCollector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SdkPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SDKPageControl.xaml.cs">
+      <DependentUpon>SDKPageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SDKPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SDKPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SDKsOptionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SdkState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\SdkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\TargetViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Converter\SdkStateToColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Converter\SdkStateToFocusableConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\GeneratePortCommentControl.xaml.cs">
+      <DependentUpon>GeneratePortCommentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\GeneratePortCommentViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\PortAttributeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\PortCommentCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcncliFeaturesPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\CMakeFlagsCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\ImportProjectCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\PlcNextCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\ProjectConfigWindowCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\SetTargetsCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogView.xaml.cs">
+      <DependentUpon>ImportDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\IncludesAndMacrosWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\OnDocSaveService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\SaveCMakeListsEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\UpdateIncludesDialogView.xaml.cs">
+      <DependentUpon>UpdateIncludesDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\UpdateIncludesViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorView.xaml.cs">
+      <DependentUpon>CMakeFlagsEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml.cs">
+      <DependentUpon>ProjectConfigWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml.cs">
+      <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\SolutionLoadService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\SolutionSaveService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\UndefClang.hpp" />
+  </ItemGroup>
+</Project>

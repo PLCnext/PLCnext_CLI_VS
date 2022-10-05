@@ -1,0 +1,98 @@
+﻿<platformui:DialogWindow x:Class="PlcncliTemplateWizards.NewProjectInformationDialog.NewProjectInformationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:local="clr-namespace:PlcncliTemplateWizards.NewProjectInformationDialog"
+             xmlns:y="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:plcncliCommonUtils="clr-namespace:PlcncliCommonUtils;assembly=PlcncliFeatures" 
+             xmlns:converter="clr-namespace:PlcncliCommonUtils.Converter;assembly=PlcncliFeatures"
+             d:DataContext="{d:DesignInstance Type=local:NewProjectInformationViewModel}"
+             mc:Ignorable="d"
+             Name="Window" Height="700" Width="600">
+    <Window.Title>Project Properties</Window.Title>
+    <Window.Style>
+        <Style>
+            <Setter Property="Window.Foreground" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+            <Setter Property="Window.Background" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+            <Setter Property="platformui:ThemedDialogStyleLoader.UseDefaultThemedDialogStyles" Value="True"/>
+        </Style>
+    </Window.Style>
+    <Window.Resources>
+        <CollectionViewSource x:Key="SortedTargets" Source="{Binding Targets}">
+            <CollectionViewSource.SortDescriptions>
+                <y:SortDescription PropertyName="Name"/>
+                <y:SortDescription PropertyName="Version" Direction="Descending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+        <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
+    </Window.Resources>
+    <Grid Margin="20"
+          FocusManager.FocusedElement="{Binding ElementName=OkButton}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Margin="0,0,0,40"
+                   Grid.Row="0"
+                   FontSize="33"
+                   Text="{Binding WindowTitle}"/>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1">
+        <Image Name="Errorimage"
+               Source="{Binding ErrorImage}"
+               Height="19"
+               Visibility="{Binding ErrorText, Converter={StaticResource TextToVisibilityConverter}}"/>
+        <TextBlock Text="{Binding ErrorText}" 
+                   Margin="10"/>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding ProjectNameProperties}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:KVP}">
+                    <StackPanel>
+                        <Label Padding="0"
+                               Margin="0,0,0,7"
+                               Content="{Binding Name}" 
+                               Target="{Binding ElementName=PropertyTextBox}"/>
+                        <TextBox Name="PropertyTextBox" 
+                                 Margin="0,0,0,14" 
+                                 Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" 
+                                 Height="35" 
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Label Grid.Row="3" 
+               Margin="0,0,0,7" 
+               Padding="0" 
+               Content="{Binding TargetListLabel}"/>
+
+        <ListBox Name="TargetsListBox" Grid.Row="4" ItemsSource="{Binding Source={StaticResource SortedTargets}}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type plcncliCommonUtils:TargetViewModel}">
+                    <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding Selected}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock Margin="0,11" Text="{Binding WarningMessage}" Grid.Row="5"/>
+        <Button Name="OkButton"
+                HorizontalAlignment="Right"
+                Grid.Row="6"
+                Command="{Binding OkButtonClickCommand}"
+                CommandParameter="{Binding ElementName=Window}"
+                Content="{Binding ButtonText}"
+                IsEnabled="{Binding ErrorText, Converter={StaticResource TextToBoolConverter}}"
+                />
+    </Grid>
+</platformui:DialogWindow>

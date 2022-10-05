@@ -46,13 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="PLCnextPLMTemplate.vcxproj" />
     <None Include="PLMProjectTemplate.ico" />
   </ItemGroup>

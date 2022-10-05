@@ -22,7 +22,7 @@
     <AssemblyName>PlcNextVSExtension</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
-    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
@@ -60,27 +60,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PlcNextVSExtension.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="..\SolutionFiles\PlcNextVSExtension.ico">
+      <Link>PlcNextVSExtension.ico</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>VSCPP</VSIXSubPath>
-    </Content>
-    <Content Include="ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
+    <Content Include="..\SolutionFiles\ProjectPropertyRules\PLCnextBuildPropertiesRule.xml">
+      <Link>ProjectPropertyRules\PLCnextBuildPropertiesRule.xml</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
+    <Content Include="..\SolutionFiles\ProjectPropertyRules\PLCnextCommonPropertiesRule.xml">
+      <Link>ProjectPropertyRules\PLCnextCommonPropertiesRule.xml</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="ProjectPropertyRules\PLCnCLI.targets">
+    <Content Include="..\SolutionFiles\ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml">
+      <Link>ProjectPropertyRules\PLCnextPLMGeneratePropertiesRule.xml</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
-    <Content Include="ProjectPropertyRules\PLCnCLIBuild.targets">
+    <Content Include="..\SolutionFiles\ProjectPropertyRules\PLCnCLI.targets">
+      <Link>ProjectPropertyRules\PLCnCLI.targets</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>VSCPP</VSIXSubPath>
+    </Content>
+    <Content Include="..\SolutionFiles\ProjectPropertyRules\PLCnCLIBuild.targets">
+      <Link>ProjectPropertyRules\PLCnCLIBuild.targets</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>VSCPP</VSIXSubPath>
     </Content>
@@ -135,12 +140,6 @@
       <Name>PlcncliServices</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\PlcncliTemplateWizards\PlcncliTemplateWizards.csproj">
-      <Project>{25CA7CAF-88D2-43B0-9FBF-EC89EC129E5F}</Project>
-      <Name>PlcncliTemplateWizards</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
     <ProjectReference Include="..\PLMProgramItemTemplate\PLMProgramItemTemplate.csproj">
       <Project>{BDB4D447-8081-4D1B-A4B1-39181BB78A22}</Project>
       <Name>PLMProgramItemTemplate</Name>
@@ -163,6 +162,21 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.VCProjectEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <Import Project="..\PlcNextVSExtensionShared\PlcNextVSExtensionShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKToolsPath)\..\Microsoft.VsSDK.targets" Condition="'$(VsSDKToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
