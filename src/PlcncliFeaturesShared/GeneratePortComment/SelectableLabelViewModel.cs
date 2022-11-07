@@ -12,11 +12,11 @@ using System.Runtime.CompilerServices;
 
 namespace PlcncliFeatures.GeneratePortComment
 {
-    public class PortAttributeViewModel : INotifyPropertyChanged
+    public class SelectableLabelViewModel : INotifyPropertyChanged
     {
         private bool selected = false;
 
-        public PortAttributeViewModel(string label, string description)
+        public SelectableLabelViewModel(string label, string description)
         {
             Label = label;
             Description = description;

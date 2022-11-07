@@ -4,7 +4,7 @@
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:local="clr-namespace:PlcncliFeatures.GeneratePortComment"
                           Width="520"
-                          Height="325"
+                          SizeToContent="Height"
                           Title="Generate Port Comments"
                           Name="PortCommentWindow">
     <Window.Style>
@@ -16,6 +16,8 @@
     </Window.Style>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -57,19 +59,34 @@
                Target="{Binding ElementName=AttributesListBox}"/>
         <ListBox Grid.Row="3"
                  Grid.ColumnSpan="2"
-                 Grid.RowSpan="2"
                  Margin="11,0,16,7"
                  ItemsSource="{Binding PortAttributes}"
                  Name="AttributesListBox">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:PortAttributeViewModel}">
+                <DataTemplate DataType="{x:Type local:SelectableLabelViewModel}">
                     <CheckBox Content="{Binding Label}" IsChecked="{Binding Selected}" ToolTip="{Binding Description}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Label Content="Use non-default IEC datatype:"
+               Grid.Row="4"
+               Grid.ColumnSpan="2"
+               Margin="11,11,16,5"/>
+        <ListBox Grid.Row="5"
+                 Grid.ColumnSpan="2"
+                 Grid.RowSpan="2"
+                 Margin="11,0,16,7"
+                 ItemsSource="{Binding IECTypeAttributes}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:SelectableLabelViewModel}">
+                    <CheckBox Content="{Binding Label}" IsChecked="{Binding Selected}" ToolTip="{Binding Description}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                    Grid.Column="2"
-                   Grid.RowSpan="5"/>
+                   Grid.RowSpan="7"/>
         <TextBlock Grid.Column="3"
                    Text="Preview"
                    HorizontalAlignment="Center"
@@ -85,12 +102,12 @@
         </StackPanel>
 
         <TextBlock Grid.Column="3"
-                   Grid.Row="4"
+                   Grid.Row="6"
                    Text="For more information visit www.plcnext.help"
                    TextWrapping="Wrap"
                    Margin="16,0,11,7"/>
 
-        <StackPanel Grid.Row="5"
+        <StackPanel Grid.Row="7"
                 Grid.Column="3"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal"

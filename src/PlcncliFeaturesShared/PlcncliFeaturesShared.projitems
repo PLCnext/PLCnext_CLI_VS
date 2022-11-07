@@ -81,7 +81,7 @@
       <DependentUpon>GeneratePortCommentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\GeneratePortCommentViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\PortAttributeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\SelectableLabelViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GeneratePortComment\PortCommentCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcncliFeaturesPackage.cs" />
