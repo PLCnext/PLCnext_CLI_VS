@@ -86,11 +86,21 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                 {
                     foreach (string path in model.SdkChangesCollector.SdksToRemove)
                     {
-                        Directory.Delete(path, true);
+                        try
+                        {
+                            Directory.Delete(path, true);
+                        }
+                        catch (DirectoryNotFoundException)
+                        {
+                            // do nothing
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message, "Error while trying to delete directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                 }
             }
-
 
             taskHandler.RegisterTask(Task.Run(async () =>
             {
