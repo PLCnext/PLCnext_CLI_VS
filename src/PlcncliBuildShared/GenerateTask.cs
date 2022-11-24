@@ -26,7 +26,7 @@ namespace PlcncliBuild
             string[] args =new string[]
             {
                 "-p",
-                ProjectDirectory
+                $"\"{ProjectDirectory}\""
             };
 
             if(GenerateDatatypesWorksheet == false)

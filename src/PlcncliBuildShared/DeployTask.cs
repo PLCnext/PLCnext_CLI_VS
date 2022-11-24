@@ -24,7 +24,7 @@ namespace PlcncliBuild
             string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
             string target = Configuration.Substring(buildType.Length);
 
-            IEnumerable<string> options = new[] { "-p", ProjectDirectory };
+            IEnumerable<string> options = new[] { "-p", $"\"{ProjectDirectory}\"" };
 
             if (!target.Contains("all Targets"))
             {
