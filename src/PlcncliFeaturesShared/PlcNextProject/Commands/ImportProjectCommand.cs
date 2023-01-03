@@ -342,14 +342,29 @@ namespace PlcncliFeatures.PlcNextProject.Commands
 
                         void SetIncludesAndMacros()
                         {
-                            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                            ProjectInformationCommandResult projectInformation = null;
+                            try
+                            {
+                                projectInformation = _plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
+                                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                            }
+                            catch (PlcncliException ex)
+                            {
+                                projectInformation = _plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                            }
 
-                            CompilerSpecificationCommandResult compilerSpecsCommandResult =
-                                _plcncliCommunication.ExecuteCommand(Constants.Command_get_compiler_specifications, null,
-                                        typeof(CompilerSpecificationCommandResult), Constants.Option_get_compiler_specifications_project, $"\"{projectDirectory}\"") as
-                                    CompilerSpecificationCommandResult;
-
+                            CompilerSpecificationCommandResult compilerSpecsCommandResult = null;
+                            try
+                            {
+                                compilerSpecsCommandResult =
+                                    _plcncliCommunication.ExecuteCommand(Constants.Command_get_compiler_specifications, null,
+                                            typeof(CompilerSpecificationCommandResult), Constants.Option_get_compiler_specifications_project, $"\"{projectDirectory}\"") as
+                                        CompilerSpecificationCommandResult;
+                            }
+                            catch (PlcncliException ex)
+                            {
+                                compilerSpecsCommandResult = _plcncliCommunication.ConvertToTypedCommandResult<CompilerSpecificationCommandResult>(ex.InfoMessages);
+                            }
                             VCProject vcProject = project.Object as VCProject;
                             ProjectIncludesManager.SetIncludesForNewProject(vcProject, compilerSpecsCommandResult, projectInformation);
                         }

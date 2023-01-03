@@ -229,6 +229,11 @@ namespace PlcncliFeatures.PlcNextProject.Commands
 
                         Solution solution = project.DTE.Solution;
                         string fileName = solution.FileName;
+                        if (string.IsNullOrEmpty(fileName))
+                        {
+                            solution.SaveAs(project.Name);
+                            fileName = solution.FileName;
+                        }
                         solution.Close(true);
                         solution.Open(fileName);
 
@@ -244,26 +249,32 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         {
                             foreach (TargetResult target in model.TargetsToAdd)
                             {
-                                cliCommunication.ExecuteCommand(Constants.Command_set_target, null, null,
-                                Constants.Option_set_target_add, Constants.Option_set_target_project,
-                                $"\"{projectDirectory}\"",
-                                Constants.Option_set_target_name, target.Name, Constants.Option_set_target_version,
-                                $"\"{target.LongVersion}\"");
+                                string[] args = new string[] { Constants.Option_set_target_add,
+                                    Constants.Option_set_target_project, $"\"{projectDirectory}\"",
+                                    Constants.Option_set_target_name, target.Name};
+                                if (!string.IsNullOrEmpty(target.LongVersion))
+                                {
+                                    args = args.Append(Constants.Option_set_target_version).Append($"\"{target.LongVersion}\"").ToArray();
+                                }
+                                _ = cliCommunication.ExecuteCommand(Constants.Command_set_target, null, null, args);
                             }
 
                             foreach (TargetResult target in model.TargetsToRemove)
                             {
-                                cliCommunication.ExecuteCommand(Constants.Command_set_target, null, null,
-                                    Constants.Option_set_target_remove, Constants.Option_set_target_project,
-                                    $"\"{projectDirectory}\"",
-                                    Constants.Option_set_target_name, target.Name, Constants.Option_set_target_version,
-                                    $"\"{target.LongVersion}\"");
+                                string[] args = new string[] { Constants.Option_set_target_remove,
+                                            Constants.Option_set_target_project, $"\"{projectDirectory}\"",
+                                            Constants.Option_set_target_name, target.Name};
+                                if (!string.IsNullOrEmpty(target.LongVersion))
+                                {
+                                    args = args.Append(Constants.Option_set_target_version).Append($"\"{target.LongVersion}\"").ToArray();
+                                }
+                                _ = cliCommunication.ExecuteCommand(Constants.Command_set_target, null, null, args);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message + ex.StackTrace ?? string.Empty, "Exception during setting of targets");
+                        _ = MessageBox.Show(ex.Message + ex.StackTrace ?? string.Empty, "Exception during setting of targets");
                         throw ex;
                     }
                 });
@@ -299,13 +310,19 @@ namespace PlcncliFeatures.PlcNextProject.Commands
 
                 bool ProjectIsDirty()
                 {
-                    if (project.IsDirty)
+                    if (!project.Saved)
+                    {
                         return true;
-                    if (project.DTE?.Solution?.IsDirty == true)
+                    }
+
+                    if (project.DTE?.Solution?.Saved == false)
+                    {
                         return true;
+                    }
+
                     foreach (ProjectItem item in project.ProjectItems)
                     {
-                        if (item?.IsDirty == true)
+                        if (item?.Saved == false)
                         {
                             return true;
                         }
