@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
 using PlcncliServices.CommandResults;
-using Task = System.Threading.Tasks.Task;
 
 namespace PlcncliServices.PLCnCLI
 {

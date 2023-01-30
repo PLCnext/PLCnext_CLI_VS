@@ -252,8 +252,8 @@ namespace PlcncliTemplateWizards
                         CompilerSpecificationCommandResult;
 
                 ProjectIncludesManager.SetIncludesForNewProject(p, compilerSpecsCommandResult, projectInformation);
-                    }
-                    }
+            }
+        }
 
 
         

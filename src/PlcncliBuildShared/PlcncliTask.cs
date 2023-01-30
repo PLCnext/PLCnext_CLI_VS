@@ -15,8 +15,10 @@ using Task = Microsoft.Build.Utilities.Task;
 
 namespace PlcncliBuild
 {
-    public abstract class PlcncliTask : Task 
+    public abstract class PlcncliTask : Task
     {
+        private string projectDirectory;
+
         protected PlcncliTask()
         {
             PlcncliLocation = Environment.GetEnvironmentVariable("plcncli_toollocation");
@@ -34,7 +36,14 @@ namespace PlcncliBuild
 
         internal IPlcncliCommunication Communication { get; }
 
-        public string ProjectDirectory { get; set; }
+        public string ProjectDirectory
+        {
+            get => projectDirectory; 
+            set
+            {
+                projectDirectory = value.TrimEnd('\\');
+            }
+        }
 
         public string AdditionalOptions { get; set; }
     }
