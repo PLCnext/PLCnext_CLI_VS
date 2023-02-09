@@ -41,15 +41,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlcncliServices\PlcncliServices.csproj">
-      <Project>{31F51E8C-C031-4BB5-9F4B-75452D136CCE}</Project>
-      <Name>PlcncliServices</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.202" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Management" />
+  </ItemGroup>
   <Import Project="..\PlcncliBuildShared\PlcncliBuildShared.projitems" Label="Shared" />
+  <Import Project="..\PlcncliCoreServicesShared\PlcncliCoreServicesShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -142,6 +142,7 @@
       <VSIXSubPath>VSCPP</VSIXSubPath>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PlcncliFeatures22\PlcncliFeatures22.csproj">
       <Project>{c9ccd5c3-4352-48e3-8ad6-a68d33d27365}</Project>

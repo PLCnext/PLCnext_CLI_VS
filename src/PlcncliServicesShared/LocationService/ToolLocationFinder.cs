@@ -25,7 +25,7 @@ namespace PlcncliServices.LocationService
                 return toolLocation;
             }
 
-            if (CheckPathVariable())
+            if (PathToolLocationFinder.CheckPathVariable(ref toolLocation))
             {
                 return toolLocation;
             }
@@ -39,32 +39,6 @@ namespace PlcncliServices.LocationService
                 {
                     toolLocation = Path.Combine(location, plcncliFileName);
                     return true;
-                }
-                return false;
-            }
-
-            bool CheckPathVariable()
-            {
-                string pathVariable = Environment.GetEnvironmentVariable("PATH");
-                if (pathVariable != null)
-                {
-                    string[] pathParts = pathVariable.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string path in pathParts)
-                    {
-                        DirectoryInfo fileInfo = new DirectoryInfo(path);
-                        if (fileInfo.Exists)
-                        {
-                            FileInfo[] files = fileInfo.GetFiles();
-                            foreach (FileInfo file in files)
-                            {
-                                if (file.Name.Equals(plcncliFileName))
-                                {
-                                    toolLocation = file.FullName;
-                                    return true;
-                                }
-                            }
-                        }
-                    }
                 }
                 return false;
             }

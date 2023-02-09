@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>640aa361-ff4a-482b-8303-d995f727c64a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PlcncliCoreServicesShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\CommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NamingConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IOutputReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IPlcncliCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\OutputCollector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PathPlcncliProcessCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PlcncliException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\ProcessFacade.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\SPlcncliCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ToolLocationFinder\PathToolLocationFinder.cs" />
+  </ItemGroup>
+</Project>

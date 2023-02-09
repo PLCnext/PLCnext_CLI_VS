@@ -24,13 +24,13 @@ namespace PlcncliBuild
             PlcncliLocation = Environment.GetEnvironmentVariable("plcncli_toollocation");
             if (string.IsNullOrEmpty(PlcncliLocation))
             {
-                PlcncliLocation = ToolLocationFinder.SearchPlcncliTool(null);
+                PlcncliLocation = PathToolLocationFinder.SearchPlcncliToolInPath();
                 if (string.IsNullOrEmpty(PlcncliLocation))
                 {
                     throw new ArgumentException($"{NamingConstants.ToolName} tool location could not be resolved.");
                 }
             }
-            Communication = new PlcncliProcessCommunication(null, PlcncliLocation);
+            Communication = new PathPlcncliProcessCommunication(PlcncliLocation);
         }
         internal string PlcncliLocation { get; }
 

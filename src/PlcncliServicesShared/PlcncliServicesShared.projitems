@@ -9,7 +9,6 @@
     <Import_RootNamespace>PlcncliServicesShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)CommandResults\CommandResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandResults\CompilerSpecificationCommandResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandResults\Path.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandResults\ProjectInformationCommandResult.cs" />
@@ -21,14 +20,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)LocationService\ToolLocationFinder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NamingConstants.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PlcncliServicePackage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IOutputReceiver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\IplcncliCommunication.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\OutputCollector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PlcncliException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\PlcncliProcessCommunication.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\ProcessFacade.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PLCnCLI\SPlcncliCommunication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcncliServicePackage.cs" />
   </ItemGroup>
 </Project>
