@@ -141,7 +141,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             else
             {
                 ExcludedFiles.Insert(0,selectAll);
-                if (ExcludedFiles.Count == libs.Count() + 1)
+                if (libs != null && ExcludedFiles.Count == libs.Count() + 1)
                 {
                     selectAll.SetSelected(true);
                 }
