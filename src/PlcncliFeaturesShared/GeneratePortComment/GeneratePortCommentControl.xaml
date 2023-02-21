@@ -74,15 +74,21 @@
                Margin="11,11,16,5"/>
         <ListBox Grid.Row="5"
                  Grid.ColumnSpan="2"
-                 Grid.RowSpan="2"
+                 Grid.RowSpan="1"
                  Margin="11,0,16,7"
                  ItemsSource="{Binding IECTypeAttributes}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:SelectableLabelViewModel}">
-                    <CheckBox Content="{Binding Label}" IsChecked="{Binding Selected}" ToolTip="{Binding Description}"/>
+                    <RadioButton Content="{Binding Label}" IsChecked="{Binding Selected}" ToolTip="{Binding Description}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button Grid.Row="6"
+                Grid.ColumnSpan="2"
+                Content="C_lear datatype selection"
+                Command="{Binding ClearSelectionCommand}"
+                Margin="11,0,11,7"
+                HorizontalAlignment="Left"/>
 
         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                    Grid.Column="2"

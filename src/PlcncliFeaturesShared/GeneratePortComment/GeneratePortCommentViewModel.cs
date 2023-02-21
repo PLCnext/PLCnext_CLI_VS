@@ -79,10 +79,10 @@ namespace PlcncliFeatures.GeneratePortComment
         {
             string leadingWhitespaces = string.Concat(Line.TakeWhile(c => char.IsWhiteSpace(c)));
             string part1 = Environment.NewLine + leadingWhitespaces + portComment;
-            string part2 = PortAttributes.Where(p => p.Selected).Any() 
+            string part3 = PortAttributes.Where(p => p.Selected).Any() 
                             ? Environment.NewLine + leadingWhitespaces + string.Format(attributesComment, string.Join("|", PortAttributes.Where(p => p.Selected).Select(p => p.Label)))
                             : string.Empty;
-            string part3 = string.IsNullOrWhiteSpace(Name)
+            string part2 = string.IsNullOrWhiteSpace(Name)
                             ? string.Empty
                             : Environment.NewLine + leadingWhitespaces + string.Format(nameComment, Name);
             string part4 = IECTypeAttributes.Where(x => x.Selected).Any()
@@ -122,6 +122,7 @@ namespace PlcncliFeatures.GeneratePortComment
 
         public ICommand OkCommand { get; } = new DelegateCommand<DialogWindow>(OnOkButtonClicked);
         public ICommand CancelCommand { get; } = new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
+        public ICommand ClearSelectionCommand => new DelegateCommand(OnClearSelectionButtonClicked);
 
         private static void OnOkButtonClicked(DialogWindow window)
         {
@@ -133,6 +134,15 @@ namespace PlcncliFeatures.GeneratePortComment
         {
             window.DialogResult = false;
             window.Close();
+        }
+
+        private void OnClearSelectionButtonClicked()
+        {
+            SelectableLabelViewModel selectedElement = IECTypeAttributes.Where(x => x.Selected).FirstOrDefault();
+            if (selectedElement != null)
+            {
+                selectedElement.Selected = false;
+            }
         }
         #endregion
 
