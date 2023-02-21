@@ -68,9 +68,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label Content="Use non-default IEC datatype:"
+        <Label Content="Overwrite IEC datatype:"
                Grid.Row="4"
                Grid.ColumnSpan="2"
+               Padding="0"
                Margin="11,11,16,5"/>
         <ListBox Grid.Row="5"
                  Grid.ColumnSpan="2"
