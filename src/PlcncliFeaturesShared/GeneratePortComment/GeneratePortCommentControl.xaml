@@ -68,14 +68,14 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label Content="Overwrite IEC datatype:"
+        <Label Content="IEC datatype mapping:"
                Grid.Row="4"
                Grid.ColumnSpan="2"
                Padding="0"
                Margin="11,11,16,5"/>
         <ListBox Grid.Row="5"
                  Grid.ColumnSpan="2"
-                 Grid.RowSpan="1"
+                 Grid.RowSpan="2"
                  Margin="11,0,16,7"
                  ItemsSource="{Binding IECTypeAttributes}">
             <ListBox.ItemTemplate>
@@ -84,12 +84,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="6"
-                Grid.ColumnSpan="2"
-                Content="C_lear datatype selection"
-                Command="{Binding ClearSelectionCommand}"
-                Margin="11,0,11,7"
-                HorizontalAlignment="Left"/>
 
         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                    Grid.Column="2"

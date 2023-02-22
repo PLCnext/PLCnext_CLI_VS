@@ -26,6 +26,7 @@ namespace PlcncliFeatures.GeneratePortComment
         private readonly string iecdatatypeComment = "//#iecdatatype({0})";
         private string preview;
         private string name;
+        private readonly string defaultButtonText = "Default";
 
         public GeneratePortCommentViewModel(string line)
         {
@@ -46,6 +47,7 @@ namespace PlcncliFeatures.GeneratePortComment
             }
             IECTypeAttributes = new Collection<SelectableLabelViewModel>()
             {
+                new SelectableLabelViewModel(defaultButtonText, "Use default datatype mapping"){ Selected = true},
                 new SelectableLabelViewModel("BYTE", "Use only for ports of type uint8"),
                 new SelectableLabelViewModel("WORD", "Use only for ports of type uint16"),
                 new SelectableLabelViewModel("DWORD", "Use only for ports of type uint32"),
@@ -69,10 +71,6 @@ namespace PlcncliFeatures.GeneratePortComment
                 }
                 UpdatePreview();
             }
-            if (!element.Selected && !IECTypeAttributes.Where(x => x.Selected).Any())
-            {
-                UpdatePreview();
-            }
         }
 
         private void UpdatePreview(object sender = null, PropertyChangedEventArgs e = null)
@@ -85,7 +83,7 @@ namespace PlcncliFeatures.GeneratePortComment
             string part2 = string.IsNullOrWhiteSpace(Name)
                             ? string.Empty
                             : Environment.NewLine + leadingWhitespaces + string.Format(nameComment, Name);
-            string part4 = IECTypeAttributes.Where(x => x.Selected).Any()
+            string part4 = IECTypeAttributes.Where(x => x.Selected && x.Label != defaultButtonText).Any()
                             ? Environment.NewLine + leadingWhitespaces + string.Format(iecdatatypeComment, IECTypeAttributes.Where(p => p.Selected).Select(p => p.Label).First())
                             : string.Empty;
             Preview = part1 + part2 + part3 + part4;
@@ -122,7 +120,6 @@ namespace PlcncliFeatures.GeneratePortComment
 
         public ICommand OkCommand { get; } = new DelegateCommand<DialogWindow>(OnOkButtonClicked);
         public ICommand CancelCommand { get; } = new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
-        public ICommand ClearSelectionCommand => new DelegateCommand(OnClearSelectionButtonClicked);
 
         private static void OnOkButtonClicked(DialogWindow window)
         {
@@ -134,15 +131,6 @@ namespace PlcncliFeatures.GeneratePortComment
         {
             window.DialogResult = false;
             window.Close();
-        }
-
-        private void OnClearSelectionButtonClicked()
-        {
-            SelectableLabelViewModel selectedElement = IECTypeAttributes.Where(x => x.Selected).FirstOrDefault();
-            if (selectedElement != null)
-            {
-                selectedElement.Selected = false;
-            }
         }
         #endregion
 
