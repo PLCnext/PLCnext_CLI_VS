@@ -2,8 +2,8 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="PlcNextVSExtension.aa798a7d-7803-4d0f-9426-ab21550c665e" Version="1.0" Language="en-US" Publisher="PHOENIX CONTACT GmbH &amp; Co. KG" />
-        <DisplayName>PLCnext Technology C++ Extension</DisplayName>
-        <Description xml:space="preserve">Extension for creating and building PLCnext Technology C++ projects with the help of the PLCnCLI.</Description>
+        <DisplayName>PLCnext Technology C++ Templates</DisplayName>
+        <Description xml:space="preserve">Extension for programming PLCnext Technology C++ projects.</Description>
         <License>PhoenixContactSoftwareLicenseTerms.txt</License>
         <Icon>PlcNextVSExtension.ico</Icon>
     </Metadata>
