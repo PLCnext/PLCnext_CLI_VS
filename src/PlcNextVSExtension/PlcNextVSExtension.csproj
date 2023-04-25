@@ -94,11 +94,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.202" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.4.1057" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.208" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.69" />
     <PackageReference Include="Microsoft.VSSDK.Vsixsigntool">
       <Version>16.2.29116.78</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.VCProjectEngine" Version="16.10.31320.204" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="16.10.31320.204" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">
@@ -165,16 +167,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.VCProjectEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <Import Project="..\PlcNextVSExtensionShared\PlcNextVSExtensionShared.projitems" Label="Shared" />
