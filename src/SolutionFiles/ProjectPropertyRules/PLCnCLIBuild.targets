@@ -23,7 +23,7 @@
     <BinDirectory>$(ProjectDir)bin</BinDirectory>
   </PropertyGroup>
 
-  <Target Name="CleanStepsPLCnext" AfterTargets="Clean">
+  <Target Name="CleanStepsPLCnext" AfterTargets="Clean" Condition="'$(PLCnCLIProjectType)' != 'snproject'">
     <RemoveDir Directories="$(IntermediateDirectory);$(BinDirectory)"/>
   </Target>
   
