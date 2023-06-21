@@ -162,7 +162,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     progress.Report(new ThreadedWaitDialogProgressData("Fetching external libraries..."));
 
                     result = plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, Path.GetDirectoryName(projectDirectory))
+                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, "\""+Path.GetDirectoryName(projectDirectory)+"\"")
                     as ProjectInformationCommandResult;
 
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
