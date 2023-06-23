@@ -210,8 +210,8 @@ namespace PlcncliFeatures.PlcNextProject
                         $" was created with an older version of the {PlcncliServices.NamingConstants.TechnologyName} C++ Extension and needs to be converted." +
                         " If the conversion is not done, the project load may fail."+Environment.NewLine+
                         Environment.NewLine+"Do you want to convert the project now?",
-                        "Necessary project conversion detected", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                        if (dialogResult == MessageBoxResult.OK)
+                        "Necessary project conversion detected", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (dialogResult == MessageBoxResult.Yes)
                         {
                             userDecision = true;
                             projectRootElement.Save();
