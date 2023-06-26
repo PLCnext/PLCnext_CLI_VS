@@ -72,10 +72,8 @@
                Grid.Row="4"
                Grid.ColumnSpan="2"
                Padding="0"
-               Margin="11,11,16,5"
-               Visibility="Collapsed"/>
+               Margin="11,11,16,5"/>
         <ListBox Grid.Row="5"
-                 Visibility="Collapsed"
                  Grid.ColumnSpan="2"
                  Grid.RowSpan="2"
                  Margin="11,0,16,7"
