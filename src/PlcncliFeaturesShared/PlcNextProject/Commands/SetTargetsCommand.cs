@@ -160,11 +160,7 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                             }
                             catch (PlcncliException ex)
                             {
-                                try
-                                {
-                                    projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
-                                }
-                                catch (PlcncliException) {}
+                                projectInformationBefore = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
                             }
 
                             includesBefore = projectInformationBefore?.IncludePaths.Select(x => x.PathValue);

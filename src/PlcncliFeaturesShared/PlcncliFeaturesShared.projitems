@@ -110,6 +110,8 @@
       <DependentUpon>ProjectConfigWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectFileProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml.cs">
       <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>
@@ -121,5 +123,11 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\UndefClang.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\Update.bat" />
   </ItemGroup>
 </Project>

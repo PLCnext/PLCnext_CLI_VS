@@ -34,6 +34,9 @@ namespace PlcncliServices.CommandResults
 
         [JsonProperty(PropertyName = "externalLibraries")]
         public IEnumerable<Path> ExternalLibraries { get; set; }
+
+        [JsonProperty(PropertyName = "generateNamespaces")]
+        public bool GenerateNamespaces { get; set; }
     }
 
     public class EntityResult

@@ -41,6 +41,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private readonly string excludedFilesElementName = "ExcludedFiles";
         private readonly string fileElementName = "File";
         private readonly string configFilePath;
+        private readonly string projectFilePath;
+        private readonly string projectFileName = "plcnext.proj";
         private DTE2 dte;
         private readonly LibViewModel selectAll;
 
@@ -75,55 +77,31 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             if (projectInformation != null)
             {
                 externalLibs = projectInformation.ExternalLibraries.Select(p => Path.GetFileName(p.PathValue));
+                GenerateNamespaces = projectInformation.GenerateNamespaces;
             }
 
             configFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), configFileName);
+            projectFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), projectFileName);
 
             IEnumerable<LibViewModel> libs = null;
             LoadFromFile();
-            void LoadFromFile()
-            {
-                if (File.Exists(configFilePath))
-                {
-                    try
-                    {
-                        XDocument document;
-                        using (FileStream stream = File.OpenRead(configFilePath))
-                        {
-                            document = XDocument.Load(stream);
-                        }
-                        XElement settings = document.Elements().FirstOrDefault();
-                        LibraryDescription = settings?.Elements(settings.GetDefaultNamespace() + libraryDescriptionElementName)
-                                                     .FirstOrDefault()
-                                                     ?.Value;
-                        LibraryVersion = settings?.Elements(settings.GetDefaultNamespace() + libraryVersionElementName)
-                                                 .FirstOrDefault()
-                                                 ?.Value;
-                        EngineerVersion = settings?.Elements(settings.GetDefaultNamespace() + engineerVersionElementName)
-                                                  .FirstOrDefault()
-                                                  ?.Value;
-                        libs = settings?.Elements(settings.GetDefaultNamespace() + excludedFilesElementName)
-                                .FirstOrDefault()
-                                ?.Elements(settings.GetDefaultNamespace() + fileElementName)
-                                .Select(e => new LibViewModel(this, e.Value, selected: true));
-
-                    }
-                    catch (Exception e)
-                    {
-                        _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
-                    }
-                }
-            }
             
             ExcludedFiles = libs != null
                                 ? new ObservableCollection<LibViewModel>(libs)
                                 : new ObservableCollection<LibViewModel>();
-
+            
+            
+            if (projectInformation.Type != Constants.ProjectType_PLM &&
+                projectInformation.Type != Constants.ProjectType_ACF)
+            {
+                ShowGenerateNamespaces = false;
+            }
             if (projectInformation.Type != Constants.ProjectType_PLM)
             {
                 ShowExcludedFiles = false;
                 return;
             }
+            
 
             foreach (string lib in externalLibs)
             {
@@ -168,6 +146,39 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 }, TimeSpan.FromMilliseconds(5));
                 return result;
+            }
+            void LoadFromFile()
+            {
+                if (File.Exists(configFilePath))
+                {
+                    try
+                    {
+                        XDocument document;
+                        using (FileStream stream = File.OpenRead(configFilePath))
+                        {
+                            document = XDocument.Load(stream);
+                        }
+                        XElement settings = document.Elements().FirstOrDefault();
+                        LibraryDescription = settings?.Elements(settings.GetDefaultNamespace() + libraryDescriptionElementName)
+                                                     .FirstOrDefault()
+                                                     ?.Value;
+                        LibraryVersion = settings?.Elements(settings.GetDefaultNamespace() + libraryVersionElementName)
+                                                 .FirstOrDefault()
+                                                 ?.Value;
+                        EngineerVersion = settings?.Elements(settings.GetDefaultNamespace() + engineerVersionElementName)
+                                                  .FirstOrDefault()
+                                                  ?.Value;
+                        libs = settings?.Elements(settings.GetDefaultNamespace() + excludedFilesElementName)
+                                .FirstOrDefault()
+                                ?.Elements(settings.GetDefaultNamespace() + fileElementName)
+                                .Select(e => new LibViewModel(this, e.Value, selected: true));
+
+                    }
+                    catch (Exception e)
+                    {
+                        _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
+                    }
+                }
             }
         }
 
@@ -241,6 +252,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         }
 
         private string errorText;
+        private bool generateNamespaces = true;
+
         public string ErrorText
         {
             get => errorText;
@@ -261,6 +274,18 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         public bool ShowExcludedFiles { get; private set; } = true;
         public bool EnableExcludedFiles { get; private set; } = true;
+
+        public bool ShowGenerateNamespaces { get; private set; } = true;
+
+        public bool GenerateNamespaces
+        {
+            get => generateNamespaces;
+            set
+            {
+                generateNamespaces = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
         #region Commands
 
@@ -291,6 +316,10 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 WriteFile(CreateFileContent());
                 window.Close();
             }
+
+            ProjectFileProvider projectProvider = new ProjectFileProvider(projectFilePath);
+            projectProvider.SetGenerateNamespaces(GenerateNamespaces);
+            projectProvider.WriteProjectFile();
 
             void WriteFile(XDocument document)
             {
