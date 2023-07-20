@@ -66,5 +66,6 @@ namespace PlcncliCommonUtils
         public const string ProjectType_ACF = "acfproject";
         public const string ProjectType_ConsumableLibrary = "consumablelibrary";
         public const string ProjectType_PLM = "project";
+        public const string ProjectType_SN = "snproject";
     }
 }

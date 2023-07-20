@@ -96,12 +96,22 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             {
                 ShowGenerateNamespaces = false;
             }
-            if (projectInformation.Type != Constants.ProjectType_PLM)
+            if (projectInformation.Type != Constants.ProjectType_PLM
+                && projectInformation.Type != Constants.ProjectType_SN)
             {
                 ShowExcludedFiles = false;
                 return;
             }
             
+
+            //project library itself can be selected as excluded file for shared native projects only
+            string projectLibraryName = $"lib{projectInformation.Name}.so";
+            LibViewModel projectLibrary = ExcludedFiles.Where(f => f.Name == projectLibraryName).FirstOrDefault();
+            if (projectInformation.Type == Constants.ProjectType_SN && projectLibrary == null)
+            {
+                projectLibrary = new LibViewModel(this, projectLibraryName);
+                ExcludedFiles.Add(projectLibrary);
+            }
 
             foreach (string lib in externalLibs)
             {
@@ -125,7 +135,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 }
             }
 
-            foreach (LibViewModel lib in ExcludedFiles.Where(f => !externalLibs.Contains(f.Name) && f != selectAll))
+            foreach (LibViewModel lib in ExcludedFiles.Where(f => !externalLibs.Contains(f.Name) && f != selectAll && f != projectLibrary))
             {
                 lib.SetInvalid();
             }
