@@ -21,9 +21,9 @@ namespace PlcncliCommonUtils
         internal const string debugConfigurationNameRaw = "Debug {0}";
         const string targetBuildConfigName = "Project-specific";
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD010:Invoke single-threaded types on Main thread", Justification = "Handled in calling method")]
         private static void CreateConfigurationsForTarget(string target, Project project)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             //*****create release and debug project configuration*****
             string releaseConfigurationName = string.Format(releaseConfigurationNameRaw, target);
             string debugConfigurationName = string.Format(debugConfigurationNameRaw, target);

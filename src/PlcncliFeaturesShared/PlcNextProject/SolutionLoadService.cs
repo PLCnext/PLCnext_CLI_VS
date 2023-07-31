@@ -197,9 +197,18 @@ namespace PlcncliFeatures.PlcNextProject
                     ProjectImportElement updatedTargetsImport = null;
                     if (plcncliTargetsImport != null)
                     {
+                        ProjectElement sibling = plcncliTargetsImport.PreviousSibling;
                         projectRootElement.RemoveChild(plcncliTargetsImport);
                         updatedTargetsImport = projectRootElement.CreateImportElement(updatedTargetsImportText);
-                        projectRootElement.AppendChild(updatedTargetsImport);
+                        updatedTargetsImport.Condition = plcncliTargetsImport.Condition;
+                        if(sibling != null)
+                        {
+                            projectRootElement.InsertAfterChild(updatedTargetsImport, sibling);
+                        }
+                        else
+                        {
+                            projectRootElement.AppendChild(updatedTargetsImport);
+                        }
                     }
 
                     ProjectIncludesManager.AddTargetsFileToOldProjects(projectRootElement);

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using PlcncliCommonUtils;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
@@ -84,9 +85,16 @@ namespace PlcncliTemplateWizards.NewProjectInformationDialog
 
         public void UpdateTargets()
         {
-            if (_plcncliCommunication.ExecuteCommand(Constants.Command_get_targets, null, typeof(TargetsCommandResult)) is TargetsCommandResult result)
+            try
             {
-                AllTargets = result.Targets;
+                if (_plcncliCommunication.ExecuteCommand(Constants.Command_get_targets, null, typeof(TargetsCommandResult)) is TargetsCommandResult result)
+                {
+                    AllTargets = result.Targets;
+                }
+            }catch(PlcncliException e)
+            {
+                MessageBox.Show(e.Message, "Error while trying to fetch targets", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw e;
             }
         }
     }
