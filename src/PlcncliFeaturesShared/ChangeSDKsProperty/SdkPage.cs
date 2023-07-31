@@ -118,7 +118,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
+                            ShowMessage(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);
@@ -139,7 +139,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
+                            ShowMessage(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);
@@ -159,7 +159,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                         }
                         catch (PlcncliException e)
                         {
-                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
+                            ShowMessage(e.Message, $"{NamingConstants.ToolName} error");
                         }
                     });
                     subTaskHandler.RegisterTask(task);
@@ -170,6 +170,11 @@ namespace PlcncliFeatures.ChangeSDKsProperty
             if(model.SdkChangesCollector.SdksToInstall.Count > 0)
                 MessageBox.Show("Installing sdks in background. This may take a while. New sdks are available after background task has finished." +
                     " Check lower left corner for active background tasks.", "Background installation started", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static void ShowMessage(string title, string message)
+        {
+            MessageBox.Show(message, title);
         }
     }
 }
