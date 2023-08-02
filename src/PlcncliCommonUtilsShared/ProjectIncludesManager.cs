@@ -349,6 +349,11 @@ namespace PlcncliCommonUtils
                 catch (PlcncliException ex)
                 {
                     projectInformationAfter = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                    if (projectInformationAfter == null)
+                    {
+                        MessageBox.Show("The following problem occured during execution of get project-information.\n" +
+                                        "Includes might not be updated correctly.\n Please resolve the problem and update includes again.\n"+ex.Message, "Problem during fetching of project information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
                 try
                 {
