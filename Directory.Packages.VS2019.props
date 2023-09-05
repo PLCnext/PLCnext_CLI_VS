@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Build" Version="[16.11.0]" />
+    <PackageVersion Include="Microsoft.Build.Locator" Version="[1.6.1]" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="[16.11.0]" />
+    <PackageVersion Include="Microsoft.VisualStudio.SDK" Version="[16.0.208]" />
+    <PackageVersion Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="[16.10.31320.204]" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="[16.3.59]" />
+    <PackageVersion Include="Microsoft.VisualStudio.VCProjectEngine" Version="[16.10.31320.204]" />    
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="[16.11.69]" />
+    <PackageVersion Include="Microsoft.VSSDK.Vsixsigntool" Version="[16.2.29116.78]" />
+   </ItemGroup>
+</Project>
