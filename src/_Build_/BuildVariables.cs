@@ -10,7 +10,7 @@
 internal static class BuildVariables
 {
     internal const string AssemblyTrademark = "PHOENIX CONTACT GmbH & Co. KG";
-    internal const string AssemblyCopyright = "Copyright � PHOENIX CONTACT GmbH & Co. KG 2022";
+    internal const string AssemblyCopyright = "Copyright � 2023 PHOENIX CONTACT GmbH & Co. KG";
     internal const string AssemblyCompany = "PHOENIX CONTACT GmbH & Co. KG";
     internal const string AssemblyDescription_PlcncliFeatures = "Contains VSPackage for PLCnext C++ Visual Studio Extension";
     internal const string AssemblyDescription_PlcncliFeatures22 = "Contains VSPackage for PLCnext C++ Visual Studio Extension for VS2022";
