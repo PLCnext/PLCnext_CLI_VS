@@ -29,4 +29,8 @@
   
   <!-- Fix for Designtimebuild failure -->
   <Target Name="_ResolveWSLTarget" />
+
+  <!-- Import customer specific settings/targets -->
+  <Import Project="PLCnextUserImports\*.props" />
+  <Import Project="PLCnextUserImports\*.targets" />
 </Project>
