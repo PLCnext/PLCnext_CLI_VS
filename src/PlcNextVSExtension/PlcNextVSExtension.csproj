@@ -95,12 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.208" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.69" />
-    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool">
-      <Version>16.2.29116.78</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.VCProjectEngine" Version="16.10.31320.204" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="16.10.31320.204" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.69" />
+    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" Version="16.2.29116.78" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">

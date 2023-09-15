@@ -71,15 +71,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool">
-      <Version>16.2.29116.78</Version>
-    </PackageReference>
     <Reference Include="Microsoft.CSharp" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime" />
     <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface">
       <Private>False</Private>
     </Reference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -87,6 +82,11 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
+    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" Version="16.2.29116.78" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\PlcNextCli\Setups\Tools\PhoenixContactSoftwareLicenseTerms.txt">
