@@ -30,6 +30,8 @@
     <StartAction>Program</StartAction>
     <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
     <StartArguments>/rootsuffix Exp</StartArguments>
+    <DirectoryPackagesPropsPath>..\..\Directory.Packages.VS2019.props</DirectoryPackagesPropsPath>
+    <ImportDirectoryPackagesProps>false</ImportDirectoryPackagesProps>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,11 +96,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.208" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VisualStudio.VCProjectEngine" Version="16.10.31320.204" />
-    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="16.10.31320.204" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.69" />
-    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" Version="16.2.29116.78" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VisualStudio.VCProjectEngine" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" />
+    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">
@@ -177,6 +179,7 @@
   <Import Project="..\PlcNextVSExtensionShared\PlcNextVSExtensionShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKToolsPath)\..\Microsoft.VsSDK.targets" Condition="'$(VsSDKToolsPath)' != ''" />
+  <Import Project="$(DirectoryPackagesPropsPath)"/>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

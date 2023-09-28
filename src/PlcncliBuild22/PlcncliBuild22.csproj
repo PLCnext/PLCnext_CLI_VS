@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <DirectoryPackagesPropsPath>..\..\Directory.Packages.VS2022.props</DirectoryPackagesPropsPath>
+    <ImportDirectoryPackagesProps>false</ImportDirectoryPackagesProps>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,8 +44,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -53,4 +55,5 @@
   <Import Project="..\PlcncliBuildShared\PlcncliBuildShared.projitems" Label="Shared" />
   <Import Project="..\PlcncliCoreServicesShared\PlcncliCoreServicesShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(DirectoryPackagesPropsPath)"/>
 </Project>
