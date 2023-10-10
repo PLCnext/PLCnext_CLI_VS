@@ -141,16 +141,16 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                 ProjectInformationCommandResult projectInformationAfter = null;
                 
 
-                IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
-                ITaskHandler taskHandler = taskCenter.PreRegister(
-                    new TaskHandlerOptions() { Title = $"Setting project targets" },
-                    new TaskProgressData());
-                Task task = Task.Run(async () =>
+                ThreadHelper.JoinableTaskFactory.Run(
+                    "Setting project targets",
+                    async (progress) =>
                 {
                     try
                     {
                         if (needProjectInformation)
                         {
+                            progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
+
                             ProjectInformationCommandResult projectInformationBefore = null;
                             try
                             {
@@ -172,6 +172,8 @@ namespace PlcncliFeatures.PlcNextProject.Commands
 
                         if (needCompilerInformation)
                         {
+                            progress.Report(new ThreadedWaitDialogProgressData("Fetching compiler information."));
+
                             CompilerSpecificationCommandResult compilerSpecsBefore = null;
                             try
                             {
@@ -186,9 +188,12 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                             macrosBefore = compilerSpecsBefore?.Specifications.FirstOrDefault()
                                 ?.CompilerMacros.Where(m => !m.Name.StartsWith("__has_include(")) ?? Enumerable.Empty<CompilerMacroResult>();
                         }
+                        
+                        progress.Report(new ThreadedWaitDialogProgressData("Setting targets."));
 
                         SetTargets();
 
+                        progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
                         try
                         {
                             projectInformationAfter = cliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
@@ -199,6 +204,8 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         {
                             projectInformationAfter = cliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
                         }
+
+                        progress.Report(new ThreadedWaitDialogProgressData("Fetching compiler information."));
                         try
                         {
                             compilerSpecsAfter = cliCommunication.ExecuteCommand(Constants.Command_get_compiler_specifications, null,
@@ -212,13 +219,16 @@ namespace PlcncliFeatures.PlcNextProject.Commands
 
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
+                        progress.Report(new ThreadedWaitDialogProgressData("Create configurations."));
                         ProjectConfigurationManager.CreateConfigurationsForAllProjectTargets
                             (projectInformationAfter?.Targets.Select(t => t.GetNameFormattedForCommandLine()), project);
 
 
+                        progress.Report(new ThreadedWaitDialogProgressData("Update includes."));
                         ProjectIncludesManager.UpdateIncludesAndMacrosForExistingProject(p, macrosBefore, 
                                                 compilerSpecsAfter, includesBefore, projectInformationAfter);
 
+                        progress.Report(new ThreadedWaitDialogProgressData("Reloading project."));
                         p.SaveUserFile();
                         p.Save();
                         p.LoadUserFile();
@@ -232,14 +242,6 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         }
                         solution.Close(true);
                         solution.Open(fileName);
-
-                        //IVsSolution solution = await package.GetServiceAsync(typeof(SVsSolution)) as IVsSolution;
-                        //string solutionFile;
-                        //solution.GetSolutionInfo(out _, out solutionFile, out _);
-                        //if (solution?.CloseSolutionElement((int)__VSSLNSAVEOPTIONS.SLNSAVEOPT_SaveIfDirty, null, 0) == VSConstants.S_OK)
-                        //{
-                        //    solution.OpenSolutionFile(0, solutionFile);
-                        //}
 
                         void SetTargets()
                         {
@@ -274,12 +276,12 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         throw ex;
                     }
                 });
-                taskHandler.RegisterTask(task);
 
+                IVsTaskStatusCenterService taskCenter = Package.GetGlobalService(typeof(SVsTaskStatusCenterService)) as IVsTaskStatusCenterService;
                 taskCenter.PreRegister(
                     new TaskHandlerOptions() { Title = $"Updating intellisense" },
                     new TaskProgressData())
-                    .RegisterTask(task.ContinueWith(async t =>
+                    .RegisterTask(Task.Run(async () =>
                     {
                         try
                         {
@@ -302,7 +304,7 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                                 "Rescanning solution automatically failed. Please rescan solution manually (Project -> Rescan Solution )", "Exception during solution scanning");
                             throw ex;
                         }
-                    }, TaskScheduler.Default));
+                    }));
 
                 bool ProjectIsDirty()
                 {
