@@ -14,6 +14,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliCommonUtils;
+using PlcncliServices.PLCnCLI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -67,7 +68,7 @@ namespace PlcncliFeatures.PlcNextProject
                                                                                null, null, vcProject);
                         vcProject.Save();
                         vcProject.SaveUserFile();
-                        
+
                         //string solutionFile;
                         //solution.GetSolutionInfo(out _, out solutionFile, out _);
                         //if (solution?.CloseSolutionElement((int)__VSSLNSAVEOPTIONS.SLNSAVEOPT_SaveIfDirty, null, 0) == VSConstants.S_OK)
@@ -152,7 +153,7 @@ namespace PlcncliFeatures.PlcNextProject
         {
             return VSConstants.S_OK;
         }
-#endregion
+        #endregion
 
         public void OnBeforeOpenProject(ref Guid guidProjectID, ref Guid guidProjectType, string pszFileName)
         {
@@ -160,10 +161,38 @@ namespace PlcncliFeatures.PlcNextProject
             if (File.Exists(projectFilePath))
             {
                 string fileContent = File.ReadAllText(projectFilePath);
-                
+
                 if (fileContent.Contains(Constants.PLCnCLIProjectType))
                 {
                     ProjectRootElement projectRootElement = ProjectRootElement.Open(projectFilePath);
+
+                    //check for projectversion
+                    ICollection<ProjectPropertyElement> properties = projectRootElement.Properties;
+                    ProjectPropertyElement projectVersionProperty = properties?.Where(p => p.Name == Constants.PLCnCLIProjectVersion).FirstOrDefault();
+
+                    if (projectVersionProperty != null && int.TryParse(projectVersionProperty.Value, out int projectVersion))
+                    {
+                        if (projectVersion > Constants.PLCnCLIExtensionVersion)
+                        {
+                            MessageBox.Show("The project was created with a newer version of the PLCnext Technology Extension. Please update the extension.",
+                                "Project problem detected ", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                    }
+
+                    //check projectversion is compatible to PLCnCLI
+                    IPlcncliCommunication cliCommunication = Package.GetGlobalService(typeof(SPlcncliCommunication)) as IPlcncliCommunication;
+                    try
+                    {
+                        cliCommunication.ExecuteWithoutResult(Constants.Command_check_project, null,
+                            Constants.Option_check_project_project, Path.GetDirectoryName(projectFilePath));
+                    }
+                    catch (PlcncliException ex)
+                    {
+                        MessageBox.Show(ex.Message, "Project problem detected ", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
 
                     //remove direct import of propertiesrulefile (version 20.6 projects)
                     ICollection<ProjectItemGroupElement> itemGroups = projectRootElement.ItemGroups;
@@ -171,10 +200,8 @@ namespace PlcncliFeatures.PlcNextProject
                               .Where(item => item.Include != null && item.Include.Equals(
                                         "$(MSBuildExtensionsPath)\\PHOENIX CONTACT\\PropertyRules\\PLCnextCommonPropertiesRule.xml"))
                               .FirstOrDefault();
-                    if (projectItem != null)
-                    {
-                        projectItem.Parent.RemoveChild(projectItem);
-                    }
+                    projectItem?.Parent.RemoveChild(projectItem);
+
 
                     //change path to plcncli.targets file
                     //<Import Project="$(MSBuildExtensionsPath)/PHOENIX CONTACT/PLCnCLI.targets" />
@@ -201,7 +228,7 @@ namespace PlcncliFeatures.PlcNextProject
                         projectRootElement.RemoveChild(plcncliTargetsImport);
                         updatedTargetsImport = projectRootElement.CreateImportElement(updatedTargetsImportText);
                         updatedTargetsImport.Condition = plcncliTargetsImport.Condition;
-                        if(sibling != null)
+                        if (sibling != null)
                         {
                             projectRootElement.InsertAfterChild(updatedTargetsImport, sibling);
                         }
@@ -217,8 +244,8 @@ namespace PlcncliFeatures.PlcNextProject
                     {
                         MessageBoxResult dialogResult = MessageBox.Show($"The project {Path.GetFileNameWithoutExtension(projectFilePath)}" +
                         $" was created with an older version of the {PlcncliServices.NamingConstants.TechnologyName} C++ Extension and needs to be converted." +
-                        " If the conversion is not done, the project load may fail."+Environment.NewLine+
-                        Environment.NewLine+"Do you want to convert the project now?",
+                        " If the conversion is not done, the project load may fail." + Environment.NewLine +
+                        Environment.NewLine + "Do you want to convert the project now?",
                         "Necessary project conversion detected", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (dialogResult == MessageBoxResult.Yes)
                         {

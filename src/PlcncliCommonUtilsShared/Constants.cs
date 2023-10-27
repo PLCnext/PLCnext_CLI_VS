@@ -17,6 +17,8 @@ namespace PlcncliCommonUtils
 
         }
         public const string PLCnCLIProjectType = "PLCnCLIProjectType";
+        public const string PLCnCLIProjectVersion = "PLCnCLIProjectVersion";
+        public const int PLCnCLIExtensionVersion = 2;
 
         // PLCnextCommonPropertiesRule
         public const string PLCnextIncludesKey = "PLCnCLIIncludes";
@@ -30,6 +32,7 @@ namespace PlcncliCommonUtils
         public const string CLRuleName = "CL";
 
         //PLCnCLI
+        public const string Command_check_project = "check-project";
         public const string Command_generate_code = "generate code";
         public const string Command_get_compiler_specifications = "get compiler-specifications";
         public const string Command_get_project_information = "get project-information";
@@ -63,6 +66,7 @@ namespace PlcncliCommonUtils
         public const string Option_set_target_project = "-p";
         public const string Option_set_target_remove = "-r";
         public const string Option_set_target_version = "-v";
+        public const string Option_check_project_project = "-p";
         public const string ProjectType_ACF = "acfproject";
         public const string ProjectType_ConsumableLibrary = "consumablelibrary";
         public const string ProjectType_PLM = "project";

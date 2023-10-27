@@ -47,7 +47,8 @@
 	</ItemDefinitionGroup>
 	<PropertyGroup>
 		<PLCnCLIProjectType>consumablelibrary</PLCnCLIProjectType>
-	</PropertyGroup>
+    <PLCnCLIProjectVersion>2</PLCnCLIProjectVersion>
+  </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'">
 		<IncludePath>$(PLCnCLIIncludes)</IncludePath>
 	</PropertyGroup>

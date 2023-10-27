@@ -22,7 +22,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
-using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 using Task = System.Threading.Tasks.Task;
 using Constants = PlcncliCommonUtils.Constants;
