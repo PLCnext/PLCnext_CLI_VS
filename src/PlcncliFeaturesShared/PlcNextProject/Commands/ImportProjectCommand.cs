@@ -140,6 +140,12 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                     {
                         string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
+                        progress.Report(new ThreadedWaitDialogProgressData("Checking project version."));
+                        if (!CheckProject())
+                        {
+                            return;
+                        }
+
                         progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
                         ProjectInformationCommandResult projectInformation = await GetProjectInformation();
                         if (projectInformation == null)
@@ -169,6 +175,22 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                             return true;
                         }
                         return false;
+                    }
+
+                    bool CheckProject()
+                    {
+                        //check projectversion is compatible to PLCnCLI
+                        try
+                        {
+                            _plcncliCommunication.ExecuteWithoutResult(Constants.Command_check_project, null,
+                                Constants.Option_check_project_project, $"\"{Path.GetDirectoryName(projectFilePath)}\"");
+                            return true; 
+                        }
+                        catch (PlcncliException ex)
+                        {
+                            MessageBox.Show(ex.Message, "Project problem detected ", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return false;
+                        }
                     }
 
                     async Task<ProjectInformationCommandResult> GetProjectInformation()
