@@ -21,8 +21,7 @@ namespace PlcncliCommonUtils
 {
     public static class ProjectIncludesManager
     {
-        //private static Regex ConfigurationNameRegex = new Regex(@"^(Release|Debug) (?<name>.*),(?<version>.*)$", RegexOptions.Compiled);
-
+        
         public static TargetResult MinTarget(this IEnumerable<TargetResult> targets)
         {
             if (!targets.Any())
@@ -40,32 +39,6 @@ namespace PlcncliCommonUtils
             });
         }
 
-        //public static (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes)
-        //    FindMacrosAndIncludesForConfiguration(CompilerSpecificationCommandResult compilerSpecsCommandResult,
-        //                                   ProjectInformationCommandResult projectInformation, string configurationName)
-        //{
-        //    Match match = ConfigurationNameRegex.Match(configurationName);
-        //    if (match.Success)
-        //    {
-        //        string targetName = match.Groups["name"].Value;
-        //        string targetVersion = match.Groups["version"].Value;
-
-        //        TargetResult target = projectInformation?.Targets
-        //                                                 .Where(t => t.Name == targetName &&
-        //                                                             t.LongVersion == targetVersion)
-        //                                                 .FirstOrDefault();
-        //        if (target != null)
-        //        {
-        //            IEnumerable<CompilerMacroResult> macros = GetMacrosForTarget(target, compilerSpecsCommandResult);
-
-        //            IEnumerable<string> includes = GetIncludesForTarget(target, projectInformation);
-
-        //            return (macros, includes);
-        //        }
-        //    }
-
-        //    return FindMacrosAndIncludesForMinTarget(compilerSpecsCommandResult, projectInformation);
-        //}
 
         public static (IEnumerable<CompilerMacroResult> macros, IEnumerable<string> includes) 
             FindMacrosAndIncludesForMinTarget(CompilerSpecificationCommandResult compilerSpecsCommandResult,
@@ -88,14 +61,15 @@ namespace PlcncliCommonUtils
             return (macros, includes);
         }
 
-        public static TargetResult FindMinTargetForMacros(CompilerSpecificationCommandResult compilerSpecsCommandResult)
+        #region private methods
+        private static TargetResult FindMinTargetForMacros(CompilerSpecificationCommandResult compilerSpecsCommandResult)
         {
             return compilerSpecsCommandResult?.Specifications
                                               .SelectMany(x => x.Targets)
                                               .MinTarget();
         }
 
-        public static TargetResult FindMinTargetForIncludes(ProjectInformationCommandResult projectInformation)
+        private static TargetResult FindMinTargetForIncludes(ProjectInformationCommandResult projectInformation)
         {
             return projectInformation?.Targets
                                       .Where(t => t.Available == true)
@@ -125,7 +99,7 @@ namespace PlcncliCommonUtils
                                               ?.CompilerMacros
                                               .Where(m => !m.Name.StartsWith("__has_include("));
         }
-
+        #endregion
         public static (bool includesSaved, bool macrosSaved)  CheckSavedIncludesAndMacros(VCProject p)
         {
             bool includesSaved = true;
@@ -183,19 +157,7 @@ namespace PlcncliCommonUtils
 
                 plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextMacrosKey, joinedMacros);
                 plcnextCommonPropertiesRule.SetPropertyValue(Constants.PLCnextIncludesKey, joinedIncludes);
-
-                
             }
-        }
-
-        public static void AddTargetsFileToOldProjects(VCProject vcProject)
-        {
-            string projectFilePath = vcProject.ProjectFile;
-            ProjectRootElement projectRootElement = ProjectRootElement.Open(projectFilePath);
-            AddTargetsFileToOldProjects(projectRootElement);
-            MessageBox.Show("The project file needs to be updated outside of the environment. Please choose 'Reload all...' in the next dialog.",
-                            "Project update needed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            projectRootElement.Save();
         }
 
         public static void AddTargetsFileToOldProjects(ProjectRootElement projectRootElement)

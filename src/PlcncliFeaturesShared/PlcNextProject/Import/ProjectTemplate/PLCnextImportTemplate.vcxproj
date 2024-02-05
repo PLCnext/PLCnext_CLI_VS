@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug - all Targets|x86">
       <Configuration>Debug - all Targets</Configuration>
@@ -21,12 +21,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
-	{$additionalproperties$}
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
-	{$additionalproperties$}
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -45,12 +43,13 @@
   </ItemDefinitionGroup>
   <PropertyGroup>
     <PLCnCLIProjectType>{$projecttype$}</PLCnCLIProjectType>
+    <PLCnCLIProjectVersion>2</PLCnCLIProjectVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - all Targets|x86'">
-	<IncludePath>$(PLCnCLIIncludes)</IncludePath>
+	  <IncludePath>$(PLCnCLIIncludes)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - all Targets|x86'">
-	<IncludePath>$(PLCnCLIIncludes)</IncludePath>
+	  <IncludePath>$(PLCnCLIIncludes)</IncludePath>
   </PropertyGroup>
   <ImportGroup Label="ExtensionTargets" />
   <Import Project="$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/{$targetsfilename$}" />

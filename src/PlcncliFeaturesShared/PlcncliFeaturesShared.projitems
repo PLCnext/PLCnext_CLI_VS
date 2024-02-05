@@ -6,7 +6,7 @@
     <SharedGUID>f5b5a57a-7d09-452f-b7bd-a2b60b39a339</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>PlcncliFeaturesShared</Import_RootNamespace>
+    <Import_RootNamespace>PlcncliFeatures</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\AddSdkDialog.xaml">
@@ -95,6 +95,8 @@
       <DependentUpon>ImportDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\Importer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\IProjectTypeImporter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\IncludesAndMacrosWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\OnDocSaveService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\OnDocSaveService\SaveCMakeListsEventHandler.cs" />
@@ -125,6 +127,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\UndefClang.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\SNLtemplate.vcxproj" />
     <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.xsd">
       <SubType>Designer</SubType>
     </None>
