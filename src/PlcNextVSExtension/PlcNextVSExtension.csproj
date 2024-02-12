@@ -103,6 +103,7 @@
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
     <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACFProjectTemplate\ACFProjectTemplate.csproj">
@@ -182,6 +183,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VsSDKToolsPath)\..\Microsoft.VsSDK.targets" Condition="'$(VsSDKToolsPath)' != ''" />
   <Import Project="$(DirectoryPackagesPropsPath)" />
+
+  <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
+    <ItemGroup>
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Newtonsoft.Json'" />
+    </ItemGroup>
+  </Target>
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
