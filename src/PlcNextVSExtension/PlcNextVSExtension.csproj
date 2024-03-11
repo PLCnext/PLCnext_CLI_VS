@@ -170,7 +170,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\PlcNextCli\Setups\Tools\PhoenixContactSoftwareLicenseTerms.txt">
+    <Content Include="..\_Build_\PhoenixContactSoftwareLicenseTerms.txt">
       <Link>PhoenixContactSoftwareLicenseTerms.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
