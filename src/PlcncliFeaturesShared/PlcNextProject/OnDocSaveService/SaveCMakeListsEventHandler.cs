@@ -162,6 +162,7 @@ namespace PlcncliFeatures.PlcNextProject.OnDocSaveService
 
         private void UpdateIncludesOnBeforeSave(VCProject p, string projectDirectory)
         {
+            projectDirectory = projectDirectory.TrimEnd('\\');
             var (includesSaved, macrosSaved) = ProjectIncludesManager.CheckSavedIncludesAndMacros(p);
             IEnumerable<string> includesBefore = null;
             IEnumerable<CompilerMacroResult> macrosBefore = null;
@@ -180,9 +181,15 @@ namespace PlcncliFeatures.PlcNextProject.OnDocSaveService
                             ProjectInformationCommandResult projectInformationBefore = null;
                             try
                             {
-                                projectInformationBefore = cliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project,
-                                $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                                projectInformationBefore = cliCommunication.ExecuteCommand(
+                                    Constants.Command_get_project_information, 
+                                    null,
+                                    typeof(ProjectInformationCommandResult),
+                                    Constants.Option_get_project_information_project,
+                                    $"\"{projectDirectory}\"",
+                                    Constants.Option_get_project_information_buildtype,
+                                    p.ActiveConfiguration?.ConfigurationName?.StartsWith("Debug", StringComparison.OrdinalIgnoreCase) == true ? "Debug" : "Release"
+                                ) as ProjectInformationCommandResult;
                             }
                             catch (PlcncliException ex)
                             {

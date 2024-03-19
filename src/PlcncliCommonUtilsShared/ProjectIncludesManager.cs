@@ -304,9 +304,14 @@ namespace PlcncliCommonUtils
                 try
                 {
                     progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
-                    projectInformationAfter = cliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project,
-                    $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                    projectInformationAfter = cliCommunication.ExecuteCommand(
+                        Constants.Command_get_project_information, 
+                        null,
+                        typeof(ProjectInformationCommandResult), 
+                        Constants.Option_get_project_information_project, $"\"{projectDirectory.TrimEnd('\\')}\"", 
+                        Constants.Option_get_project_information_buildtype, 
+                        vcProject.ActiveConfiguration?.ConfigurationName?.StartsWith("Debug") == true ? "Debug" : "Release"
+                            ) as ProjectInformationCommandResult;
                 }
                 catch (PlcncliException ex)
                 {

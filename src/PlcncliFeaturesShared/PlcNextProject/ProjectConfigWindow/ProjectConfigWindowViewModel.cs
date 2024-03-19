@@ -11,6 +11,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
 using System;
@@ -143,16 +144,36 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             ProjectInformationCommandResult GetProjectInformation()
             {
                 ProjectInformationCommandResult result = null;
+                Projects projects = dte.Solution?.Projects;
+                string configurationName = null;
+                if (projects != null)
+                {
+                    foreach (Project project in projects)
+                    {
+                        if (project.Name == Path.GetFileNameWithoutExtension(projectDirectory))
+                        {
+                            VCProject vcProject = project.Object as VCProject;
+                            configurationName = vcProject?.ActiveConfiguration?.ConfigurationName;
+                        }
+                    }
+                }
+
                 ThreadHelper.JoinableTaskFactory.Run(
                 "Fetching project information",
                 async (progress) =>
                 {
                     progress.Report(new ThreadedWaitDialogProgressData("Fetching external libraries..."));
 
-                    result = plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, "\""+Path.GetDirectoryName(projectDirectory)+"\"")
-                    as ProjectInformationCommandResult;
-
+                    result = plcncliCommunication.ExecuteCommand(
+                        Constants.Command_get_project_information,
+                        null,
+                        typeof(ProjectInformationCommandResult),
+                        Constants.Option_get_project_information_project,
+                        "\""+Path.GetDirectoryName(projectDirectory)+"\"",
+                        Constants.Option_get_project_information_buildtype,
+                        configurationName?.StartsWith("Debug", StringComparison.OrdinalIgnoreCase) == true ? "Debug" : "Release"
+                    ) as ProjectInformationCommandResult;
+                    
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 }, TimeSpan.FromMilliseconds(5));
                 return result;

@@ -50,6 +50,7 @@ namespace PlcncliCommonUtils
         public const string Option_get_compiler_specifications_project = "-p";
         public const string Option_get_project_information_no_include_detection = "-n";
         public const string Option_get_project_information_project = "-p";
+        public const string Option_get_project_information_buildtype = "-b";
         public const string Option_new_component_name = "-n";
         public const string Option_new_component_namespace = "-s";
         public const string Option_new_component_project = "-p";

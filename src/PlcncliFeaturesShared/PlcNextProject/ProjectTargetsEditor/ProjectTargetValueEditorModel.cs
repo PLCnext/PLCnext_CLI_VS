@@ -29,10 +29,13 @@ namespace PlcncliFeatures.PlcNextProject.ProjectTargetsEditor
                 InstalledTargets = targetsCommandResult.Targets;
 
                 ProjectInformationCommandResult projectInfo = cliCommunication.ExecuteCommand(
-                        Constants.Command_get_project_information, null, typeof(ProjectInformationCommandResult),
+                        Constants.Command_get_project_information, 
+                        null, 
+                        typeof(ProjectInformationCommandResult),
                         Constants.Option_get_project_information_no_include_detection,
-                        Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as
-                    ProjectInformationCommandResult;
+                        Constants.Option_get_project_information_project, 
+                        $"\"{projectDirectory}\""
+                    ) as ProjectInformationCommandResult;
                 ProjectTargets = projectInfo.Targets;
                 //TODO extract these commands somewhere after the viewModel.Showmodal call (and possibly asyncron), otherwise the ui seems to be too unresponsive
             }

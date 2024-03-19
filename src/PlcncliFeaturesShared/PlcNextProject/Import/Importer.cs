@@ -52,7 +52,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                 async (progress) =>
                 {
                     IProjectTypeImporter projectTypeImporter;
-
+                    ProjectInformationCommandResult projectInformation = null;
 
                     if (plcncliCommunication == null)
                     {
@@ -70,7 +70,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         }
 
                         progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
-                        ProjectInformationCommandResult projectInformation = await GetProjectInformation();
+                        await GetProjectInformation();
                         if (projectInformation == null)
                         {
                             return;
@@ -116,24 +116,26 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         }
                     }
 
-                    async Task<ProjectInformationCommandResult> GetProjectInformation()
+                    async Task GetProjectInformation()
                     {
-                        ProjectInformationCommandResult result = null;
                         await Task.Run(() =>
                         {
                             try
                             {
-                                result = plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project,
-                                    $"\"{projectFilePath}\"") as ProjectInformationCommandResult;
+                                projectInformation = plcncliCommunication.ExecuteCommand(
+                                    Constants.Command_get_project_information, 
+                                    null,
+                                    typeof(ProjectInformationCommandResult), 
+                                    Constants.Option_get_project_information_project,
+                                    $"\"{projectFilePath}\""
+                                ) as ProjectInformationCommandResult;
                             }
                             catch (PlcncliException ex)
                             {
-                                result = plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
+                                projectInformation = plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
                                 throw ex;
                             }
                         });
-                        return result;
                     }
 
                     async Task CreateVSProject(string projectDirectory, string projectName, IEnumerable<TargetResult> projectTargets)
@@ -262,17 +264,6 @@ namespace PlcncliFeatures.PlcNextProject.Import
 
                         void SetIncludesAndMacros()
                         {
-                            ProjectInformationCommandResult projectInformation = null;
-                            try
-                            {
-                                projectInformation = plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
-                            }
-                            catch (PlcncliException ex)
-                            {
-                                projectInformation = plcncliCommunication.ConvertToTypedCommandResult<ProjectInformationCommandResult>(ex.InfoMessages);
-                            }
-
                             CompilerSpecificationCommandResult compilerSpecsCommandResult = null;
                             try
                             {

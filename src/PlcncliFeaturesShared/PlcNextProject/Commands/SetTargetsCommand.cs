@@ -154,9 +154,15 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                             ProjectInformationCommandResult projectInformationBefore = null;
                             try
                             {
-                                projectInformationBefore = cliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                    typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project,
-                                    $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                                projectInformationBefore = cliCommunication.ExecuteCommand(
+                                    Constants.Command_get_project_information, 
+                                    null,
+                                    typeof(ProjectInformationCommandResult), 
+                                    Constants.Option_get_project_information_project, 
+                                    $"\"{projectDirectory}\"",
+                                    Constants.Option_get_project_information_buildtype, 
+                                    p.ActiveConfiguration?.ConfigurationName?.StartsWith("Debug", StringComparison.OrdinalIgnoreCase) == true ? "Debug" : "Release"
+                                    ) as ProjectInformationCommandResult;
                             }
                             catch (PlcncliException ex)
                             {
@@ -196,9 +202,15 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
                         try
                         {
-                            projectInformationAfter = cliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                                typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_project,
-                                $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                            projectInformationAfter = cliCommunication.ExecuteCommand(
+                                Constants.Command_get_project_information, 
+                                null,
+                                typeof(ProjectInformationCommandResult), 
+                                Constants.Option_get_project_information_project,
+                                $"\"{projectDirectory}\"",
+                                Constants.Option_get_project_information_buildtype,
+                                p.ActiveConfiguration?.ConfigurationName?.StartsWith("Debug", StringComparison.OrdinalIgnoreCase) == true ? "Debug" : "Release"
+                                ) as ProjectInformationCommandResult;
                         }
                         catch (PlcncliException ex)
                         {
