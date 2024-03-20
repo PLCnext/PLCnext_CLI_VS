@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Build.Locator" Version="[1.6.1]" />
+    <PackageVersion Include="Microsoft.Build.Locator" Version="[1.7.8]" />
     <PackageVersion Include="Microsoft.VisualStudio.SDK" Version="[17.0.31902.203]" />
     <PackageVersion Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="[17.0.31902.203]" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="[17.0.5232]" />
-    <PackageVersion Include="Microsoft.VSSDK.Vsixsigntool" Version="[16.2.29116.78]" />
   </ItemGroup>
 </Project>
