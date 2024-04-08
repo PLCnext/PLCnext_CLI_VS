@@ -6,7 +6,7 @@
              xmlns:platformui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d" 
              Name="Window" Height="300" Width="450"
-             Title="{Binding Path=ItemType, StringFormat='Create New {0}'}">
+             Title="{Binding Path=ItemType, StringFormat='Create new {0}'}">
     <Window.Style>
         <Style>
             <Setter Property="Window.Foreground" Value="{DynamicResource {x:Static platformui:EnvironmentColors.ToolWindowTextBrushKey}}"/>
@@ -16,9 +16,12 @@
     </Window.Style>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <platformui:AndBooleanConverter x:Key="AndBooleanConverter"/>
+        <platformui:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
     </Window.Resources>
     <Grid Margin="11">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -26,10 +29,21 @@
         </Grid.RowDefinitions>
         <TextBlock Margin="0,0,0,11"
                    Grid.Row="0"
-                   FontSize="15"
+                   FontSize="14"
                    TextWrapping="Wrap"
                    Text="{Binding Description}"/>
         <StackPanel Grid.Row="1">
+            <Label Content="{Binding NameLabel}" 
+                   Target="{Binding ElementName=NameTextBox}" 
+                   Padding="0"
+                   Margin="0,0,0,5"/>
+            <TextBox Name="NameTextBox" 
+                     Margin="0,0,0,11"
+                     Height="23"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  
+                     VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
             <Label Content="{Binding NamespaceLabel}" 
                    Target="{Binding ElementName=PropertyTextBox}" 
                    Padding="0"
@@ -37,10 +51,10 @@
             <TextBox Name="PropertyTextBox" 
                      Margin="0,0,0,11"
                      Height="23"
-                     Text="{Binding Namespace}"  
+                     Text="{Binding Namespace, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  
                      VerticalContentAlignment="Center"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" 
+        <StackPanel Grid.Row="3" 
                     Visibility="{Binding IsProgramWizard, Converter={StaticResource VisibilityConverter}}">
             <Label Content="{Binding ComponentLabel}" 
                    Target="{Binding ElementName=PropertyTextBox2}" 
@@ -55,9 +69,16 @@
                       />
         </StackPanel>
         <Button HorizontalAlignment="Right"
-                Grid.Row="3"
+                Grid.Row="4"
                 Command="{Binding OkButtonClickCommand}"
                 CommandParameter="{Binding ElementName=Window}"
-                Content="{Binding ButtonText}"/>
+                Content="{Binding ButtonText}">
+            <Button.IsEnabled>
+                <MultiBinding Converter="{StaticResource AndBooleanConverter}">
+                    <Binding ElementName="NameTextBox" Path="(Validation.HasError)" Converter="{StaticResource NegateBooleanConverter}"/>
+                    <Binding ElementName="PropertyTextBox" Path="(Validation.HasError)" Converter="{StaticResource NegateBooleanConverter}"/>
+                </MultiBinding>
+            </Button.IsEnabled>
+        </Button>
     </Grid>
 </platformui:DialogWindow>

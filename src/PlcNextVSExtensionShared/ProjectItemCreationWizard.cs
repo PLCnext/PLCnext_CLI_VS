@@ -53,10 +53,18 @@ namespace PlcncliTemplateWizards
                         GetWizardDataFromTemplate();
 
                         string projectDirectory = Path.GetDirectoryName(project.FullName);
-                        ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                            typeof(ProjectInformationCommandResult),
-                            Constants.Option_get_project_information_no_include_detection,
-                            Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                        ProjectInformationCommandResult projectInformation = null;
+                        
+                        ThreadHelper.JoinableTaskFactory.Run(
+                            "Fetching project information",
+                            async (progress) =>
+                            {
+                                projectInformation = _plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
+                                    typeof(ProjectInformationCommandResult),
+                                    Constants.Option_get_project_information_no_include_detection,
+                                    Constants.Option_get_project_information_project, $"\"{projectDirectory}\"") as ProjectInformationCommandResult;
+                                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                            });
                         string projecttype = projectInformation.Type;
                         
                         if (projecttype == null || !validProjectTypes.Contains(projecttype))
@@ -69,13 +77,14 @@ namespace PlcncliTemplateWizards
                             throw new WizardBackoutException();
                         }
 
-                        NewItemModel model = new NewItemModel(_plcncliCommunication, projectDirectory, itemType);
+                        NewItemModel model = new NewItemModel(itemType, itemName, projectInformation);
                         NewItemViewModel viewModel = new NewItemViewModel(model);
                         NewItemDialogView view = new NewItemDialogView(viewModel);
 
                         bool? result = view.ShowModal();
                         if (result != null && result == true)
                         {
+                            itemName = model.SelectedName;
                             try
                             {
                                 if (itemType.Equals(Constants.ItemType_program))
@@ -112,6 +121,10 @@ namespace PlcncliTemplateWizards
                                 MessageBox.Show(e.Message, "Error occured", MessageBoxButton.OK, MessageBoxImage.Error);
                                 throw new WizardBackoutException();
                             }
+                        }
+                        else
+                        {
+                            throw new WizardBackoutException();
                         }
 
 

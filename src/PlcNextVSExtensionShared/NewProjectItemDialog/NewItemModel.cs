@@ -9,43 +9,37 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using PlcncliCommonUtils;
 using PlcncliServices.CommandResults;
-using PlcncliServices.PLCnCLI;
 
 namespace PlcncliTemplateWizards.NewProjectItemDialog
 {
     public class NewItemModel
     {
-        private readonly IPlcncliCommunication _plcncliCommunication;
-        private readonly string _projectDirectory;
-
-        public NewItemModel(IPlcncliCommunication plcncliCommunication, string projectDirectory, string itemType)
+        public NewItemModel(string itemType, string name, ProjectInformationCommandResult projectInformation)
         {
-            _plcncliCommunication = plcncliCommunication;
-            _projectDirectory = projectDirectory;
             ItemType = itemType;
-            FetchProjectComponents();
+            SelectedName = name;
+            FetchProjectComponents(projectInformation);
         }
 
         public string ItemType { get; }
 
         public string SelectedNamespace { get; set; }
 
-        public IEnumerable<string> Components { get; private set; }
+        public string SelectedName { get; set; }
+
+        public IEnumerable<EntityResult> Components { get; private set; }
+        public IEnumerable<EntityResult> Programs { get; private set; }
 
         public string SelectedComponent { get; set; }
 
 
-        private void FetchProjectComponents()
+        private void FetchProjectComponents(ProjectInformationCommandResult projectInformation)
         {
-            ProjectInformationCommandResult projectInformation = _plcncliCommunication.ExecuteCommand(Constants.Command_get_project_information, null,
-                typeof(ProjectInformationCommandResult), Constants.Option_get_project_information_no_include_detection,
-                Constants.Option_get_project_information_project, $"\"{_projectDirectory}\"") as ProjectInformationCommandResult;
             if (projectInformation != null)
             {
-                Components = projectInformation.Entities.Where(e => e.Type.Equals("component"))
-                    .Select(e => $"{e.Namespace}::{e.Name}");
+                Components = projectInformation.Entities.Where(e => e.Type.Equals("component"));
+                Programs = projectInformation.Entities.Where(e => e.Type.Equals("program"));
                 SelectedNamespace = projectInformation.Namespace;
             }
         }
