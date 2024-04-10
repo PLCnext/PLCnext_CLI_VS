@@ -42,6 +42,11 @@ namespace PlcncliBuild
 
             }
 
+            if (!string.IsNullOrEmpty(MSBuildPath))
+            {
+                options = options.Append("--msbuild").Append($"\"{MSBuildPath}\"").ToArray();
+            }
+
             options = options.Append(AdditionalOptions);
 
             try
@@ -68,6 +73,8 @@ namespace PlcncliBuild
             }
         }
         public string SourceFoldersRaw { get; set; }
+
+        public string MSBuildPath { get; set; }
 
     }
 }

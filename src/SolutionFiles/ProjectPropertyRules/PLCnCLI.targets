@@ -27,10 +27,22 @@
   <Target Name="Build">
     <CallTarget Targets="PLCnCLIGenerate"/>
     <CallTarget Targets="PLCnCLIBuild"/>
+    <CallTarget Targets="PLCnCLIDeploy" Condition="$(PLCnCLIProjectType) != snproject"/>
+    <CallTarget Targets="PLCnCLIDeployForSN" Condition="$(PLCnCLIProjectType) == snproject"/>
+  </Target>
+  <Target Name="PLCnCLIDeploy">
     <DeployTask ProjectDirectory="$(ProjectDir)"
                 AdditionalOptions="$(PLCnCLIDeployOptions)"
                 Configuration="$(Configuration)"
                 SourceFoldersRaw="$(SourceFolders)"
+                Condition="$(DisablePLCnCLIDeploy) != true"/>
+  </Target>
+  <Target Name="PLCnCLIDeployForSN">
+    <DeployTask ProjectDirectory="$(ProjectDir)"
+                AdditionalOptions="$(PLCnCLIDeployOptions)"
+                Configuration="$(Configuration)"
+                SourceFoldersRaw="$(SourceFolders)"
+                MSBuildPath="$(MSBuildBinPath)"
                 Condition="$(DisablePLCnCLIDeploy) != true"/>
   </Target>
   <Target Name="PLCnCLIAfterClean" AfterTargets="Clean">
