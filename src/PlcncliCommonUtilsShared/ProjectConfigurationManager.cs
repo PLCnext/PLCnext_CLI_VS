@@ -56,7 +56,14 @@ namespace PlcncliCommonUtils
 
             if(targetSpecificConfiguration == null)
             {
-                targetSpecificConfiguration = solutionConfigurations.Add(targetBuildConfigName, string.Empty, false) as SolutionConfiguration2;
+                try
+                {
+                    targetSpecificConfiguration = solutionConfigurations.Add(targetBuildConfigName, string.Empty, false) as SolutionConfiguration2;
+                }
+                catch (Exception)
+                {
+                    targetSpecificConfiguration = solutionConfigurations.Add(targetBuildConfigName, " ", false) as SolutionConfiguration2;
+                }
                 if (targetSpecificConfiguration == null)
                     return;
             }
