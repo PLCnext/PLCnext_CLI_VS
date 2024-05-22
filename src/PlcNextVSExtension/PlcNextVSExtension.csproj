@@ -110,7 +110,6 @@
     <PackageReference Include="Microsoft.VisualStudio.VCProjectEngine" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
-    <PackageReference Include="Microsoft.VSSDK.Vsixsigntool" />
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
