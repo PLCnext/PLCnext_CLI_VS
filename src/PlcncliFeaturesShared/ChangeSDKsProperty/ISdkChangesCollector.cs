@@ -29,7 +29,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
         public InstallSdk(string archiveFile, string destination, bool force)
         {
             ArchiveFile = archiveFile;
-            Destination = destination;
+            Destination = destination.TrimEnd('\\');
             Force = force;
         }
 

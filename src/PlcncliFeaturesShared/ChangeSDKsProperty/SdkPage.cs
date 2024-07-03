@@ -172,7 +172,7 @@ namespace PlcncliFeatures.ChangeSDKsProperty
                     " Check lower left corner for active background tasks.", "Background installation started", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private static void ShowMessage(string title, string message)
+        private static void ShowMessage(string message, string title)
         {
             MessageBox.Show(message, title);
         }
