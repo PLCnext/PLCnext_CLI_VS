@@ -19,11 +19,12 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
     {
         private string projectFilePath;
         private ProjectSettings value;
+        private readonly string projectFileName = "plcnext.proj";
 
-        public ProjectFileProvider(string projectPath)
+        public ProjectFileProvider(string projectDirectory)
         {
-                projectFilePath = projectPath;
-                ReadProjectFile();
+            projectFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), projectFileName);
+            ReadProjectFile();
         }
 
         private void ReadProjectFile()

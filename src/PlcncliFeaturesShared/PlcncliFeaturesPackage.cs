@@ -76,6 +76,7 @@ namespace PlcncliFeatures
             //do not remove next line, otherwise XamlParseException will occur, since Utils might not be loaded
             PlcncliCommonUtils.Constants.DoNothing();
             await new SolutionLoadService().InitializeAsync(this);
+            await new UpdateSolutionEventsExtension().InitializeAsync(this);
             await SetTargetsCommand.InitializeAsync(this);
             await CMakeFlagsCommand.InitializeAsync(this);
             await ProjectConfigWindowCommand.InitializeAsync(this);

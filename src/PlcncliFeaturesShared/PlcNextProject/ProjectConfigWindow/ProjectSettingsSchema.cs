@@ -33,15 +33,11 @@ namespace PlcncliFeatures.PlcNextProject {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.phoenixcontact.com/schema/cliproject", IsNullable=false)]
     public partial class ProjectSettings {
         
-        private string[] targetField;
-        
         private string idField;
         
         private string versionField;
         
         private string nameField;
-        
-        private extension[] extensionField;
         
         private string typeField;
         
@@ -53,21 +49,14 @@ namespace PlcncliFeatures.PlcNextProject {
         
         private bool generateNamespacesFieldSpecified;
         
+        private string[] targetField;
+        
+        private extension[] extensionField;
+        
         public ProjectSettings() {
             this.versionField = "1.0";
             this.typeField = "project";
             this.generateDTArrayNameByTypeField = false;
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Target")]
-        public string[] Target {
-            get {
-                return this.targetField;
-            }
-            set {
-                this.targetField = value;
-            }
         }
         
         /// <remarks/>
@@ -98,17 +87,6 @@ namespace PlcncliFeatures.PlcNextProject {
             }
             set {
                 this.nameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Extension")]
-        public extension[] Extension {
-            get {
-                return this.extensionField;
-            }
-            set {
-                this.extensionField = value;
             }
         }
         
@@ -162,6 +140,28 @@ namespace PlcncliFeatures.PlcNextProject {
             }
             set {
                 this.generateNamespacesFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Target")]
+        public string[] Target {
+            get {
+                return this.targetField;
+            }
+            set {
+                this.targetField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Extension")]
+        public extension[] Extension {
+            get {
+                return this.extensionField;
+            }
+            set {
+                this.extensionField = value;
             }
         }
     }

@@ -32,6 +32,7 @@
   </Target>
   <Target Name="PLCnCLIDeploy">
     <DeployTask ProjectDirectory="$(ProjectDir)"
+                ProjectName="$(ProjectName)"
                 AdditionalOptions="$(PLCnCLIDeployOptions)"
                 Configuration="$(Configuration)"
                 SourceFoldersRaw="$(SourceFolders)"

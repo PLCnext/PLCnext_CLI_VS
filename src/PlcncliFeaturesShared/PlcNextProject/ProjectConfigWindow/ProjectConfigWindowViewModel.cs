@@ -11,6 +11,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
@@ -18,62 +19,58 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
-using System.Xml.Linq;
 using Constants = PlcncliCommonUtils.Constants;
 using Path = System.IO.Path;
 
 namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 {
-    public class ProjectConfigWindowViewModel : INotifyPropertyChanged
+    public class ProjectConfigWindowViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        private readonly string configFileName = "PLCnextSettings.xml";
-        private readonly string settingElementName = "ProjectConfiguration";
-        private readonly string libraryDescriptionElementName = "LibraryDescription";
-        private readonly string libraryVersionElementName = "LibraryVersion";
-        private readonly string engineerVersionElementName = "EngineerVersion";
-        private readonly string excludedFilesElementName = "ExcludedFiles";
-        private readonly string fileElementName = "File";
-        private readonly string configFilePath;
-        private readonly string projectFilePath;
-        private readonly string projectFileName = "plcnext.proj";
-        private DTE2 dte;
+        private readonly string projectDirectory;
+        private readonly string projectName;
         private readonly LibViewModel selectAll;
+        private readonly IVsSolutionPersistence solutionPersistence; 
 
         public ProjectConfigWindowViewModel(IPlcncliCommunication plcncliCommunication)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE2 dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
+            solutionPersistence = Package.GetGlobalService(typeof (SVsSolutionPersistence)) as IVsSolutionPersistence;
+
             selectAll = new LibViewModel(this, "Select/Deselect all elements");
-            string projectDirectory = GetProjectLocation();
-            string GetProjectLocation()
+            GetProjectLocation(out projectDirectory, out projectName);
+            
+            void GetProjectLocation(out string projectDirectory, out string projectName)
             {
-                dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-                ThreadHelper.ThrowIfNotOnUIThread();
+                projectName = string.Empty;
+                projectDirectory = string.Empty;
+
                 Array selectedItems = dte?.ToolWindows.SolutionExplorer.SelectedItems as Array;
                 if (selectedItems == null || selectedItems.Length != 1)
                 {
-                    return string.Empty;
+                    return;
                 }
 
                 if (!((selectedItems.GetValue(0) as UIHierarchyItem)?.Object is Project project))
                 {
-                    return string.Empty;
+                    return;
                 }
 
-                return project.FullName;
+                projectName = project.Name;
+                projectDirectory = project.FullName;
             }
+
             if (string.IsNullOrEmpty(projectDirectory))
             {
                 return;
             }
 
-            ProjectInformationCommandResult projectInformation  = GetProjectInformation();
+            ProjectInformationCommandResult projectInformation = GetProjectInformation();
             IEnumerable<string> externalLibs = Enumerable.Empty<string>();
             if (projectInformation != null)
             {
@@ -81,12 +78,13 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 GenerateNamespaces = projectInformation.GenerateNamespaces;
             }
 
-            configFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), configFileName);
-            projectFilePath = Path.Combine(Path.GetDirectoryName(projectDirectory), projectFileName);
-
             IEnumerable<LibViewModel> libs = null;
             LoadFromFile();
-            
+
+            UsePEMFiles = !string.IsNullOrEmpty(PrivateKeyFile) 
+                          || !string.IsNullOrEmpty(PublicKeyFile)
+                          || CertificateFiles.Count > 0;
+
             ExcludedFiles = libs != null
                                 ? new ObservableCollection<LibViewModel>(libs)
                                 : new ObservableCollection<LibViewModel>();
@@ -180,35 +178,24 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
             void LoadFromFile()
             {
-                if (File.Exists(configFilePath))
+                ProjectConfiguration config = ConfigFileProvider.LoadFromConfig(projectDirectory);
+                LibraryDescription = config.LibraryDescription;
+                LibraryVersion = config.LibraryVersion;
+                EngineerVersion = config.EngineerVersion;
+                libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
+                Sign = config.Sign;
+                PKCS12File = config.Pkcs12;
+                PrivateKeyFile = config.PrivateKey;
+                PublicKeyFile = config.PublicKey;
+                if (config.Timestamp && config.NoTimestamp)
                 {
-                    try
-                    {
-                        XDocument document;
-                        using (FileStream stream = File.OpenRead(configFilePath))
-                        {
-                            document = XDocument.Load(stream);
-                        }
-                        XElement settings = document.Elements().FirstOrDefault();
-                        LibraryDescription = settings?.Elements(settings.GetDefaultNamespace() + libraryDescriptionElementName)
-                                                     .FirstOrDefault()
-                                                     ?.Value;
-                        LibraryVersion = settings?.Elements(settings.GetDefaultNamespace() + libraryVersionElementName)
-                                                 .FirstOrDefault()
-                                                 ?.Value;
-                        EngineerVersion = settings?.Elements(settings.GetDefaultNamespace() + engineerVersionElementName)
-                                                  .FirstOrDefault()
-                                                  ?.Value;
-                        libs = settings?.Elements(settings.GetDefaultNamespace() + excludedFilesElementName)
-                                .FirstOrDefault()
-                                ?.Elements(settings.GetDefaultNamespace() + fileElementName)
-                                .Select(e => new LibViewModel(this, e.Value, selected: true));
-
-                    }
-                    catch (Exception e)
-                    {
-                        _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
-                    }
+                    throw new ArgumentException("Invalid configuration: Timestamp and NoTimestamp cannot be combined.");
+                }
+                Timestamp = config.Timestamp;
+                TimestampConfiguration = config.TimestampConfiguration;
+                foreach (string item in config.Certificates??Enumerable.Empty<string>())
+                {
+                    CertificateFiles.Add(item);
                 }
             }
         }
@@ -218,6 +205,14 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private string libraryDescription;
         private string libraryVersion;
         private string engineerVersion;
+        private string errorText;
+        private bool generateNamespaces = true;
+        private string privateKeyFile;
+        private string pKCS12File;
+        private string publicKeyFile;
+        private string timestampConfiguration;
+        private bool usePEMFiles;
+        private bool timestamp;
 
         public string LibraryDescription
         {
@@ -244,60 +239,10 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             get => engineerVersion;
             set
             {
-                if (!CheckVersion(value))
-                {
-                    SetErrorMessage();
-                }
-                else
-                {
-                    ClearErrorMessage();
-                }
                 engineerVersion = value;
                 OnPropertyChanged();
             }
         }
-        private void SetErrorMessage()
-        {
-            ErrorText = "Engineer Version not valid! Please use format: 202x.x or 202x.x.x";
-        }
-
-        private void ClearErrorMessage()
-        {
-            ErrorText = string.Empty;
-        }
-        private bool CheckVersion(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return true;
-            }
-
-            if (System.Version.TryParse(value, out System.Version version))
-            {
-                if (version.Major > 2019 && version.Major < 2030)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private string errorText;
-        private bool generateNamespaces = true;
-
-        public string ErrorText
-        {
-            get => errorText;
-            private set
-            {
-                errorText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public BitmapSource ErrorImage => Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Error.Handle, 
-                                                                              Int32Rect.Empty,
-                                                                              BitmapSizeOptions.FromEmptyOptions());
 
         public string ExcludedFilesLabel => "Excluded Files - checked files will not be added to pcwlx";
 
@@ -317,11 +262,145 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 OnPropertyChanged();
             }
         }
+
+        public bool Sign { get;set; }
+
+        public string PKCS12File
+        {
+            get => pKCS12File; set
+            {
+                pKCS12File = value;
+                OnPropertyChanged();
+            }
+        }
+        public string PrivateKeyFile
+        {
+            get => privateKeyFile; set
+            {
+                privateKeyFile = value;
+                OnPropertyChanged();
+            }
+        }
+        public string PublicKeyFile
+        {
+            get => publicKeyFile; set
+            {
+                publicKeyFile = value;
+                OnPropertyChanged();
+            }
+        }
+        public ObservableCollection<string> CertificateFiles { get; } = new ObservableCollection<string>();
+        public string TimestampConfiguration
+        {
+            get => timestampConfiguration;
+            set
+            {
+                timestampConfiguration = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool Timestamp
+        {
+            get => timestamp;
+            set
+            {
+                timestamp = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TimestampConfiguration));
+            }
+        }
+
+        public bool UsePEMFiles
+        {
+            get => usePEMFiles;
+            set
+            {
+                usePEMFiles = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
         #region Commands
 
         public ICommand SaveButtonClickCommand => new DelegateCommand<DialogWindow>(OnSaveButtonClicked);
         public ICommand CancelButtonClickCommand => new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
+        public ICommand BrowseCommand => new DelegateCommand<string>(OnBrowseButtonClicked);
+        public ICommand DeleteCommand => new DelegateCommand<string>(OnDeleteButtonClicked);
+        public ICommand SetPWCommand => new DelegateCommand<PasswordPersistFileType>(OnPasswordButtonClicked);
+
+        private void OnPasswordButtonClicked(PasswordPersistFileType fileType)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            
+            PasswordService passwordService = new PasswordService(solutionPersistence);
+            passwordService.ProvidePasswordPersistence(projectName, fileType);
+        }
+
+        private void OnDeleteButtonClicked(string itemToDelete)
+        {
+            CertificateFiles.Remove(itemToDelete);
+            OnPropertyChanged();
+        }
+        private void OnBrowseButtonClicked(string propertyName)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            switch (propertyName)
+            {
+                case nameof(PKCS12File):
+                    fileDialog.Filter = "PKCS#12 container|*.p12;*.pfx|All files|*.*";
+                    fileDialog.InitialDirectory = PKCS12File;
+                    break;
+                case nameof(PrivateKeyFile):
+                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
+                    fileDialog.InitialDirectory = PrivateKeyFile;
+                    break;
+                case nameof(PublicKeyFile):
+                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
+                    fileDialog.InitialDirectory = PublicKeyFile;
+                    break;
+                case nameof(CertificateFiles):
+                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
+                    fileDialog.Multiselect = true;
+                    break;
+                case nameof(TimestampConfiguration):
+                    fileDialog.Filter = "JSON|*.json";
+                    fileDialog.InitialDirectory = TimestampConfiguration;
+                    break;
+                default:
+                    break;
+            }
+
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                switch (propertyName)
+                {
+                    case nameof(PKCS12File):
+                        PKCS12File = fileDialog.FileName;
+                        break;
+                    case nameof(PrivateKeyFile):
+                        PrivateKeyFile = fileDialog.FileName;
+                        break;
+                    case nameof(PublicKeyFile):
+                        PublicKeyFile = fileDialog.FileName;
+                        break;
+                    case nameof(CertificateFiles):
+                        foreach (string item in fileDialog.FileNames)
+                        {
+                            CertificateFiles.Add(item);
+                            OnPropertyChanged(nameof(CertificateFiles));
+                        }
+                        break;
+                    case nameof(TimestampConfiguration):
+                        TimestampConfiguration = fileDialog.FileName;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         private void OnCancelButtonClicked(DialogWindow window)
         {
@@ -330,57 +409,55 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         private void OnSaveButtonClicked(DialogWindow window)
         {
-
-            if (string.IsNullOrEmpty(LibraryDescription)
-                && string.IsNullOrEmpty(LibraryVersion)
-                && string.IsNullOrEmpty(EngineerVersion)
-                && ExcludedFiles.Count < 1)
+            if (!string.IsNullOrEmpty(PKCS12File) && (!string.IsNullOrEmpty(PrivateKeyFile) ||
+                                                      !string.IsNullOrEmpty(PublicKeyFile) ||
+                                                      CertificateFiles?.Any() == true))
             {
-                if (File.Exists(configFilePath))
+                string unpersistedValue = UsePEMFiles ? "PKCS#12" : "PEM";
+                DialogResult result = MessageBox.Show($"The entered {unpersistedValue} file(s) will not be persisted.",
+                                                      "Value will not be saved",
+                                                      MessageBoxButtons.OKCancel,
+                                                      MessageBoxIcon.Information);
+                if (result != DialogResult.OK)
                 {
-                    DeleteFile();
+                    return;
                 }
-                window.Close();
             }
-            else
-            {
-                WriteFile(CreateFileContent());
-                window.Close();
-            }
+            ConfigFileProvider.WriteConfigFile(CreateConfigFileContent(), projectDirectory);
 
-            ProjectFileProvider projectProvider = new ProjectFileProvider(projectFilePath);
+            ProjectFileProvider projectProvider = new ProjectFileProvider(projectDirectory);
             projectProvider.SetGenerateNamespaces(GenerateNamespaces);
             projectProvider.WriteProjectFile();
 
-            void WriteFile(XDocument document)
+            window.Close();
+
+            ProjectConfiguration CreateConfigFileContent()
             {
-                using (FileStream stream = File.OpenWrite(configFilePath))
+                ProjectConfiguration config =  new ProjectConfiguration()
                 {
-                    stream.SetLength(0);
-                    document.Save(stream);
+                    LibraryDescription = LibraryDescription,
+                    LibraryVersion = LibraryVersion,
+                    EngineerVersion = EngineerVersion,
+                    ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
+                                                 .Select(e => e.Name)
+                                                 .ToArray(),
+                    Sign = Sign,
+                    Pkcs12 = UsePEMFiles ? null : PKCS12File,
+                    PrivateKey = UsePEMFiles ? PrivateKeyFile : null,
+                    PublicKey = UsePEMFiles ? PublicKeyFile : null,
+                    Certificates = UsePEMFiles ? CertificateFiles.ToArray() : null,
+                    TimestampConfiguration = TimestampConfiguration
+                    
+                };
+                if (Timestamp)
+                {
+                    config.Timestamp = true;
                 }
-            }
-            void DeleteFile()
-            {
-                File.Delete(configFilePath);
-            }
-
-            XDocument CreateFileContent()
-            {
-                XNamespace xmlns = "http://www.phoenixcontact.com/schema/projectconfiguration";
-
-                return new XDocument(
-                    new XElement(xmlns + settingElementName, 
-                        new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"),
-                        new XAttribute(XNamespace.Xmlns + "xsd", "http://www.w3.org/2001/XMLSchema"),
-                        new XElement(xmlns + nameof(LibraryDescription), LibraryDescription),
-                        new XElement(xmlns + nameof(LibraryVersion), LibraryVersion),
-                        new XElement(xmlns + nameof(EngineerVersion), EngineerVersion),
-                        new XElement(xmlns + nameof(ExcludedFiles), ExcludedFiles.Where(e => e.Selected && e != selectAll)
-                                                                .Select(e => new XElement(xmlns + "File",e.Name))
-                                                                .ToArray())
-                        )
-                    );
+                else 
+                {
+                    config.NoTimestamp = true;
+                }
+                return config;
             }
         }
 
@@ -406,6 +483,54 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
         }
 
+        #endregion
+
+        #region IDataErrorInfo
+        public string Error => errorText;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == nameof(EngineerVersion))
+                {
+                    if (!ValidateVersion(EngineerVersion))
+                    {
+                        errorText = "Engineer Version not valid! Please use format: 202x.x or 202x.x.x";
+                        OnPropertyChanged(nameof(Error));
+                        return errorText;
+                    }
+                }
+                if (columnName == nameof(Timestamp) || columnName == nameof(TimestampConfiguration))
+                {
+                    if (Timestamp && string.IsNullOrEmpty(TimestampConfiguration))
+                    {
+                        errorText = "TimestampConfiguration must be provided if timestamp is requested";
+                        OnPropertyChanged(nameof(Error));
+                        return errorText;
+                    }
+                }
+                errorText = string.Empty;
+                OnPropertyChanged(nameof(Error));
+                return errorText;
+            }
+        }
+        private bool ValidateVersion(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return true;
+            }
+
+            if (System.Version.TryParse(value, out System.Version version))
+            {
+                if (version.Major > 2019 && version.Major < 2030)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region INotifyPropertyChanged

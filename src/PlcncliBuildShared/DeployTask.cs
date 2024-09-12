@@ -9,6 +9,7 @@
 
 using Microsoft.Build.Framework;
 using PlcncliServices.PLCnCLI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,9 +17,14 @@ namespace PlcncliBuild
 {
     public class DeployTask : PlcncliTask
     {
+        private readonly string pwPattern = "plcncli_deploy_pw_{0}";
+
         public override bool Execute()
         {
             Log.LogMessage(MessageImportance.Low, "Starting deploy task.");
+            string password = Environment.GetEnvironmentVariable(string.Format(pwPattern, ProjectName));
+            Environment.SetEnvironmentVariable(string.Format(pwPattern, ProjectName), string.Empty);
+
             Log.LogMessage(MessageImportance.Low, "Additional deploy options value: \"" + AdditionalOptions + "\"");
 
             string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
@@ -45,6 +51,11 @@ namespace PlcncliBuild
             if (!string.IsNullOrEmpty(MSBuildPath))
             {
                 options = options.Append("--msbuild").Append($"\"{MSBuildPath}\"").ToArray();
+            }
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                options = options.Append("--password").Append(password).ToArray();
             }
 
             options = options.Append(AdditionalOptions);
@@ -75,6 +86,8 @@ namespace PlcncliBuild
         public string SourceFoldersRaw { get; set; }
 
         public string MSBuildPath { get; set; }
+
+        public string ProjectName { get; set; }
 
     }
 }

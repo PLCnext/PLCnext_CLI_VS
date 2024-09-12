@@ -42,7 +42,6 @@ namespace PlcncliServices.PLCnCLI
                 RedirectStandardError = true
             };
 
-            Debug.WriteLine($"Starting process {processInfo.FileName} {processInfo.Arguments} in {processInfo.WorkingDirectory}.");
             _internalProcess = Process.Start(processInfo);
             if (_internalProcess != null && !_internalProcess.HasExited)
             {

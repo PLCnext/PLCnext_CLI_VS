@@ -41,7 +41,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\SigningControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -108,12 +116,29 @@
       <DependentUpon>CMakeFlagsEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ConfigFileProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PasswordService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordDialog.xaml.cs">
+      <DependentUpon>SetPasswordDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PasswordPersistSolutionOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\ComStreamWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PersistSolutionOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigurationSchema.cs">
+      <DependentUpon>ProjectConfigurationSchema.xsd</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowControl.xaml.cs">
       <DependentUpon>ProjectConfigWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigWindowViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectFileProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.cs">
+      <DependentUpon>ProjectSettingsSchema.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\SigningControl.xaml.cs">
+      <DependentUpon>SigningControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml.cs">
       <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>
@@ -121,6 +146,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\SolutionLoadService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\SolutionSaveService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\UpdateSolutionEventsExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\PLCnextImportTemplate.vcxproj" />
@@ -128,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ProjectTemplate\SNLtemplate.vcxproj" />
+    <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigurationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectSettingsSchema.xsd">
       <SubType>Designer</SubType>
     </None>

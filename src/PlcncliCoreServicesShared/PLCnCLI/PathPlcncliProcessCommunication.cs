@@ -73,7 +73,32 @@ namespace PlcncliServices.PLCnCLI
 
             string commandline = $"{command} {string.Join(" ", arguments)}";
 
-            receiver.LogDebugInfo($"Starting process {PlcncliCommand} with options {commandline}");
+            //replace password with * in logged arguments
+            int index = -1;
+            string[] argsWithoutPw = new string[arguments.Length];
+            Array.Copy(arguments, argsWithoutPw, arguments.Length);
+
+            if (arguments.Contains("--password"))
+            {
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    if (arguments[i] == "--password"
+                        && arguments.Length > i + 1
+                        && !arguments[i + 1].StartsWith("-"))
+                    {
+                        index = i + 1;
+                        break;
+                    }
+                }
+                if (index > -1)
+                {
+                    argsWithoutPw[index] = "*";
+                }
+            }
+
+            string commandLineWithoutPassword = $"{command} {string.Join(" ", argsWithoutPw)}";
+
+            receiver.LogDebugInfo($"Starting process {PlcncliCommand} with options {commandLineWithoutPassword}");
             using (ProcessFacade f = new ProcessFacade(PlcncliCommand, commandline, receiver, CancellationToken.None))
             {
                 f.WaitForExit();
