@@ -12,12 +12,20 @@
                          Name="window"
                          Title="PLCnext Project Configuration">
     <Window.Resources>
-        <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
-        <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
-        <platformui:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\StyleDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
+            <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <platformui:AndBooleanConverter x:Key="AndBooleanConverter"/>
+        </ResourceDictionary>
     </Window.Resources>
+    <Window.Style>
+        <Style BasedOn="{StaticResource WindowStyle}" TargetType="Window"/>
+    </Window.Style>
     <Grid Margin="11">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,8 +38,9 @@
                    TextWrapping="Wrap">Project properties for PLCnext C++ Projects.<LineBreak/>
 Rebuild the project after saving your changes to transfer the configuration to the library.</TextBlock>
 
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}">
             <TabItem Header="General">
+                <AdornerDecorator>
                 <Grid Margin="11">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -110,9 +119,12 @@ Rebuild the project after saving your changes to transfer the configuration to t
                               Grid.Row="8"
                               Visibility="{Binding ShowGenerateNamespaces, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
+                </AdornerDecorator>
             </TabItem>
             <TabItem Header="Signing">
-                <local:SigningControl/>
+                <AdornerDecorator>
+                    <local:SigningControl DataContext="{Binding SigningViewModel}"/>
+                </AdornerDecorator>
             </TabItem>
         </TabControl>
 
@@ -126,8 +138,14 @@ Rebuild the project after saving your changes to transfer the configuration to t
                     Margin="7,0,0,0"
                     Content="_Apply" 
                     Command="{Binding SaveButtonClickCommand}"
-                    CommandParameter="{Binding ElementName=window}"
-                    IsEnabled="{Binding Error, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TextToBoolConverter}}"/>
+                    CommandParameter="{Binding ElementName=window}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource AndBooleanConverter}">
+                        <Binding Path="Error" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TextToBoolConverter}"/>
+                        <Binding Path="SigningViewModel.Error" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TextToBoolConverter}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
             <Button Content="_Cancel"
                     Height="23"
                     Width="75"

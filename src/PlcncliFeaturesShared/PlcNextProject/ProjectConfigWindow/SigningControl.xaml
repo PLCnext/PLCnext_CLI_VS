@@ -5,6 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PlcncliFeatures.PlcNextProject.ProjectConfigWindow"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\StyleDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Margin="11">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,7 +20,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Margin="0,0,10,11"
-                   TextWrapping="Wrap">
+                   TextWrapping="Wrap"
+                   Style="{StaticResource TextBlockStyle}">
             Choose a PKCS#12 container or select the certificates, private and public key 
             as separate PEM files, set a password and decide whether a timestamp shall be added
         </TextBlock>
@@ -50,7 +58,7 @@
                          Text="{Binding PKCS12File, Mode=TwoWay}"/>
                     <Button 
                         Margin="0,0,5,0"
-                        Width="75"
+                        Width="80"
                         Height="23"
                         Grid.Column="1"
                         Content="_Browse..."
@@ -59,7 +67,7 @@
                         Command="{Binding BrowseCommand}"/>
                     <Button Grid.Column="2"
                             Height="23"
-                            Width="75"
+                            Width="80"
                             Content="Password..."
                             Command="{Binding SetPWCommand}"
                             CommandParameter="{x:Static local:PasswordPersistFileType.PKCS12}"/>
@@ -90,7 +98,7 @@
                              Text="{Binding PrivateKeyFile, Mode=TwoWay}"/>
                         <Button 
                             Margin="0,0,5,0"
-                            Width="75"
+                            Width="80"
                             Height="23"
                             Grid.Column="1"
                             Content="_Browse..."
@@ -98,7 +106,7 @@
                             CommandParameter="PrivateKeyFile"
                             Command="{Binding BrowseCommand}"/>
                         <Button Grid.Column="2"
-                                Width="75"
+                                Width="80"
                                 Height="23"
                                 Content="Password..."
                                 Command="{Binding SetPWCommand}"
@@ -116,7 +124,7 @@
                              Grid.Column="0"
                              VerticalContentAlignment="Center"
                              Text="{Binding PublicKeyFile, Mode=TwoWay}"/>
-                        <Button Width="75"
+                        <Button Width="80"
                             Height="23"
                             Grid.Column="1"
                             Content="_Browse..."
@@ -140,14 +148,14 @@
                         </ListBox>
                         <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
-                            <Button Width="75"
+                            <Button Width="80"
                                 Height="23"
                                 Margin="0,0,0,5"
                                 Content="_Browse..."
                                 HorizontalAlignment="Right"
                                 CommandParameter="CertificateFiles"
                                 Command="{Binding BrowseCommand}"/>
-                            <Button Width="75"
+                            <Button Width="80"
                                 Height="23"
                                 Content="_Delete"
                                 HorizontalAlignment="Right"
@@ -169,11 +177,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Margin="0,0,5,0"
+                <TextBox Margin="0,0,25,0"
                      Grid.Column="0"
                      VerticalContentAlignment="Center"
                      Text="{Binding TimestampConfiguration, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Width="75"
+                <Button Width="80"
                     Height="23"
                     Grid.Column="1"
                     Content="_Browse..."

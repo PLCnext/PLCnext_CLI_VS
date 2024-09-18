@@ -57,6 +57,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)StyleDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ChangeSDKsProperty\AddSdkDialog.xaml.cs">
@@ -139,6 +143,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\SigningControl.xaml.cs">
       <DependentUpon>SigningControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\SigningViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectTargetsEditor\ProjectTargetValueEditorView.xaml.cs">
       <DependentUpon>ProjectTargetValueEditorView.xaml</DependentUpon>

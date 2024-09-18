@@ -33,14 +33,12 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private readonly string projectDirectory;
         private readonly string projectName;
         private readonly LibViewModel selectAll;
-        private readonly IVsSolutionPersistence solutionPersistence; 
 
         public ProjectConfigWindowViewModel(IPlcncliCommunication plcncliCommunication)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             DTE2 dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-            solutionPersistence = Package.GetGlobalService(typeof (SVsSolutionPersistence)) as IVsSolutionPersistence;
 
             selectAll = new LibViewModel(this, "Select/Deselect all elements");
             GetProjectLocation(out projectDirectory, out projectName);
@@ -79,11 +77,10 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
 
             IEnumerable<LibViewModel> libs = null;
+            ProjectConfiguration config;
             LoadFromFile();
 
-            UsePEMFiles = !string.IsNullOrEmpty(PrivateKeyFile) 
-                          || !string.IsNullOrEmpty(PublicKeyFile)
-                          || CertificateFiles.Count > 0;
+            SigningViewModel = new SigningViewModel(config, projectName);
 
             ExcludedFiles = libs != null
                                 ? new ObservableCollection<LibViewModel>(libs)
@@ -178,25 +175,19 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
             void LoadFromFile()
             {
-                ProjectConfiguration config = ConfigFileProvider.LoadFromConfig(projectDirectory);
+                try 
+                { 
+                    config = ConfigFileProvider.LoadFromConfig(projectDirectory);
+                }
+                catch (Exception e)
+                {
+                    _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
+                    config = new ProjectConfiguration();
+                }
                 LibraryDescription = config.LibraryDescription;
                 LibraryVersion = config.LibraryVersion;
                 EngineerVersion = config.EngineerVersion;
                 libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
-                Sign = config.Sign;
-                PKCS12File = config.Pkcs12;
-                PrivateKeyFile = config.PrivateKey;
-                PublicKeyFile = config.PublicKey;
-                if (config.Timestamp && config.NoTimestamp)
-                {
-                    throw new ArgumentException("Invalid configuration: Timestamp and NoTimestamp cannot be combined.");
-                }
-                Timestamp = config.Timestamp;
-                TimestampConfiguration = config.TimestampConfiguration;
-                foreach (string item in config.Certificates??Enumerable.Empty<string>())
-                {
-                    CertificateFiles.Add(item);
-                }
             }
         }
 
@@ -207,12 +198,6 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private string engineerVersion;
         private string errorText;
         private bool generateNamespaces = true;
-        private string privateKeyFile;
-        private string pKCS12File;
-        private string publicKeyFile;
-        private string timestampConfiguration;
-        private bool usePEMFiles;
-        private bool timestamp;
 
         public string LibraryDescription
         {
@@ -263,145 +248,14 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
         }
 
-        public bool Sign { get;set; }
-
-        public string PKCS12File
-        {
-            get => pKCS12File; set
-            {
-                pKCS12File = value;
-                OnPropertyChanged();
-            }
-        }
-        public string PrivateKeyFile
-        {
-            get => privateKeyFile; set
-            {
-                privateKeyFile = value;
-                OnPropertyChanged();
-            }
-        }
-        public string PublicKeyFile
-        {
-            get => publicKeyFile; set
-            {
-                publicKeyFile = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<string> CertificateFiles { get; } = new ObservableCollection<string>();
-        public string TimestampConfiguration
-        {
-            get => timestampConfiguration;
-            set
-            {
-                timestampConfiguration = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Timestamp
-        {
-            get => timestamp;
-            set
-            {
-                timestamp = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TimestampConfiguration));
-            }
-        }
-
-        public bool UsePEMFiles
-        {
-            get => usePEMFiles;
-            set
-            {
-                usePEMFiles = value;
-                OnPropertyChanged();
-            }
-        }
+        public SigningViewModel SigningViewModel { get; }
 
         #endregion
         #region Commands
 
         public ICommand SaveButtonClickCommand => new DelegateCommand<DialogWindow>(OnSaveButtonClicked);
         public ICommand CancelButtonClickCommand => new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
-        public ICommand BrowseCommand => new DelegateCommand<string>(OnBrowseButtonClicked);
-        public ICommand DeleteCommand => new DelegateCommand<string>(OnDeleteButtonClicked);
-        public ICommand SetPWCommand => new DelegateCommand<PasswordPersistFileType>(OnPasswordButtonClicked);
-
-        private void OnPasswordButtonClicked(PasswordPersistFileType fileType)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            
-            PasswordService passwordService = new PasswordService(solutionPersistence);
-            passwordService.ProvidePasswordPersistence(projectName, fileType);
-        }
-
-        private void OnDeleteButtonClicked(string itemToDelete)
-        {
-            CertificateFiles.Remove(itemToDelete);
-            OnPropertyChanged();
-        }
-        private void OnBrowseButtonClicked(string propertyName)
-        {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            switch (propertyName)
-            {
-                case nameof(PKCS12File):
-                    fileDialog.Filter = "PKCS#12 container|*.p12;*.pfx|All files|*.*";
-                    fileDialog.InitialDirectory = PKCS12File;
-                    break;
-                case nameof(PrivateKeyFile):
-                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
-                    fileDialog.InitialDirectory = PrivateKeyFile;
-                    break;
-                case nameof(PublicKeyFile):
-                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
-                    fileDialog.InitialDirectory = PublicKeyFile;
-                    break;
-                case nameof(CertificateFiles):
-                    fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
-                    fileDialog.Multiselect = true;
-                    break;
-                case nameof(TimestampConfiguration):
-                    fileDialog.Filter = "JSON|*.json";
-                    fileDialog.InitialDirectory = TimestampConfiguration;
-                    break;
-                default:
-                    break;
-            }
-
-            DialogResult result = fileDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                switch (propertyName)
-                {
-                    case nameof(PKCS12File):
-                        PKCS12File = fileDialog.FileName;
-                        break;
-                    case nameof(PrivateKeyFile):
-                        PrivateKeyFile = fileDialog.FileName;
-                        break;
-                    case nameof(PublicKeyFile):
-                        PublicKeyFile = fileDialog.FileName;
-                        break;
-                    case nameof(CertificateFiles):
-                        foreach (string item in fileDialog.FileNames)
-                        {
-                            CertificateFiles.Add(item);
-                            OnPropertyChanged(nameof(CertificateFiles));
-                        }
-                        break;
-                    case nameof(TimestampConfiguration):
-                        TimestampConfiguration = fileDialog.FileName;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
+                
         private void OnCancelButtonClicked(DialogWindow window)
         {
             window.Close();
@@ -409,11 +263,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         private void OnSaveButtonClicked(DialogWindow window)
         {
-            if (!string.IsNullOrEmpty(PKCS12File) && (!string.IsNullOrEmpty(PrivateKeyFile) ||
-                                                      !string.IsNullOrEmpty(PublicKeyFile) ||
-                                                      CertificateFiles?.Any() == true))
+            if (!string.IsNullOrEmpty(SigningViewModel.PKCS12File) && (!string.IsNullOrEmpty(SigningViewModel.PrivateKeyFile) ||
+                                                      !string.IsNullOrEmpty(SigningViewModel.PublicKeyFile) ||
+                                                      SigningViewModel.CertificateFiles?.Any() == true))
             {
-                string unpersistedValue = UsePEMFiles ? "PKCS#12" : "PEM";
+                string unpersistedValue = SigningViewModel.UsePEMFiles ? "PKCS#12" : "PEM";
                 DialogResult result = MessageBox.Show($"The entered {unpersistedValue} file(s) will not be persisted.",
                                                       "Value will not be saved",
                                                       MessageBoxButtons.OKCancel,
@@ -441,15 +295,15 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
                                                  .Select(e => e.Name)
                                                  .ToArray(),
-                    Sign = Sign,
-                    Pkcs12 = UsePEMFiles ? null : PKCS12File,
-                    PrivateKey = UsePEMFiles ? PrivateKeyFile : null,
-                    PublicKey = UsePEMFiles ? PublicKeyFile : null,
-                    Certificates = UsePEMFiles ? CertificateFiles.ToArray() : null,
-                    TimestampConfiguration = TimestampConfiguration
+                    Sign = SigningViewModel.Sign,
+                    Pkcs12 = SigningViewModel.UsePEMFiles ? null : SigningViewModel.PKCS12File,
+                    PrivateKey = SigningViewModel.UsePEMFiles ? SigningViewModel.PrivateKeyFile : null,
+                    PublicKey = SigningViewModel.UsePEMFiles ? SigningViewModel.PublicKeyFile : null,
+                    Certificates = SigningViewModel.UsePEMFiles ? SigningViewModel.CertificateFiles.ToArray() : null,
+                    TimestampConfiguration = SigningViewModel.TimestampConfiguration
                     
                 };
-                if (Timestamp)
+                if (SigningViewModel.Timestamp)
                 {
                     config.Timestamp = true;
                 }
@@ -497,15 +351,6 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     if (!ValidateVersion(EngineerVersion))
                     {
                         errorText = "Engineer Version not valid! Please use format: 202x.x or 202x.x.x";
-                        OnPropertyChanged(nameof(Error));
-                        return errorText;
-                    }
-                }
-                if (columnName == nameof(Timestamp) || columnName == nameof(TimestampConfiguration))
-                {
-                    if (Timestamp && string.IsNullOrEmpty(TimestampConfiguration))
-                    {
-                        errorText = "TimestampConfiguration must be provided if timestamp is requested";
                         OnPropertyChanged(nameof(Error));
                         return errorText;
                     }
