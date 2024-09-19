@@ -38,8 +38,8 @@ namespace PlcncliTemplateWizards.NewProjectItemDialog
         {
             if (projectInformation != null)
             {
-                Components = projectInformation.Entities.Where(e => e.Type.Equals("component"));
-                Programs = projectInformation.Entities.Where(e => e.Type.Equals("program"));
+                Components = projectInformation.Entities.Where(e => e.Type.Contains("component"));
+                Programs = projectInformation.Entities.Where(e => e.Type.Contains("program"));
                 SelectedNamespace = projectInformation.Namespace;
             }
         }
