@@ -36,27 +36,24 @@
                 Margin="20,0,10,11"
                 IsEnabled="{Binding ElementName=SigningCheckBox, Path=IsChecked}">
 
-            <GroupBox Margin="0,0,0,11"
-                  Name="PKCS12GroupBox">
-                <GroupBox.Header>
-                    <RadioButton Content="PKCS#12 Container"
-                             GroupName="SigningGroup"
-                             Name="PKCS12RadioButton"
-                             IsChecked="{Binding UsePEMFiles, Mode=OneTime, Converter={StaticResource NegateBooleanConverter}}"/>
-                </GroupBox.Header>
+            <RadioButton 
+                     Content="PKCS#12 Container"
+                     GroupName="SigningGroup"
+                     Name="PKCS12RadioButton"
+                     IsChecked="{Binding UsePEMFiles, Mode=OneTime, Converter={StaticResource NegateBooleanConverter}}"/>
 
-                <Grid Margin="11"
-                  IsEnabled="{Binding ElementName=PKCS12RadioButton, Path=IsChecked}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Margin="0,0,5,0"
+            <Grid Margin="11"
+              IsEnabled="{Binding ElementName=PKCS12RadioButton, Path=IsChecked}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Margin="0,0,5,0"
                          Grid.Column="0"
                          VerticalContentAlignment="Center"
                          Text="{Binding PKCS12File, Mode=TwoWay}"/>
-                    <Button 
+                <Button 
                         Margin="0,0,5,0"
                         Width="80"
                         Height="23"
@@ -65,38 +62,36 @@
                         HorizontalAlignment="Right"
                         CommandParameter="PKCS12File"
                         Command="{Binding BrowseCommand}"/>
-                    <Button Grid.Column="2"
+                <Button Grid.Column="2"
                             Height="23"
                             Width="80"
                             Content="Password..."
                             Command="{Binding SetPWCommand}"
                             CommandParameter="{x:Static local:PasswordPersistFileType.PKCS12}"/>
-                </Grid>
-            </GroupBox>
+            </Grid>
 
-            <GroupBox Margin="0,0,0,11">
-                <GroupBox.Header>
-                    <RadioButton Content="Separate PEM Files"
+
+            <RadioButton Content="Separate PEM Files"
                              GroupName="SigningGroup"
                              Name="PEMRadioButton"
                              IsChecked="{Binding UsePEMFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </GroupBox.Header>
-                <StackPanel Margin="11"
+
+            <StackPanel Margin="11"
                         IsEnabled="{Binding ElementName=PEMRadioButton, Path=IsChecked}">
-                    <Label Padding="0"
+                <Label Padding="0"
                        Margin="0,0,10,5"
                        Content="Private Key File (PEM)"/>
-                    <Grid Margin="0,0,0,11">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Margin="0,0,5,0"
+                <Grid Margin="0,0,0,11">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Margin="0,0,5,0"
                              Grid.Column="0"
                              VerticalContentAlignment="Center"
                              Text="{Binding PrivateKeyFile, Mode=TwoWay}"/>
-                        <Button 
+                    <Button 
                             Margin="0,0,5,0"
                             Width="80"
                             Height="23"
@@ -105,66 +100,66 @@
                             HorizontalAlignment="Right"
                             CommandParameter="PrivateKeyFile"
                             Command="{Binding BrowseCommand}"/>
-                        <Button Grid.Column="2"
+                    <Button Grid.Column="2"
                                 Width="80"
                                 Height="23"
                                 Content="Password..."
                                 Command="{Binding SetPWCommand}"
                                 CommandParameter="{x:Static local:PasswordPersistFileType.PEMKeyFile}"/>
-                    </Grid>
-                    <Label Padding="0"
+                </Grid>
+                <Label Padding="0"
                        Margin="0,0,10,5"
                        Content="Public Key File (PEM)"/>
-                    <Grid Margin="0,0,0,11">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Margin="0,0,5,0"
+                <Grid Margin="0,0,0,11">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Margin="0,0,5,0"
                              Grid.Column="0"
                              VerticalContentAlignment="Center"
                              Text="{Binding PublicKeyFile, Mode=TwoWay}"/>
-                        <Button Width="80"
+                    <Button Width="80"
                             Height="23"
                             Grid.Column="1"
                             Content="_Browse..."
                             HorizontalAlignment="Right"
                             CommandParameter="PublicKeyFile"
                             Command="{Binding BrowseCommand}"/>
-                    </Grid>
-                    <Label Padding="0"
+                </Grid>
+                <Label Padding="0"
                        Margin="0,0,10,5"
                        Content="Certificate Files (PEM)"/>
-                    <Grid Margin="0,0,0,11">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ListBox Margin="0,0,5,0"
-                                 Grid.Column="0"
-                                 Name="CertificatesListBox"
-                                 Height="87"
-                                 ItemsSource="{Binding CertificateFiles, UpdateSourceTrigger=PropertyChanged}">
-                        </ListBox>
-                        <StackPanel Orientation="Vertical"
+                <Grid Margin="0,0,0,11">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Margin="0,0,5,0"
+                             Grid.Column="0"
+                             Name="CertificatesListBox"
+                             Height="87"
+                             ItemsSource="{Binding CertificateFiles, UpdateSourceTrigger=PropertyChanged}">
+                    </ListBox>
+                    <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
-                            <Button Width="80"
+                        <Button Width="80"
                                 Height="23"
                                 Margin="0,0,0,5"
                                 Content="_Browse..."
                                 HorizontalAlignment="Right"
                                 CommandParameter="CertificateFiles"
                                 Command="{Binding BrowseCommand}"/>
-                            <Button Width="80"
+                        <Button Width="80"
                                 Height="23"
                                 Content="_Delete"
                                 HorizontalAlignment="Right"
                                 CommandParameter="{Binding ElementName=CertificatesListBox, Path=SelectedItem}"
                                 Command="{Binding DeleteCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
             <CheckBox Content="Timestamp"
                   Margin="0,0,0,11"
                   Name="TimestampCheckBox"
