@@ -2,6 +2,7 @@
   
   <PropertyGroup>
     <PLCnextCPPBuildTools>$(MSBuildThisFileDirectory)PlcncliBuild.dll</PLCnextCPPBuildTools>
+    <PLCnextUserImportDir>$(AppData)\plcncli\VSCPP\PLCnextUserImports</PLCnextUserImportDir>
   </PropertyGroup>
   
   <ItemGroup>
@@ -33,4 +34,6 @@
   <!-- Import customer specific settings/targets -->
   <Import Project="PLCnextUserImports\*.props" />
   <Import Project="PLCnextUserImports\*.targets" />
+  <Import Project="$(PLCnextUserImportDir)\*.props" />
+  <Import Project="$(PLCnextUserImportDir)\*.targets" />
 </Project>
