@@ -37,9 +37,11 @@ namespace PlcncliFeatures.PlcNextProject.Import
         {
             try
             {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
                 bool closed = SolutionSaveService.SaveAndCloseSolution(dte.Solution);
                 if (!closed)
                     return;
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             }
             catch (Exception exception)
             {
@@ -70,7 +72,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         }
 
                         progress.Report(new ThreadedWaitDialogProgressData("Fetching project information."));
-                        await GetProjectInformation();
+                        await GetProjectInformationAsync();
                         if (projectInformation == null)
                         {
                             return;
@@ -80,7 +82,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         projectTypeImporter = CommonProjectImporter.GetProjectTypeImporter(projectType);
                         IEnumerable<TargetResult> projectTargets = projectInformation.Targets;
 
-                        await CreateVSProject(projectDirectory, projectName, projectTargets);
+                        await CreateVSProjectAsync(projectDirectory, projectName, projectTargets);
 
                         projectTypeImporter.ShowFinalMessage();
                     }
@@ -116,7 +118,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         }
                     }
 
-                    async Task GetProjectInformation()
+                    async Task GetProjectInformationAsync()
                     {
                         await Task.Run(() =>
                         {
@@ -138,11 +140,11 @@ namespace PlcncliFeatures.PlcNextProject.Import
                         });
                     }
 
-                    async Task CreateVSProject(string projectDirectory, string projectName, IEnumerable<TargetResult> projectTargets)
+                    async Task CreateVSProjectAsync(string projectDirectory, string projectName, IEnumerable<TargetResult> projectTargets)
                     {
 
                         progress.Report(new ThreadedWaitDialogProgressData("Creating project files."));
-                        bool projectFileCreated = await CreateVSProjectFile();
+                        bool projectFileCreated = await CreateVSProjectFileAsync();
                         if (!projectFileCreated)
                             return;
 
@@ -195,7 +197,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
 
                         project.Save();
 
-                        async Task<bool> CreateVSProjectFile()
+                        async Task<bool> CreateVSProjectFileAsync()
                         {
                             string filePath = projectTypeImporter.GetProjectFilePath(projectDirectory, projectName);
                             
@@ -214,7 +216,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
                                     };
                             replacementDictionary.Add(targetsFileNameKey, projectTypeImporter.GetTargetsFileName());
                             
-                            string fileContent = await GetProjectFileTemplate();
+                            string fileContent = await GetProjectFileTemplateAsync();
                             Match replaceParameterMatch = ReplaceParameterRegex.Match(fileContent);
 
                             while (replaceParameterMatch.Success)
@@ -247,7 +249,7 @@ namespace PlcncliFeatures.PlcNextProject.Import
 
                             return true;
 
-                            async Task<string> GetProjectFileTemplate()
+                            async Task<string> GetProjectFileTemplateAsync()
                             {
                                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"PlcncliFeatures.PlcNextProject.Import.ProjectTemplate.{projectTypeImporter.GetProjectTemplateName()}"))
                                 using (StreamReader reader = new StreamReader(stream))

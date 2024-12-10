@@ -51,10 +51,12 @@ namespace PlcncliCommonUtils
             Solution solution = project.DTE.Solution;
 
             SolutionConfigurations solutionConfigurations = solution.SolutionBuild.SolutionConfigurations;
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             SolutionConfiguration2 targetSpecificConfiguration = solutionConfigurations.OfType<SolutionConfiguration2>()
                 .Where(config => config.Name.Equals(targetBuildConfigName)).FirstOrDefault();
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
 
-            if(targetSpecificConfiguration == null)
+            if (targetSpecificConfiguration == null)
             {
                 try
                 {

@@ -27,7 +27,9 @@ namespace PlcncliFeatures.PlcNextProject.Commands
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             IServiceProvider serviceProvider = package;
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             dte = (DTE2)serviceProvider.GetService(typeof(DTE));
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
         }
 
         /// <summary>

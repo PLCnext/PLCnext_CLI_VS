@@ -90,12 +90,14 @@ namespace PlcncliServices
 
             if (_asyncServiceProvider is Package)
             {
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
                 DTE2 dte = (DTE2)Package.GetGlobalService(typeof(DTE));
                 if (dte != null)
                 {
                     dte.ExecuteCommand("Tools.Options", "E0865D49-D384-4D95-89D5-A04B1D51EC43");
                     return SearchPlcncliTool(true);
                 }
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             }
             return string.Empty;
         }

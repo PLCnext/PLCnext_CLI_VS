@@ -299,7 +299,9 @@ namespace PlcncliFeatures.PlcNextProject.Commands
                         {
                             System.Threading.Thread.Sleep(1000);
 #pragma warning disable VSSDK006 // Check services exist
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
                             DTE2 dte = (DTE2)serviceProvider.GetService(typeof(DTE));
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
 #pragma warning restore VSSDK006 // Check services exist
                             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                             Array selectedItems = (Array)dte?.ToolWindows.SolutionExplorer.SelectedItems;
