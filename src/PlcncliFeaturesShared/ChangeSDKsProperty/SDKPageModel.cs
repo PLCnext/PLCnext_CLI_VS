@@ -13,6 +13,7 @@ using PlcncliServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Microsoft.VisualStudio.Shell;
 
 namespace PlcncliFeatures.ChangeSDKsProperty
 {
@@ -32,25 +33,32 @@ namespace PlcncliFeatures.ChangeSDKsProperty
 
         public void Initialize()
         {
-            try
-            {
-                SdksCommandResult commandResult = plcncli.ExecuteCommand("get sdks", null, typeof(SdksCommandResult)) as SdksCommandResult;
-                Sdks = commandResult.Sdks.Select(sdk => new SdkViewModel(sdk.PathValue, sdk.Targets));
-            }
-            catch(PlcncliException e)
-            {
-                MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
-                try
-                {
-                    SdkPathsSettingCommandResult commandResult =
-                        plcncli.ExecuteCommand("get setting", null, typeof(SdkPathsSettingCommandResult), "SdkPaths") as SdkPathsSettingCommandResult;
-                    Sdks = commandResult.Settings.SdkPaths.Split(';').Select(sdk => new SdkViewModel(sdk, Enumerable.Empty<TargetResult>()));
-                }
-                catch(PlcncliException e1)
-                {
-                    MessageBox.Show(e1.Message, $"{NamingConstants.ToolName} get settings error");
-                }
-            }
+            ThreadHelper.JoinableTaskFactory.Run(
+                    "Creating sdk page",
+                    async (progress) =>
+                    {
+                        try
+                        {
+                            progress.Report(new ThreadedWaitDialogProgressData("Fetching sdk information..."));
+                            SdksCommandResult commandResult = plcncli.ExecuteCommand("get sdks", null, typeof(SdksCommandResult)) as SdksCommandResult;
+                            Sdks = commandResult.Sdks.Select(sdk => new SdkViewModel(sdk.PathValue, sdk.Targets));
+                        }
+                        catch (PlcncliException e)
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                            MessageBox.Show(e.Message, $"{NamingConstants.ToolName} error");
+                            try
+                            {
+                                SdkPathsSettingCommandResult commandResult =
+                                    plcncli.ExecuteCommand("get setting", null, typeof(SdkPathsSettingCommandResult), "SdkPaths") as SdkPathsSettingCommandResult;
+                                Sdks = commandResult.Settings.SdkPaths.Split(';').Select(sdk => new SdkViewModel(sdk, Enumerable.Empty<TargetResult>()));
+                            }
+                            catch (PlcncliException e1)
+                            {
+                                MessageBox.Show(e1.Message, $"{NamingConstants.ToolName} get settings error");
+                            }
+                        }
+                    });
             SdkChangesCollector = new SdkChangesCollector();
         }
     }
