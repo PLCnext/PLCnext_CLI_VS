@@ -109,7 +109,8 @@ namespace PlcncliCommonUtils
                 IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item(Constants.PLCnextRuleName) as IVCRulePropertyStorage;
                 if (plcnextCommonPropertiesRule == null)
                 {
-                    MessageBox.Show($"{Constants.PLCnextRuleName} rule was not found in configuration rules collection.");
+                    MessageBox.Show($"{Constants.PLCnextRuleName} rule is missing." +
+                        " Please make sure that the PLCnext Toolchain was installed correctly.");
                 }
 
                 if (string.IsNullOrEmpty(plcnextCommonPropertiesRule.GetUnevaluatedPropertyValue(Constants.PLCnextIncludesKey)))
@@ -147,7 +148,8 @@ namespace PlcncliCommonUtils
                 IVCRulePropertyStorage plcnextCommonPropertiesRule = config.Rules.Item(Constants.PLCnextRuleName) as IVCRulePropertyStorage;
                 if (plcnextCommonPropertiesRule == null)
                 {
-                    MessageBox.Show("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    MessageBox.Show("PLCnextCommonProperties rule is missing." +
+                        " Please make sure that the PLCnext Toolchain was installed correctly.");
                 }
 
                 string joinedMacros = macros.Any() ? string.Join(";",

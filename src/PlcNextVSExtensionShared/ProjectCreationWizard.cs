@@ -180,7 +180,8 @@ namespace PlcncliTemplateWizards
                 IVCRulePropertyStorage plcnextRule = configuration.Rules.Item(Constants.PLCnextRuleName) as IVCRulePropertyStorage;
                 if (plcnextRule == null)
                 {
-                    throw new NullReferenceException("PLCnextCommonProperties rule was not found in configuration rules collection.");
+                    throw new NullReferenceException("PLCnextCommonProperties rule is missing." +
+                        " Please make sure that the PLCnext Toolchain was installed correctly.");
                 }
                 string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
 

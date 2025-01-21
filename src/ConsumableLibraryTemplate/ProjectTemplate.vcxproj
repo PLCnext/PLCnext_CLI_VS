@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project InitialTargets="PLCnextCheck" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup Label="ProjectConfigurations">
 		<ProjectConfiguration Include="Debug - all Targets|x86">
 			<Configuration>Debug - all Targets</Configuration>
@@ -56,6 +56,9 @@
 		<IncludePath>$(PLCnCLIIncludes)</IncludePath>
 	</PropertyGroup>
 	<ImportGroup Label="ExtensionTargets" />
-	<Import Project="$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLIBuild.targets" />
+  <Target Name="PLCnextCheck">
+    <Error Text="PLCnext toolchain is not installed correctly. PLCnCLIBuild.targets is missing. Reinstall the toolchain!" Condition="!Exists('$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLIBuild.targets')"/>
+  </Target>
+	<Import Project="$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLIBuild.targets" Condition="Exists('$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLIBuild.targets')"/>
 	
 </Project>
