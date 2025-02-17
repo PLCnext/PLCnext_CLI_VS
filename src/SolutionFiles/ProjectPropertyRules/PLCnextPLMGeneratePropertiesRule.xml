@@ -13,7 +13,7 @@
 				  Default="true"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="PLCnCLIGenerateDT" SourceOfDefaultValue="AfterContext" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="PLCnCLIGenerateDT" SourceOfDefaultValue="AfterContext" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 </Rule>

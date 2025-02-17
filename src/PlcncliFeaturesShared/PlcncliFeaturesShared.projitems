@@ -102,6 +102,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\PlcNextCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\ProjectConfigWindowCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\SetTargetsCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Commands\UpdateIncludesCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\Import\ImportDialogView.xaml.cs">
       <DependentUpon>ImportDialogView.xaml</DependentUpon>

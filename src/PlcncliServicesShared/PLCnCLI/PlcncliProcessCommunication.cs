@@ -7,12 +7,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Newtonsoft.Json;
-using PlcncliServices.CommandResults;
 
 namespace PlcncliServices.PLCnCLI
 {

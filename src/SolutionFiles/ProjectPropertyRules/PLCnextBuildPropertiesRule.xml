@@ -29,7 +29,7 @@
 				  Default="false"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIGenerate" SourceOfDefaultValue="AfterContext" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIGenerate" SourceOfDefaultValue="AfterContext" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 	<BoolProperty Name="DisablePLCnCLIDeploy"
@@ -39,7 +39,7 @@
 				  Default="false"
 				  IsRequired="true">
 		<BoolProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" SourceOfDefaultValue="AfterContext" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="true" PersistedName="DisablePLCnCLIDeploy" SourceOfDefaultValue="AfterContext" />
 		</BoolProperty.DataSource>
 	</BoolProperty>
 	<StringListProperty Name="SourceFolders"

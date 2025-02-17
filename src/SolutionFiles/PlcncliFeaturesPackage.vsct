@@ -86,6 +86,13 @@
           <ButtonText>&amp;Project Configuration</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidPlcncliFeaturesPackageCmdSet" id="UpdateIncludesCommandId" priority="0x0600" type="Button">
+        <Parent guid="guidPlcncliFeaturesPackageCmdSet" id="PlcNextSubMenuGroup"/>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Update Includes and Macros</ButtonText>
+        </Strings>
+      </Button>
       <Button guid="guidPlcncliFeaturesPackageCmdSet" id="ImportProjectCommandId" priority="0x0300" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_FILE_NEW_CASCADE"/>
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -136,6 +143,7 @@
       <IDSymbol name="SetTargetsCommandId" value="0x0101" />
       <IDSymbol name="ImportProjectCommandId" value="0X0010"/>
       <IDSymbol name="ProjectConfigWindowCommandID" value="0x0011"/>
+      <IDSymbol name="UpdateIncludesCommandId" value="0x0012"/>
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{9c72419a-ef6c-467e-880e-8a132234ccdb}" >

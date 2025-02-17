@@ -80,6 +80,7 @@ namespace PlcncliFeatures
             await SetTargetsCommand.InitializeAsync(this);
             await CMakeFlagsCommand.InitializeAsync(this);
             await ProjectConfigWindowCommand.InitializeAsync(this);
+            await UpdateIncludesCommand.InitializeAsync(this);
             await ImportProjectCommand.InitializeAsync(this);
             await new OnDocSaveService().InitializeAsync(this);
             await GeneratePortComment.PortCommentCommand.InitializeAsync(this);
