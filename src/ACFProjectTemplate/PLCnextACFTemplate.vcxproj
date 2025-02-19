@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ImportGroup Label="ExtensionTargets" />
   <Target Name="PLCnextCheck">
-    <Error Text="PLCnext toolchain is not installed correctly. PLCnCLI.targets is missing. Reinstall the toolchain!" Condition="!Exists('$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLI.targets')"/>
+    <Error Text="PLCnext toolchain is not installed correctly. 'PLCnCLI.targets' file is missing. Reinstall the toolchain!" Condition="!Exists('$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLI.targets')"/>
   </Target>
   <Import Project="$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLI.targets" Condition="Exists('$(PLCNEXT_TOOLCHAIN_INSTALLDIR)/VSCPP/PLCnCLI.targets')"/>
 </Project>
