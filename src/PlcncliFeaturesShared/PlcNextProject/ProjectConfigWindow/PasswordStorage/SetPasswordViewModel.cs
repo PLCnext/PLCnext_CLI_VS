@@ -8,6 +8,7 @@
 #endregion
 
 using Microsoft.VisualStudio.PlatformUI;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -18,9 +19,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
     internal class SetPasswordViewModel : INotifyPropertyChanged
     {
         private string password = string.Empty;
+        private bool showPassword;
 
         public SetPasswordViewModel(string password = null)
         {
+            ShowPassword = false;
             if (password != null)
             {
                 Password = password;
@@ -35,6 +38,17 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             set
             {
                 password = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowPassword
+        {
+            get => showPassword; 
+            set
+            {
+                showPassword = value;
+                OnPropertyChanged();
             }
         }
         #endregion

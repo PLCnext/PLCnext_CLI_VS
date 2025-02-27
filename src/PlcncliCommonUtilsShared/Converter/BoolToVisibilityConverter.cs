@@ -14,13 +14,13 @@ using System.Windows.Data;
 
 namespace PlcncliCommonUtils.Converter
 {
-    [ValueConversion(typeof(bool), typeof(Visibility))]
+    [ValueConversion(typeof(bool?), typeof(Visibility))]
     public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool castedValue = (bool)value;
-            return castedValue ? Visibility.Visible : Visibility.Collapsed;
+            bool? castedValue = (bool?)value;
+            return castedValue == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

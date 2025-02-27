@@ -168,4 +168,7 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\Update.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\ShowPwIcon.png" />
+  </ItemGroup>
 </Project>
