@@ -15,7 +15,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PlcNextVSExtension</RootNamespace>
-    <AssemblyName>PlcNextVSExtension22</AssemblyName>
+    <AssemblyName>PlcNextVSExtension</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -49,6 +49,9 @@
     <WarningLevel>4</WarningLevel>
     <DeployExtension>false</DeployExtension>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetVsixContainer>$(OutputPath)PlcNextVSExtension22.vsix</TargetVsixContainer>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\_Build_\BuildVariables.cs">
