@@ -69,7 +69,7 @@ Rebuild the project after saving your changes to transfer the configuration to t
 
                     <Label Grid.Row="2"
                            Padding="0"
-                           Content="Library _Version"
+                           Content="Library _Version - if required set it also in &lt;library&gt;Info.hpp (projects &gt;= 2025.0)"
                            Target="{Binding ElementName=textbox2}"
                            Margin="0,0,10,5"/>
                     <TextBox Grid.Row="3"
