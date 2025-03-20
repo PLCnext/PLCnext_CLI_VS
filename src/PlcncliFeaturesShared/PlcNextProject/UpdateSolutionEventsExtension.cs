@@ -75,12 +75,12 @@ namespace PlcncliFeatures.PlcNextProject
                     if (ConfigFileProvider.IsConfiguredToSignWithPEMFiles(config)
                         && !ConfigFileProvider.IsConfiguredToSignWithPKCS12(config))
                     {
-                        password = passwordService.LoadProjectPassword(project.Name, PasswordPersistFileType.PEMKeyFile);
+                        password = passwordService.GetProjectPassword(project.Name, PasswordPersistFileType.PEMKeyFile);
                     }
                     else if (!ConfigFileProvider.IsConfiguredToSignWithPEMFiles(config)
                             && ConfigFileProvider.IsConfiguredToSignWithPKCS12(config))
                     {
-                        password = passwordService.LoadProjectPassword(project.Name, PasswordPersistFileType.PKCS12);
+                        password = passwordService.GetProjectPassword(project.Name, PasswordPersistFileType.PKCS12);
                     }
                     if (!string.IsNullOrEmpty(password))
                     {

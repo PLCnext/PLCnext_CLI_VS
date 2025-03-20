@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
@@ -21,7 +22,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private string password = string.Empty;
         private bool showPassword;
 
-        public SetPasswordViewModel(string password = null)
+        public SetPasswordViewModel(string password, string titleText,
+            string okButtonText, string additionalInformation = null)
         {
             ShowPassword = false;
             if (password != null)
@@ -29,6 +31,17 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 Password = password;
                 OnPropertyChanged(nameof(Password));
             }
+            if (additionalInformation != null)
+            {
+                AdditionalInformationText = additionalInformation;
+            }
+
+            TitleText = titleText;
+
+            OkButtonLabel = new AccessText
+            {
+                Text = okButtonText
+            };
         }
 
         #region Properties
@@ -51,6 +64,12 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 OnPropertyChanged();
             }
         }
+
+        public string AdditionalInformationText { get; }
+
+        public AccessText OkButtonLabel { get; }
+
+        public string TitleText { get; }
         #endregion
 
         #region Commands

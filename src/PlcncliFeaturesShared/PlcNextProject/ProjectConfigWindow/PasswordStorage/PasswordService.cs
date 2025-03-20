@@ -27,7 +27,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LoadPassword(projectName, fileType, out string password);
-            SetPasswordViewModel viewModel = new SetPasswordViewModel(password);
+            SetPasswordViewModel viewModel = new SetPasswordViewModel(password: password, titleText: "Set Password", okButtonText: "_Save");
             SetPasswordDialog passwordDialog = new SetPasswordDialog(viewModel);
             bool? dialogResult = passwordDialog.ShowModal();
 
@@ -37,10 +37,14 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
         }
 
-        public string LoadProjectPassword(string projectName, PasswordPersistFileType fileType)
+        public string GetProjectPassword(string projectName, PasswordPersistFileType fileType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LoadPassword(projectName, fileType, out string password);
+            if (string.IsNullOrEmpty(password))
+            {
+                GetPasswordFromUIPrompt(out password);
+            }
             return password;
         }
 
@@ -81,6 +85,26 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     int result = solutionPersistence.SavePackageUserOpts(options, PasswordServicePersistenceKey);
                 }
                 catch (Exception) { }
+            }
+        }
+
+        private void GetPasswordFromUIPrompt(out string password)
+        {
+            password = string.Empty;
+            SetPasswordViewModel viewModel = new SetPasswordViewModel(
+                null,
+                titleText: "Signing library requires password",
+                okButtonText: "Submit",
+                additionalInformation: "The password will not be persisted.\n" +
+                                       "To save a password go to\n" +
+                                       "Project -> PLCnext Technology -> Project Configuration"
+                );
+            SetPasswordDialog passwordDialog = new SetPasswordDialog(viewModel);
+            bool? dialogResult = passwordDialog.ShowModal();
+
+            if (dialogResult == true)
+            {
+                password = viewModel.Password;
             }
         }
     }
