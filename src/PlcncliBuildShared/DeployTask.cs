@@ -22,9 +22,6 @@ namespace PlcncliBuild
         public override bool Execute()
         {
             Log.LogMessage(MessageImportance.Low, "Starting deploy task.");
-            string password = Environment.GetEnvironmentVariable(string.Format(pwPattern, ProjectName));
-            Environment.SetEnvironmentVariable(string.Format(pwPattern, ProjectName), string.Empty);
-
             Log.LogMessage(MessageImportance.Low, "Additional deploy options value: \"" + AdditionalOptions + "\"");
 
             string buildType = Configuration.StartsWith("Debug") ? "Debug" : "Release";
@@ -53,9 +50,13 @@ namespace PlcncliBuild
                 options = options.Append("--msbuild").Append($"\"{MSBuildPath}\"").ToArray();
             }
 
+            string password = Environment.GetEnvironmentVariable(string.Format(pwPattern, ProjectName));
+            Environment.SetEnvironmentVariable(string.Format(pwPattern, ProjectName), string.Empty);
+
             if (!string.IsNullOrEmpty(password))
             {
                 options = options.Append("--password").Append(password).ToArray();
+                password = string.Empty;
             }
 
             options = options.Append(AdditionalOptions);
@@ -63,6 +64,7 @@ namespace PlcncliBuild
             try
             {
                 Communication.ExecuteWithoutResult("deploy", new TaskLogger(Log), options.ToArray());
+                options = null;
             }
             catch (PlcncliException ex)
             {
