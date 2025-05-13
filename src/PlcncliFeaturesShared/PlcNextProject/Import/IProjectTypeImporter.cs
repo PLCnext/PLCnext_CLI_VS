@@ -63,7 +63,18 @@ namespace PlcncliFeatures.PlcNextProject.Import
             string file = Path.Combine(Path.GetDirectoryName(projectDirectory), $"{projectName}CSharp", $"{projectName}CSharp.csproj");
             try
             {
-                solution.AddFromFile(file);
+                Project csharpProject = solution.AddFromFile(file);
+
+                //set build dependency
+                BuildDependencies buildDependencies = solution.SolutionBuild?.BuildDependencies;
+                foreach (BuildDependency buildDependency in buildDependencies)
+                {
+                    if (buildDependency?.Project?.Name != null &&
+                        buildDependency.Project.Name.Equals($"{projectName}Cpp"))
+                    {
+                        buildDependency.AddProject(csharpProject.UniqueName);
+                    }
+                }
             }
             catch (Exception ex)
             {
