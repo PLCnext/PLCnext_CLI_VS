@@ -11,7 +11,6 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
@@ -187,6 +186,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 LibraryDescription = config.LibraryDescription;
                 LibraryVersion = config.LibraryVersion;
                 EngineerVersion = config.EngineerVersion;
+                LibraryInfo = config.LibraryInfo;
                 libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
             }
         }
@@ -227,6 +227,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 engineerVersion = value;
                 OnPropertyChanged();
             }
+        }
+
+        public ProjectConfigurationLibraryInfo[] LibraryInfo
+        { 
+            get; set;
         }
 
         public string ExcludedFilesLabel => "Excluded Files - checked files will not be added to pcwlx";
@@ -292,6 +297,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     LibraryDescription = LibraryDescription,
                     LibraryVersion = LibraryVersion,
                     EngineerVersion = EngineerVersion,
+                    LibraryInfo = LibraryInfo,
                     ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
                                                  .Select(e => e.Name)
                                                  .ToArray(),

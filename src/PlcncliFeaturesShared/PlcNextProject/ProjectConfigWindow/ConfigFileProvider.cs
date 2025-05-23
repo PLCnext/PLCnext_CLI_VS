@@ -75,6 +75,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             if (string.IsNullOrEmpty(config.LibraryDescription)
                 && string.IsNullOrEmpty(config.LibraryVersion)
                 && string.IsNullOrEmpty(config.EngineerVersion)
+                && (config.LibraryInfo == null || config.LibraryInfo.Length == 0)
                 && (config.ExcludedFiles == null ||config.ExcludedFiles.Length < 1)
                 && !config.Sign
                 && string.IsNullOrEmpty(config.Pkcs12)
