@@ -27,7 +27,7 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
         <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
-        <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
+        <converter:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     </Window.Resources>
     <Grid Margin="20"
           FocusManager.FocusedElement="{Binding ElementName=OkButton}">
@@ -92,7 +92,7 @@
                 Command="{Binding OkButtonClickCommand}"
                 CommandParameter="{Binding ElementName=Window}"
                 Content="{Binding ButtonText}"
-                IsEnabled="{Binding ErrorText, Converter={StaticResource TextToBoolConverter}}"
+                IsEnabled="{Binding ErrorText, Converter={StaticResource StringToBooleanConverter}}"
                 />
     </Grid>
 </platformui:DialogWindow>

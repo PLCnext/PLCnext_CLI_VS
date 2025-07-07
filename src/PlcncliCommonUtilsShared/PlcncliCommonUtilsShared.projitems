@@ -13,8 +13,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converter\BoolToColorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\InverseBoolToColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\ObjectToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\InverseStringToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\StringToBooleanConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converter\TextToBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\TextToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\VisibilityToBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProjectConfigurationManager.cs" />

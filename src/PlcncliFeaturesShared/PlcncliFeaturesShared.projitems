@@ -41,6 +41,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\AddItemDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +125,10 @@
       <DependentUpon>CMakeFlagsEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectCMakeFlagsEditor\CMakeFlagsEditorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\AddItemDialog.xaml.cs">
+      <DependentUpon>AddItemDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\AddItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ConfigFileProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PasswordService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordDialog.xaml.cs">

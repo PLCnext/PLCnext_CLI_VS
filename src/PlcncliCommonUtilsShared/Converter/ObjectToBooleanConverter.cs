@@ -13,13 +13,12 @@ using System.Windows.Data;
 
 namespace PlcncliCommonUtils.Converter
 {
-    [ValueConversion(typeof(string), typeof(bool))]
-    public class TextToBoolConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(bool))]
+    public class ObjectToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string text = (string)value;
-            return string.IsNullOrEmpty(text) ? true : false;
+            return value != null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

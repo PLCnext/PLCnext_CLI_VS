@@ -7,7 +7,7 @@
                          xmlns:converter="clr-namespace:PlcncliCommonUtils.Converter"
                          xmlns:local="clr-namespace:PlcncliFeatures.PlcNextProject.ProjectConfigWindow"
                          mc:Ignorable="d"
-                         Width="650"
+                         Width="565"
                          SizeToContent="Height"
                          Name="window"
                          Title="PLCnext Project Configuration">
@@ -18,8 +18,9 @@
             </ResourceDictionary.MergedDictionaries>
             
             <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converter:TextToBoolConverter x:Key="TextToBoolConverter"/>
+            <converter:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
             <converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <converter:ObjectToBooleanConverter x:Key="ObjectToBooleanConverter" />
             <platformui:AndBooleanConverter x:Key="AndBooleanConverter"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -41,84 +42,144 @@ Rebuild the project after saving your changes to transfer the configuration to t
         <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}">
             <TabItem Header="General">
                 <AdornerDecorator>
-                <Grid Margin="11">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                    <Grid Margin="11">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" 
-                           Padding="0"
-                           Content="Library _Description"
-                           Target="{Binding ElementName=textbox1}"
-                           Margin="0,0,10,5"/>
-                    <TextBox Grid.Row="1"
-                             Name="textbox1"
-                             AcceptsReturn="True"
-                             Height="87"
-                             VerticalScrollBarVisibility="Auto"
-                             Margin="0,0,10,11"
-                             Text="{Binding LibraryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="0" 
+                               Grid.ColumnSpan="2"
+                               Padding="0"
+                               Content="Library _Description"
+                               Target="{Binding ElementName=textbox1}"
+                               Margin="0,0,10,5"/>
+                        <TextBox Grid.Row="1"
+                                 Name="textbox1"
+                                 AcceptsReturn="True"
+                                 Height="87"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Margin="0,0,10,11"
+                                 Text="{Binding LibraryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Label Grid.Row="2"
-                           Padding="0"
-                           Content="Library _Version - if required set it also in &lt;library&gt;Info.hpp (projects &gt;= 2025.0)"
-                           Target="{Binding ElementName=textbox2}"
-                           Margin="0,0,10,5"/>
-                    <TextBox Grid.Row="3"
-                             Margin="0,0,10,11"
-                             Height="23"
-                             VerticalContentAlignment="Center"
-                             Name="textbox2"
-                             AcceptsReturn="False"
-                             Text="{Binding LibraryVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="2"
+                               Padding="0"
+                               Content="Library _Version - if required set it also in &lt;library&gt;Info.hpp (projects &gt;= 2025.0)"
+                               Target="{Binding ElementName=textbox2}"
+                               Margin="0,0,10,5"/>
+                        <TextBox Grid.Row="3"
+                                 Margin="0,0,10,11"
+                                 Height="23"
+                                 VerticalContentAlignment="Center"
+                                 Name="textbox2"
+                                 AcceptsReturn="False"
+                                 Text="{Binding LibraryVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Label Grid.Row="4"
-                           Padding="0"
-                           Content="_Engineer Version"
-                           Target="{Binding ElementName=textbox3}"
-                           Margin="0,0,10,5"/>
-                    <TextBox Grid.Row="5"
-                             Margin="0,0,10,11"
-                             Height="23"
-                             VerticalContentAlignment="Center"
-                             Name="textbox3"
-                             AcceptsReturn="False"
-                             Text="{Binding EngineerVersion, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        <Label Grid.Row="4"
+                               Padding="0"
+                               Content="_Engineer Version"
+                               Target="{Binding ElementName=textbox3}"
+                               Margin="0,0,10,5"/>
+                        <TextBox Grid.Row="5"
+                                 Margin="0,0,10,11"
+                                 Height="23"
+                                 VerticalContentAlignment="Center"
+                                 Name="textbox3"
+                                 AcceptsReturn="False"
+                                 Text="{Binding EngineerVersion, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                    <Label Grid.Row="6"
-                           Margin="0,0,10,5"
-                           Padding="0"
-                           Content="{Binding ExcludedFilesLabel}"
-                           Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <ListBox MinHeight="23"
-                             Grid.Row="7"
-                             Margin="0,0,10,11"
-                             ItemsSource="{Binding ExcludedFiles}"
-                             Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"
-                             IsEnabled="{Binding EnableExcludedFiles}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type local:LibViewModel}">
-                                <CheckBox Content="{Binding Name}"
-                                          IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Foreground="{Binding Invalid, Converter={StaticResource BoolToColorConverter}, ConverterParameter={x:Static Brushes.Gray}}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                        <Label Grid.Row="6"
+                               Margin="0,0,10,5"
+                               Padding="0"
+                               Content="{Binding ExcludedFilesLabel}"
+                               Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <ListBox MinHeight="23"
+                                 Grid.Row="7"
+                                 Margin="0,0,10,11"
+                                 ItemsSource="{Binding ExcludedFiles}"
+                                 Visibility="{Binding ShowExcludedFiles, Converter={StaticResource BoolToVisibilityConverter}}"
+                                 IsEnabled="{Binding EnableExcludedFiles}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:LibViewModel}">
+                                    <CheckBox Content="{Binding Name}"
+                                              IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Foreground="{Binding Invalid, Converter={StaticResource BoolToColorConverter}, ConverterParameter={x:Static Brushes.Gray}}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
-                    <CheckBox Content="Generate Namespaces in Datatypes Worksheet"
-                              IsChecked="{Binding GenerateNamespaces}"
-                              Margin="0,0,10,20"
-                              Grid.Row="8"
-                              Visibility="{Binding ShowGenerateNamespaces, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                </Grid>
+                        <Label Grid.Row="8" 
+                               Padding="0"
+                               Content="Library _Infos"
+                               Target="{Binding ElementName=LibraryInfosGrid}"
+                               Margin="0,0,10,5"/>
+                        <DataGrid Grid.Row="9"
+                                  Grid.RowSpan="3"
+                                  Margin="0,0,5,10" 
+                                  ItemsSource="{Binding LibraryInfos}"
+                                  AutoGenerateColumns="False"
+                                  MaxHeight="143"
+                                  Name="LibraryInfosGrid"
+                                  SelectionMode="Single"
+                                  GridLinesVisibility="None"
+                                  CanUserAddRows="False"
+                                  CanUserResizeColumns="True"
+                                  CanUserResizeRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Key" Binding="{Binding name}" Width="126" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="280" CanUserResize="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Grid.Row="9"
+                                Grid.Column="1"
+                                Margin="0,0,5,10"
+                                Content="Add"
+                                VerticalAlignment="Top"
+                                Height="23"
+                                Width="75"
+                                Command="{Binding AddButtonClickCommand}"/>
+                        <Button Grid.Row="10"
+                                Grid.Column="1"
+                                Margin="0,0,5,10"
+                                VerticalAlignment="Top"
+                                Content="Remove"
+                                Height="23"
+                                Width="75"
+                                Command="{Binding RemoveButtonClickCommand}"
+                                CommandParameter="{Binding ElementName=LibraryInfosGrid, Path=SelectedItem}"
+                                IsEnabled="{Binding ElementName=LibraryInfosGrid, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"/>
+                        <Button Grid.Row="11"
+                                Grid.Column="1"
+                                Margin="0,0,5,10"
+                                VerticalAlignment="Top"
+                                Content="Edit"
+                                Height="23"
+                                Width="75" 
+                                Command="{Binding EditButtonClickCommand}"
+                                CommandParameter="{Binding ElementName=LibraryInfosGrid, Path=SelectedItem}"
+                                IsEnabled="{Binding ElementName=LibraryInfosGrid, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"/>
+
+                        <CheckBox Content="Generate Namespaces in Datatypes Worksheet"
+                                  IsChecked="{Binding GenerateNamespaces}"
+                                  Margin="0,0,10,11"
+                                  Grid.Row="12"
+                                  Visibility="{Binding ShowGenerateNamespaces, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
                 </AdornerDecorator>
             </TabItem>
             <TabItem Header="Signing">
@@ -141,8 +202,12 @@ Rebuild the project after saving your changes to transfer the configuration to t
                     CommandParameter="{Binding ElementName=window}">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource AndBooleanConverter}">
-                        <Binding Path="Error" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TextToBoolConverter}"/>
-                        <Binding Path="SigningViewModel.Error" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TextToBoolConverter}"/>
+                        <Binding Path="Error" 
+                                 UpdateSourceTrigger="PropertyChanged" 
+                                 Converter="{StaticResource StringToBooleanConverter}"/>
+                        <Binding Path="SigningViewModel.Error" 
+                                 UpdateSourceTrigger="PropertyChanged" 
+                                 Converter="{StaticResource StringToBooleanConverter}"/>
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>

@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.VCProjectEngine;
 using PlcncliServices.CommandResults;
 using PlcncliServices.PLCnCLI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -186,7 +187,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 LibraryDescription = config.LibraryDescription;
                 LibraryVersion = config.LibraryVersion;
                 EngineerVersion = config.EngineerVersion;
-                LibraryInfo = config.LibraryInfo;
+                LibraryInfos = new ObservableCollection<ProjectConfigurationLibraryInfo>(config.LibraryInfo);
                 libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
             }
         }
@@ -229,7 +230,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
         }
 
-        public ProjectConfigurationLibraryInfo[] LibraryInfo
+        public ObservableCollection<ProjectConfigurationLibraryInfo> LibraryInfos
         { 
             get; set;
         }
@@ -260,7 +261,46 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         public ICommand SaveButtonClickCommand => new DelegateCommand<DialogWindow>(OnSaveButtonClicked);
         public ICommand CancelButtonClickCommand => new DelegateCommand<DialogWindow>(OnCancelButtonClicked);
-                
+
+        public ICommand AddButtonClickCommand => new DelegateCommand(OnAddButtonClicked);
+        public ICommand RemoveButtonClickCommand => new DelegateCommand<object>(OnRemoveButtonClicked);
+        public ICommand EditButtonClickCommand => new DelegateCommand<ProjectConfigurationLibraryInfo>(OnEditButtonClicked);
+
+        private void OnAddButtonClicked()
+        {
+            AddItemViewModel viewModel = new AddItemViewModel(LibraryInfos);
+            AddItemDialog dialog = new AddItemDialog(viewModel);
+            bool? dialogResult = dialog.ShowModal();
+
+            if (dialogResult == true)
+            {
+                LibraryInfos.Add(new ProjectConfigurationLibraryInfo(){name=viewModel.Key, Value=viewModel.Value});
+            }
+        }
+
+        private void OnRemoveButtonClicked(object selectedItem)
+        {
+            if(selectedItem is ProjectConfigurationLibraryInfo libraryInfoItem)
+                LibraryInfos.Remove(libraryInfoItem);
+        }
+
+        private void OnEditButtonClicked(object selectedObject)
+        {
+            if (!(selectedObject is ProjectConfigurationLibraryInfo selectedItem))
+                return;
+
+            AddItemViewModel viewModel = new AddItemViewModel(LibraryInfos, selectedItem.name, selectedItem.Value);
+            AddItemDialog dialog = new AddItemDialog(viewModel);
+            bool? dialogResult = dialog.ShowModal();
+
+            if (dialogResult == true 
+                && (selectedItem.name != viewModel.Key || selectedItem.Value != viewModel.Value))
+            {
+                LibraryInfos.Remove(selectedItem);
+                LibraryInfos.Add(new ProjectConfigurationLibraryInfo() { name = viewModel.Key, Value = viewModel.Value });
+            }
+        }
+
         private void OnCancelButtonClicked(DialogWindow window)
         {
             window.Close();
@@ -297,7 +337,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     LibraryDescription = LibraryDescription,
                     LibraryVersion = LibraryVersion,
                     EngineerVersion = EngineerVersion,
-                    LibraryInfo = LibraryInfo,
+                    LibraryInfo = LibraryInfos.ToArray(),
                     ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
                                                  .Select(e => e.Name)
                                                  .ToArray(),
