@@ -7,7 +7,7 @@
                          xmlns:converter="clr-namespace:PlcncliCommonUtils.Converter"
                          xmlns:local="clr-namespace:PlcncliFeatures.PlcNextProject.ProjectConfigWindow"
                          mc:Ignorable="d"
-                         Width="565"
+                         Width="580"
                          SizeToContent="Height"
                          Name="window"
                          Title="PLCnext Project Configuration">
@@ -30,8 +30,8 @@
     <Grid Margin="11">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock FontSize="12"

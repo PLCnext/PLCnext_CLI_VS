@@ -19,8 +19,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -55,9 +55,9 @@
         <TextBox Grid.Row="2" 
                  Grid.Column="1"
                  Grid.ColumnSpan="2"
-                 Height="50"
+                 MinHeight="50"
                  Name="ValueTextBlock"
-                 VerticalAlignment="Center"
+                 VerticalAlignment="Stretch"
                  Margin="0,0,0,11"
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"

@@ -187,7 +187,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 LibraryDescription = config.LibraryDescription;
                 LibraryVersion = config.LibraryVersion;
                 EngineerVersion = config.EngineerVersion;
-                LibraryInfos = new ObservableCollection<ProjectConfigurationLibraryInfo>(config.LibraryInfo);
+                LibraryInfos = config.LibraryInfo!= null ? new ObservableCollection<ProjectConfigurationLibraryInfo>(config.LibraryInfo) 
+                                                : new ObservableCollection<ProjectConfigurationLibraryInfo>();
                 libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
             }
         }
