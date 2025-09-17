@@ -106,6 +106,7 @@
       <Link>Port.16.png</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="resources\showpassword.png" />
   </ItemGroup>
   <Import Project="..\PlcncliFeaturesShared\PlcncliFeaturesShared.projitems" Label="Shared" />
   <Import Project="..\PlcncliCommonUtilsShared\PlcncliCommonUtilsShared.projitems" Label="Shared" />
