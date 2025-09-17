@@ -10,10 +10,12 @@
 using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 {
@@ -42,9 +44,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             {
                 Text = okButtonText
             };
+            
         }
 
         #region Properties
+
         public string Password
         {
             get => password; 
@@ -70,6 +74,10 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         public AccessText OkButtonLabel { get; }
 
         public string TitleText { get; }
+
+        public BitmapImage ShowPWImageUri { get; } = new BitmapImage(
+                new Uri($"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/resources/showpassword.png"));
+
         #endregion
 
         #region Commands

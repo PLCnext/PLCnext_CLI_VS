@@ -85,6 +85,7 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="resources\showpassword.png" />
     <VSCTCompile Include="..\SolutionFiles\PlcncliFeaturesPackage.vsct">
       <Link>PlcncliFeaturesPackage.vsct</Link>
       <ResourceName>Menus.ctmenu</ResourceName>
