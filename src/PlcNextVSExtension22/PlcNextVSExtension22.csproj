@@ -51,7 +51,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetVsixContainer>$(OutputPath)PlcNextVSExtension22.vsix</TargetVsixContainer>
+    <TargetVsixContainer>$(OutputPath)PLCnext Technology C++ Templates.vsix</TargetVsixContainer>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\_Build_\BuildVariables.cs">
@@ -87,9 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -100,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
