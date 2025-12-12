@@ -14,6 +14,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using PlcncliFeatures.PlcNextProject.ProjectConfigWindow;
 using System;
+using System.IO;
+using System.Windows;
 
 namespace PlcncliFeatures.PlcNextProject
 {
@@ -50,7 +52,22 @@ namespace PlcncliFeatures.PlcNextProject
             {
                 if (item.Object is Project project)
                 {
-                    SaveProjectPasswordInEnvironment(project);
+                    if (project == null 
+                        || project.FullName == null 
+                        || !File.Exists(Path.Combine(Path.GetDirectoryName(project.FullName), "plcnext.proj")))
+                    {
+                        continue;
+                    }
+                    if (SaveProjectPasswordInEnvironment(project))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        pfCancelUpdate = 1;
+                        return VSConstants.E_FAIL;
+                    }
+                        
                 }
                 else if (item.Object is Solution solution)
                 {
@@ -59,15 +76,38 @@ namespace PlcncliFeatures.PlcNextProject
                     {
                         foreach (EnvDTE.Project proj in projects)
                         {
-                            SaveProjectPasswordInEnvironment(proj);
+                            if (proj == null 
+                                || proj.FullName == null 
+                                || !File.Exists(Path.Combine(Path.GetDirectoryName(proj.FullName), "plcnext.proj")))
+                            {
+                                continue;
+                            }
+                            if (SaveProjectPasswordInEnvironment(proj))
+                            {
+                                continue;
+                            }
+
+                            pfCancelUpdate = 1;
+                            return VSConstants.E_FAIL;
+
                         }
                     }
                 }
             }
 
-            void SaveProjectPasswordInEnvironment(EnvDTE.Project project)
+            bool SaveProjectPasswordInEnvironment(EnvDTE.Project project)
             {
-                ProjectConfiguration config = ConfigFileProvider.LoadFromConfig(project.FullName);
+                IProjectConfiguration config;
+                try
+                {
+                    config = ConfigFileProvider.LoadFromConfig(project.FullName);
+                }
+                catch (Exception e)
+                {
+                    _ = MessageBox.Show("Project configuration file 'PLCnextSettings.xml' could not be loaded. " + e.Message,
+                        "Invalid Configuration found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
                 if (config.Sign)
                 {
                     string password = string.Empty;
@@ -87,6 +127,7 @@ namespace PlcncliFeatures.PlcNextProject
                         Environment.SetEnvironmentVariable(string.Format(pwPattern, project.Name), password);
                     }
                 }
+                return true;
             }
 
             return VSConstants.S_OK;
@@ -126,6 +167,13 @@ namespace PlcncliFeatures.PlcNextProject
             {
                 foreach (EnvDTE.Project project in projects)
                 {
+                    if (project == null 
+                        || project.Name == null 
+                        || project.FullName == null 
+                        || !File.Exists(Path.Combine(Path.GetDirectoryName(project.FullName), "plcnext.proj")))
+                    {
+                        continue;
+                    }
                     Environment.SetEnvironmentVariable(string.Format(pwPattern, project.Name), null);
                 }
             }

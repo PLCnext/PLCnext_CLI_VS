@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\AddItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ConfigFileProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ConfigurationException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PasswordService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\SetPasswordDialog.xaml.cs">
       <DependentUpon>SetPasswordDialog.xaml</DependentUpon>
@@ -138,6 +139,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PasswordPersistSolutionOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\ComStreamWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\PasswordStorage\PersistSolutionOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ConvertedProjectConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlcNextProject\ProjectConfigWindow\ProjectConfigurationSchema.cs">
       <DependentUpon>ProjectConfigurationSchema.xsd</DependentUpon>
     </Compile>

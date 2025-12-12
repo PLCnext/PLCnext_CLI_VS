@@ -25,65 +25,59 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             return Path.Combine(Path.GetDirectoryName(projectDirectory), configFileName);
         }
 
-        public static bool IsConfiguredToSignWithPKCS12(ProjectConfiguration config)
+        public static bool IsConfiguredToSignWithPKCS12(IProjectConfiguration config)
         {
             return config.Sign
                         && !string.IsNullOrEmpty(config.Pkcs12)
                         && string.IsNullOrEmpty(config.PrivateKey)
-                        && string.IsNullOrEmpty(config.PublicKey)
-                        && (config.Certificates == null || !config.Certificates.Any());
+                        && string.IsNullOrEmpty(config.SigningCertificate)
+                        && (config.CertificateChain == null || !config.CertificateChain.Any());
         }
 
-        public static bool IsConfiguredToSignWithPEMFiles(ProjectConfiguration config)
+        public static bool IsConfiguredToSignWithPEMFiles(IProjectConfiguration config)
         {
             return config.Sign
                         && string.IsNullOrEmpty(config.Pkcs12)
                         && !string.IsNullOrEmpty(config.PrivateKey)
-                        && !string.IsNullOrEmpty(config.PublicKey)
-                        && config.Certificates != null 
-                        && config.Certificates.Any();
+                        && !string.IsNullOrEmpty(config.SigningCertificate);
         }
 
-        public static ProjectConfiguration LoadFromConfig(string projectDirectory)
+        public static IProjectConfiguration CreateNewConfiguration()
+        {
+            return new ConvertedProjectConfiguration();
+        }
+
+        public static ConvertedProjectConfiguration LoadFromConfig(string projectDirectory)
         {
             string configFilePath = GetConfigFilePath(projectDirectory);
-            ProjectConfiguration configuration = new ProjectConfiguration();
 
             if (File.Exists(configFilePath))
             {
-                try
+                using (FileStream stream = File.OpenRead(configFilePath))
+                using (XmlReader reader = XmlReader.Create(stream))
                 {
-                    using (FileStream stream = File.OpenRead(configFilePath))
-                    using(XmlReader reader = XmlReader.Create(stream)) 
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(ProjectConfiguration));
-                        configuration = serializer.Deserialize(reader) as ProjectConfiguration;
-                    }
-                }
-                catch (Exception e)
-                {
-                    _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
+                    XmlSerializer serializer = new XmlSerializer(typeof(ProjectConfiguration));
+                    ProjectConfiguration configuration = serializer.Deserialize(reader) as ProjectConfiguration;
+                    return new ConvertedProjectConfiguration(configuration);
                 }
             }
-
-            return configuration;
+            return new ConvertedProjectConfiguration();
         }
 
-        public static void WriteConfigFile(ProjectConfiguration config, string projectDirectory)
+        public static void WriteConfigFile(IProjectConfiguration config, string projectDirectory)
         {
             string configFilePath = GetConfigFilePath(projectDirectory);
             if (string.IsNullOrEmpty(config.LibraryDescription)
                 && string.IsNullOrEmpty(config.LibraryVersion)
                 && string.IsNullOrEmpty(config.EngineerVersion)
-                && (config.LibraryInfo == null || config.LibraryInfo.Length == 0)
-                && (config.ExcludedFiles == null ||config.ExcludedFiles.Length < 1)
+                && (config.LibraryInfo == null || config.LibraryInfo.Count() == 0)
+                && (config.ExcludedFiles == null ||config.ExcludedFiles.Count() < 1)
                 && !config.Sign
                 && string.IsNullOrEmpty(config.Pkcs12)
                 && string.IsNullOrEmpty(config.PrivateKey)
-                && string.IsNullOrEmpty(config.PublicKey)
-                && (config.Certificates == null || config.Certificates.Length == 0)
+                && string.IsNullOrEmpty(config.SigningCertificate)
+                && (config.CertificateChain == null || config.CertificateChain.Length == 0)
                 && !config.Timestamp
-                // TODO how to handle notimestamp
                 && string.IsNullOrEmpty(config.TimestampConfiguration))
             {
                 if (File.Exists(configFilePath))
@@ -93,6 +87,10 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
             else
             {
+                if (config.ExcludedFiles != null && !config.ExcludedFiles.Any())
+                {
+                    config.ExcludedFiles = null;
+                }
                 WriteFile();
             }
 
@@ -108,7 +106,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 {
                     stream.SetLength(0);
                     XmlSerializer serializer = new XmlSerializer(typeof(ProjectConfiguration));
-                    serializer.Serialize(stream, config);
+                    serializer.Serialize(stream, config.GetSerializableConfiguration());
                 }
             }
         }

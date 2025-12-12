@@ -30,11 +30,14 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 {
     public class ProjectConfigWindowViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        private readonly string projectDirectory;
-        private readonly string projectName;
-        private readonly LibViewModel selectAll;
+        private string projectDirectory;
+        private string projectName;
+        private LibViewModel selectAll;
 
-        public ProjectConfigWindowViewModel(IPlcncliCommunication plcncliCommunication)
+        public ProjectConfigWindowViewModel()
+        { }
+
+        public bool Initialize(IPlcncliCommunication plcncliCommunication)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -65,7 +68,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
             if (string.IsNullOrEmpty(projectDirectory))
             {
-                return;
+                return false;
             }
 
             ProjectInformationCommandResult projectInformation = GetProjectInformation();
@@ -77,8 +80,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
 
             IEnumerable<LibViewModel> libs = null;
-            ProjectConfiguration config;
-            LoadFromFile();
+            IProjectConfiguration config;
+            if (!LoadFromFile())
+            {
+                return false;
+            }
 
             SigningViewModel = new SigningViewModel(config, projectName);
 
@@ -96,7 +102,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 && projectInformation.Type != Constants.ProjectType_SN)
             {
                 ShowExcludedFiles = false;
-                return;
+                return true;
             }
             
 
@@ -136,6 +142,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 lib.SetInvalid();
             }
 
+            return true;
+
             ProjectInformationCommandResult GetProjectInformation()
             {
                 ProjectInformationCommandResult result = null;
@@ -173,7 +181,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 }, TimeSpan.FromMilliseconds(5));
                 return result;
             }
-            void LoadFromFile()
+            bool LoadFromFile()
             {
                 try 
                 { 
@@ -181,8 +189,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 }
                 catch (Exception e)
                 {
-                    _ = MessageBox.Show("Project configuration file could not be loaded." + e.Message);
-                    config = new ProjectConfiguration();
+                    _ = MessageBox.Show("Project configuration file could not be loaded:\n\n" + e.Message +
+                        "\n\nResolve the problem by editing the file 'PLCnextSettings.xml'.",
+                                            "Invalid Configuration found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    config = ConfigFileProvider.CreateNewConfiguration();
+                    return false;
                 }
                 LibraryDescription = config.LibraryDescription;
                 LibraryVersion = config.LibraryVersion;
@@ -190,6 +201,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 LibraryInfos = config.LibraryInfo!= null ? new ObservableCollection<ProjectConfigurationLibraryInfo>(config.LibraryInfo) 
                                                 : new ObservableCollection<ProjectConfigurationLibraryInfo>();
                 libs = config.ExcludedFiles?.Select(e => new LibViewModel(this, e, selected: true));
+                return true;
             }
         }
 
@@ -238,7 +250,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         public string ExcludedFilesLabel => "Excluded Files - checked files will not be added to pcwlx";
 
-        public ObservableCollection<LibViewModel> ExcludedFiles { get; }
+        public ObservableCollection<LibViewModel> ExcludedFiles { get; private set; }
 
         public bool ShowExcludedFiles { get; private set; } = true;
         public bool EnableExcludedFiles { get; private set; } = true;
@@ -255,7 +267,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             }
         }
 
-        public SigningViewModel SigningViewModel { get; }
+        public SigningViewModel SigningViewModel { get; private set; }
 
         #endregion
         #region Commands
@@ -310,7 +322,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
         private void OnSaveButtonClicked(DialogWindow window)
         {
             if (!string.IsNullOrEmpty(SigningViewModel.PKCS12File) && (!string.IsNullOrEmpty(SigningViewModel.PrivateKeyFile) ||
-                                                      !string.IsNullOrEmpty(SigningViewModel.PublicKeyFile) ||
+                                                      !string.IsNullOrEmpty(SigningViewModel.SigningCertFile) ||
                                                       SigningViewModel.CertificateFiles?.Any() == true))
             {
                 string unpersistedValue = SigningViewModel.UsePEMFiles ? "PKCS#12" : "PEM";
@@ -331,25 +343,25 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
             window.Close();
 
-            ProjectConfiguration CreateConfigFileContent()
+            IProjectConfiguration CreateConfigFileContent()
             {
-                ProjectConfiguration config =  new ProjectConfiguration()
-                {
-                    LibraryDescription = LibraryDescription,
-                    LibraryVersion = LibraryVersion,
-                    EngineerVersion = EngineerVersion,
-                    LibraryInfo = LibraryInfos.ToArray(),
-                    ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
-                                                 .Select(e => e.Name)
-                                                 .ToArray(),
-                    Sign = SigningViewModel.Sign,
-                    Pkcs12 = SigningViewModel.UsePEMFiles ? null : SigningViewModel.PKCS12File,
-                    PrivateKey = SigningViewModel.UsePEMFiles ? SigningViewModel.PrivateKeyFile : null,
-                    PublicKey = SigningViewModel.UsePEMFiles ? SigningViewModel.PublicKeyFile : null,
-                    Certificates = SigningViewModel.UsePEMFiles ? SigningViewModel.CertificateFiles.ToArray() : null,
-                    TimestampConfiguration = SigningViewModel.TimestampConfiguration
+                IProjectConfiguration config = ConfigFileProvider.CreateNewConfiguration();
+                config.LibraryDescription = LibraryDescription;
+                config.LibraryVersion = LibraryVersion;
+                config.EngineerVersion = EngineerVersion;
+                config.LibraryInfo = LibraryInfos.ToArray();
+                config.ExcludedFiles = ExcludedFiles.Where(e => e.Selected && e != selectAll)
+                                             .Select(e => e.Name)
+                                             .ToArray();
+                config.Sign = SigningViewModel.Sign;
+                config.Pkcs12 = SigningViewModel.UsePEMFiles ? null : SigningViewModel.PKCS12File;
+                config.PrivateKey = SigningViewModel.UsePEMFiles ? SigningViewModel.PrivateKeyFile : null;
+                config.SigningCertificate = SigningViewModel.UsePEMFiles ? SigningViewModel.SigningCertFile : null;
+                config.CertificateChain = SigningViewModel.UsePEMFiles ? (SigningViewModel.CertificateFiles.ToArray().Any() ?
+                                                                            SigningViewModel.CertificateFiles.ToArray() : null) : null;
+                config.TimestampConfiguration = SigningViewModel.TimestampConfiguration;
                     
-                };
+                
                 if (SigningViewModel.Timestamp)
                 {
                     config.Timestamp = true;

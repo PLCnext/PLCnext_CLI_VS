@@ -2,46 +2,46 @@
 <xs:schema xmlns="http://www.phoenixcontact.com/schema/projectconfiguration"
            xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
            id="projectConfiguration" targetNamespace="http://www.phoenixcontact.com/schema/projectconfiguration"
-           version="1.0"
+           version="2.0"
 >
-	<xs:element name="ProjectConfiguration">
-		<xs:complexType>
-			<xs:annotation>
-				<xs:documentation>
-					Root element for the project description file.
-					It contains all the project configuration elements.
-				</xs:documentation>
-			</xs:annotation>
-			<xs:sequence>
-				<xs:element minOccurs="0" maxOccurs="1" name="EngineerVersion" type="xs:string">
-					<xs:annotation>
-						<xs:documentation>
-							The version of the PLCnext Engineer for which the library shall be built.
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element minOccurs="0" maxOccurs="1" name="SolutionVersion" type="xs:string">
-					<xs:annotation>
-						<xs:documentation>
-							The solutionversion for which the library shall be build.
-							Use either engineerversion or solutionversion but not both.
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element minOccurs="0" maxOccurs="1" name="LibraryVersion" type="xs:string">
-					<xs:annotation>
-						<xs:documentation>
-							A version of the library.
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element minOccurs="0" maxOccurs="1" name="LibraryDescription" type="xs:string">
-					<xs:annotation>
-						<xs:documentation>
-							A description of the library.
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
+  <xs:element name="ProjectConfiguration">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>
+          Root element for the project description file.
+          It contains all the project configuration elements.
+        </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="EngineerVersion" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The version of the PLCnext Engineer for which the library shall be built.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="SolutionVersion" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The solutionversion for which the library shall be build.
+              Use either engineerversion or solutionversion but not both.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="LibraryVersion" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              A version of the library.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="LibraryDescription" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              A description of the library.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
         <xs:element minOccurs="0" maxOccurs="1" name="ExcludedFiles" type="FilesList">
           <xs:annotation>
             <xs:documentation>
@@ -70,7 +70,7 @@
             </xs:simpleContent>
           </xs:complexType>
         </xs:element>
-        
+
 
         <xs:element minOccurs="0" maxOccurs="1" name="Sign" type="xs:boolean" default="false">
           <xs:annotation>
@@ -93,20 +93,42 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element minOccurs="0" maxOccurs="1" name="PublicKey" type="xs:string">
+
+        <xs:element name="PublicKey" minOccurs="0" maxOccurs="1" type="xs:string">
           <xs:annotation>
             <xs:documentation>
-              A path to a PEM file containing the public key.
+              A path to a PEM file containing the public key (schema version 1.0).
+              Should NOT be used anymore. Replaced by SigningCertificate.
             </xs:documentation>
           </xs:annotation>
         </xs:element>
+        <xs:element name="SigningCertificate" minOccurs="0" maxOccurs="1" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              Path to a certificate containing the public key. Path should point to a PEM-encoded file.
+              (schema version 2.0).
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+
         <xs:element minOccurs="0" maxOccurs="1" name="Certificates" type="FilesList">
           <xs:annotation>
             <xs:documentation>
-              A list of paths to PEM files containing certificates for signing.
+              A list of paths to PEM files containing certificates for signing.(schema version 1.0).
+              Should NOT be used anymore. Replaced by CertificateChain.
             </xs:documentation>
           </xs:annotation>
         </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="CertificateChain" type="FilesList">
+          <xs:annotation>
+            <xs:documentation>
+              A list of paths to PEM files containing certificates for signing.
+              (schema version 2.0).
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element> 
+        
         <xs:element minOccurs="0" maxOccurs="1" name="TimestampConfiguration" type="xs:string">
           <xs:annotation>
             <xs:documentation>
@@ -128,11 +150,11 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-  
-  <xs:complexType name="FilesList">
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="FilesList" >
     <xs:annotation>
       <xs:documentation>
         A list of file names.

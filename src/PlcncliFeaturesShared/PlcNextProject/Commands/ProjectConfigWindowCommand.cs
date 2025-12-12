@@ -83,8 +83,14 @@ namespace PlcncliFeatures.PlcNextProject.Commands
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            ProjectConfigWindowControl control = new ProjectConfigWindowControl(new ProjectConfigWindowViewModel(plcncliCommunication));
-            _ = control.ShowModal();
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            ProjectConfigWindowViewModel viewModel = new ProjectConfigWindowViewModel();
+            if (viewModel.Initialize(plcncliCommunication))
+            {
+                ProjectConfigWindowControl control = new ProjectConfigWindowControl(viewModel);
+                _ = control.ShowModal();
+            }
         }
     }
 }

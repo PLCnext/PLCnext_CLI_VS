@@ -28,7 +28,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         private readonly IVsSolutionPersistence solutionPersistence;
 
-        public SigningViewModel(ProjectConfiguration config, string projectName)
+        public SigningViewModel(IProjectConfiguration config, string projectName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -40,20 +40,20 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
             Sign = config.Sign;
             PKCS12File = config.Pkcs12;
             PrivateKeyFile = config.PrivateKey;
-            PublicKeyFile = config.PublicKey;
+            SigningCertFile = config.SigningCertificate;
             if (config.Timestamp && config.NoTimestamp)
             {
                 throw new ArgumentException("Invalid configuration: Timestamp and NoTimestamp cannot be combined.");
             }
             Timestamp = config.Timestamp;
             TimestampConfiguration = config.TimestampConfiguration;
-            foreach (string item in config.Certificates ?? Enumerable.Empty<string>())
+            foreach (string item in config.CertificateChain ?? Enumerable.Empty<string>())
             {
                 CertificateFiles.Add(item);
             }
 
             UsePEMFiles = !string.IsNullOrEmpty(PrivateKeyFile)
-                          || !string.IsNullOrEmpty(PublicKeyFile)
+                          || !string.IsNullOrEmpty(SigningCertFile)
                           || CertificateFiles.Count > 0;
             this.projectName = projectName;
         }
@@ -62,7 +62,7 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
 
         private string privateKeyFile;
         private string pKCS12File;
-        private string publicKeyFile;
+        private string signingCertFile;
         private string timestampConfiguration;
         private bool usePEMFiles;
         private bool timestamp;
@@ -85,11 +85,11 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                 OnPropertyChanged();
             }
         }
-        public string PublicKeyFile
+        public string SigningCertFile
         {
-            get => publicKeyFile; set
+            get => signingCertFile; set
             {
-                publicKeyFile = value;
+                signingCertFile = value;
                 OnPropertyChanged();
             }
         }
@@ -184,9 +184,9 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
                     fileDialog.InitialDirectory = PrivateKeyFile;
                     break;
-                case nameof(PublicKeyFile):
+                case nameof(SigningCertFile):
                     fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
-                    fileDialog.InitialDirectory = PublicKeyFile;
+                    fileDialog.InitialDirectory = SigningCertFile;
                     break;
                 case nameof(CertificateFiles):
                     fileDialog.Filter = "Privacy-Enhanced Mail (PEM)|*.pem;*.cer;*.crt;*.key|All files|*.*";
@@ -211,8 +211,8 @@ namespace PlcncliFeatures.PlcNextProject.ProjectConfigWindow
                     case nameof(PrivateKeyFile):
                         PrivateKeyFile = fileDialog.FileName;
                         break;
-                    case nameof(PublicKeyFile):
-                        PublicKeyFile = fileDialog.FileName;
+                    case nameof(SigningCertFile):
+                        SigningCertFile = fileDialog.FileName;
                         break;
                     case nameof(CertificateFiles):
                         foreach (string item in fileDialog.FileNames)

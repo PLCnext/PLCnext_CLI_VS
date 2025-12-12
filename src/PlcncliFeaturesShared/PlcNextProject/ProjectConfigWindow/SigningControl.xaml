@@ -24,7 +24,7 @@
         <TextBlock Margin="0,0,10,11"
                    TextWrapping="Wrap"
                    Style="{StaticResource TextBlockStyle}">
-            Choose a PKCS#12 container or select the certificates, private and public key 
+            Choose a PKCS#12 container or select the private key, signing certificate and certificate chain 
             as separate PEM files, set a password and decide whether a timestamp shall be added
         </TextBlock>
         <CheckBox Content="Sign Library"
@@ -111,7 +111,7 @@
                 </Grid>
                 <Label Padding="0"
                        Margin="0,0,10,5"
-                       Content="Public Key File (PEM)"/>
+                       Content="Signing Certificate (PEM)"/>
                 <Grid Margin="0,0,0,11">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -120,18 +120,18 @@
                     <TextBox Margin="0,0,5,0"
                              Grid.Column="0"
                              VerticalContentAlignment="Center"
-                             Text="{Binding PublicKeyFile, Mode=TwoWay}"/>
+                             Text="{Binding SigningCertFile, Mode=TwoWay}"/>
                     <Button Width="80"
                             Height="23"
                             Grid.Column="1"
                             Content="_Browse..."
                             HorizontalAlignment="Right"
-                            CommandParameter="PublicKeyFile"
+                            CommandParameter="SigningCertFile"
                             Command="{Binding BrowseCommand}"/>
                 </Grid>
                 <Label Padding="0"
                        Margin="0,0,10,5"
-                       Content="Certificate Files (PEM)"/>
+                       Content="Certificate Chain (PEM)"/>
                 <Grid Margin="0,0,0,11">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

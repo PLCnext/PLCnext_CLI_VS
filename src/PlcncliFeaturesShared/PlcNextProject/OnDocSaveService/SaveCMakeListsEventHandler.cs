@@ -123,8 +123,11 @@ namespace PlcncliFeatures.PlcNextProject.OnDocSaveService
                 }
                 DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
                 ProjectItem projectItem = dte.Solution.FindProjectItem(documentPath);
+                if (projectItem == null) return VSConstants.S_OK;
                 Project project = projectItem.ContainingProject;
                 VCProject p = project.Object as VCProject;
+                if (p == null) return VSConstants.S_OK;
+
                 VCConfiguration configuration = p.ActiveConfiguration;
                 IVCRulePropertyStorage plcnextRule = configuration.Rules.Item("PLCnextCommonProperties") as IVCRulePropertyStorage;
                 string projectType = plcnextRule.GetUnevaluatedPropertyValue("ProjectType_");
