@@ -38,7 +38,7 @@
                    Padding="0"
                    Margin="0,0,0,5"/>
             <TextBox Name="NameTextBox" 
-                     Margin="0,0,0,11"
+                     Margin="0,0,11,11"
                      Height="23"
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  
                      VerticalContentAlignment="Center"/>
@@ -49,7 +49,7 @@
                    Padding="0"
                    Margin="0,0,0,5"/>
             <TextBox Name="PropertyTextBox" 
-                     Margin="0,0,0,11"
+                     Margin="0,0,11,11"
                      Height="23"
                      Text="{Binding Namespace, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  
                      VerticalContentAlignment="Center"/>
@@ -61,7 +61,7 @@
                    Margin="0,0,0,5"
                    Padding="0"/>
             <ComboBox Name="PropertyTextBox2" 
-                      Margin="0,0,0,11"
+                      Margin="0,0,11,11"
                       Height="23"
                       ItemsSource="{Binding Components}" 
                       SelectedItem="{Binding SelectedComponent}" 
@@ -69,6 +69,7 @@
                       />
         </StackPanel>
         <Button HorizontalAlignment="Right"
+                Margin="0,0,11,11"
                 Grid.Row="4"
                 Command="{Binding OkButtonClickCommand}"
                 CommandParameter="{Binding ElementName=Window}"
