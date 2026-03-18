@@ -15,7 +15,8 @@
             <commonConverter:InverseStringToBooleanConverter x:Key="InverseStringToBooleanConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="11">
+    <Grid Margin="11"
+          FocusManager.FocusedElement="{Binding ElementName=KeyTextBox}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
